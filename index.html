@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WA-Marketer — WhatsApp Marketing on Autopilot</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#fafafa;color:#0a0a0a}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:14px;outline:none}
+.hidden{display:none!important}
+
+/* auth */
+#auth{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.auth-box{background:#fff;border:1px solid rgba(0,0,0,0.1);border-radius:18px;padding:36px;width:400px;max-width:94vw}
+.brand{font-size:22px;font-weight:900;letter-spacing:1px}
+.brand span{color:#25D366}
+.tag{font-size:13px;color:#888;margin-top:4px;margin-bottom:24px}
+.field{margin-bottom:12px}
+.field label{font-size:12px;color:#888;display:block;margin-bottom:4px}
+.field input,.field select,.field textarea{width:100%;padding:11px 13px;border:1.5px solid rgba(0,0,0,0.12);border-radius:10px}
+.field input:focus,.field textarea:focus{border-color:#0a0a0a}
+.btn{width:100%;padding:12px;background:#0a0a0a;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600}
+.btn:hover{background:#333}
+.btn.sm{width:auto;padding:9px 18px;font-size:13px}
+.btn.ghost{background:#fff;color:#0a0a0a;border:1.5px solid rgba(0,0,0,0.15)}
+.btn.ghost:hover{background:#f5f5f5}
+.btn.wa{background:#25D366}
+.btn.wa:hover{background:#1eb857}
+.err{background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:9px 12px;font-size:12px;color:#dc2626;margin-bottom:12px;display:none}
+.ok-msg{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:9px 12px;font-size:12px;color:#16a34a;margin-bottom:12px;display:none}
+.switch-line{text-align:center;font-size:13px;color:#888;margin-top:14px}
+.switch-line a{color:#0a0a0a;font-weight:600;cursor:pointer;text-decoration:underline}
+
+/* app shell */
+#app{display:none;min-height:100vh}
+#topbar{background:#fff;border-bottom:1px solid rgba(0,0,0,0.08);padding:0 24px;display:flex;align-items:center;gap:6px;height:58px;position:sticky;top:0;z-index:50}
+.nav-btn{background:none;border:none;font-size:13px;font-weight:500;color:#666;padding:8px 14px;border-radius:8px}
+.nav-btn:hover{background:#f5f5f5;color:#0a0a0a}
+.nav-btn.on{background:#0a0a0a;color:#fff;font-weight:600}
+#user-email{margin-left:auto;font-size:12px;color:#aaa}
+.page{max-width:1060px;margin:0 auto;padding:32px 24px;display:none}
+.page.on{display:block}
+h1{font-size:24px;font-weight:800;letter-spacing:-0.5px;margin-bottom:4px}
+.sub{font-size:13px;color:#888;margin-bottom:24px}
+.card{background:#fff;border:1px solid rgba(0,0,0,0.09);border-radius:14px;padding:22px;margin-bottom:16px}
+.card h3{font-size:15px;font-weight:700;margin-bottom:12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.stat{background:#fff;border:1px solid rgba(0,0,0,0.09);border-radius:14px;padding:18px;text-align:center}
+.stat b{font-size:26px;font-weight:900;display:block}
+.stat span{font-size:12px;color:#888}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.05em;padding:8px 10px;border-bottom:1px solid rgba(0,0,0,0.08)}
+td{padding:9px 10px;border-bottom:1px solid rgba(0,0,0,0.05)}
+.pill{font-size:10px;font-weight:700;padding:2px 9px;border-radius:99px;border:1px solid rgba(0,0,0,0.12);color:#555}
+.pill.green{background:#25D366;color:#fff;border-color:#25D366}
+.pill.dark{background:#0a0a0a;color:#fff;border-color:#0a0a0a}
+.link{font-size:12px;color:#0a0a0a;text-decoration:underline;cursor:pointer;background:none;border:none}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.step-row{display:grid;grid-template-columns:70px 110px 1fr 34px;gap:8px;margin-bottom:8px;align-items:start}
+.step-row input,.step-row select,.step-row textarea{padding:8px 10px;border:1.5px solid rgba(0,0,0,0.12);border-radius:8px;width:100%}
+.note{font-size:12px;color:#888;background:#f8f8f8;border:1px solid rgba(0,0,0,0.07);border-radius:8px;padding:10px 12px;margin-top:10px;line-height:1.6}
+.seg-chip{font-size:12px;font-weight:600;padding:6px 12px;border-radius:99px;border:1.5px solid rgba(0,0,0,0.12);background:#fff;cursor:pointer}
+.seg-chip:hover{border-color:#0a0a0a}
+.seg-chip.on{background:#0a0a0a;color:#fff;border-color:#0a0a0a}
+.an-bar{height:8px;background:rgba(0,0,0,0.07);border-radius:4px;overflow:hidden;margin:4px 0 10px}
+.an-fill{height:100%;background:#25D366;border-radius:4px}
+.wiz-step{display:flex;gap:12px;margin-bottom:14px;font-size:13px}
+.wiz-n{flex-shrink:0;width:26px;height:26px;border-radius:50%;background:#0a0a0a;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+.wiz-t{color:#666;line-height:1.7}
+.wiz-t code{background:#f5f5f5;border:1px solid rgba(0,0,0,0.1);border-radius:5px;padding:1px 7px;font-size:12px}
+.plink{font-size:13px;color:#666;cursor:pointer;font-weight:500}
+.plink:hover{color:#0a0a0a;text-decoration:underline}
+.feat{list-style:none;margin:12px 0;display:flex;flex-direction:column;gap:6px;font-size:13px;color:#444}
+.feat li::before{content:'✓ ';color:#25D366;font-weight:700}
+.pub-pg h1{font-size:26px;margin-bottom:4px}
+#demo-banner{background:#0a0a0a;color:#fff;padding:9px 24px;font-size:12px;display:none;align-items:center;gap:10px}
+#demo-banner a{color:#25D366;font-weight:600;cursor:pointer}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#0a0a0a;color:#fff;border-radius:99px;padding:10px 22px;font-size:13px;z-index:999;display:none}
+@media(max-width:720px){.grid2,.grid4{grid-template-columns:1fr}.step-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="toast"></div>
+
+<!-- ═══════ AUTH ═══════ -->
+<div id="auth">
+  <div class="auth-box">
+    <div class="brand">WA·<span>Marketer</span></div>
+    <div class="tag"><b>AI that sells on WhatsApp 24/7</b> — answers customers in Arabic & English, collects orders, alerts you on hot leads. Plus campaigns, segments & drips.</div>
+    <div class="err" id="auth-err"></div>
+    <div class="field"><label>Email</label><input id="a-email" type="email" placeholder="you@business.com"></div>
+    <div class="field"><label>Password</label><input id="a-pass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doAuth()"></div>
+    <button class="btn" id="auth-btn" onclick="doAuth()">Create account</button>
+    <button class="btn wa" style="margin-top:8px" onclick="startDemo()">⚡ Try 24-hour demo — no signup</button>
+    <div class="switch-line" id="auth-switch">Already have an account? <a onclick="toggleAuth()">Sign in</a></div>
+    <div style="display:flex;gap:14px;justify-content:center;margin-top:20px;padding-top:16px;border-top:1px solid rgba(0,0,0,0.07);font-size:12px">
+      <a class="plink" onclick="showPublic('pricing')">Pricing</a>
+      <a class="plink" onclick="showPublic('about')">About</a>
+      <a class="plink" onclick="showPublic('faq')">FAQ</a>
+      <a class="plink" onclick="showPublic('legal')">Terms &amp; Legal</a>
+      <a class="plink" style="opacity:0.4" onclick="showPublic('admin')">Admin</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ PUBLIC PAGES (visible logged out or in) ═══════ -->
+<div id="public-wrap" class="hidden" style="min-height:100vh;background:#fafafa">
+  <div style="background:#fff;border-bottom:1px solid rgba(0,0,0,0.08);padding:14px 24px;display:flex;align-items:center;gap:14px">
+    <span class="brand" style="font-size:16px;cursor:pointer" onclick="hidePublic()">WA·<span>Marketer</span></span>
+    <a class="plink" onclick="showPublic('pricing')">Pricing</a>
+    <a class="plink" onclick="showPublic('about')">About</a>
+    <a class="plink" onclick="showPublic('faq')">FAQ</a>
+    <a class="plink" onclick="showPublic('legal')">Terms &amp; Legal</a>
+    <button class="btn sm" style="margin-left:auto" onclick="hidePublic()" id="pub-back">← Back</button>
+  </div>
+  <div style="max-width:900px;margin:0 auto;padding:40px 24px">
+
+    <div class="pub-pg" id="pub-pricing">
+      <h1>Simple pricing</h1><div class="sub"><b>Your 24/7 sales employee for about $1/day.</b> Start free, upgrade when campaigns grow. You bring your own Meta WhatsApp number — Meta's free tier covers 1,000 conversations/month.</div>
+      <div class="grid2" style="grid-template-columns:repeat(4,1fr)">
+        <div class="card"><h3>Demo</h3><div style="font-size:28px;font-weight:900">$0</div><div class="sub">24 hours</div>
+          <ul class="feat"><li>Full platform access</li><li>25 contacts max</li><li>AI sales responder</li><li>Expires after 24h</li></ul>
+          <button class="btn sm wa" onclick="hidePublic();startDemo()">Start demo</button></div>
+        <div class="card"><h3>Starter</h3><div style="font-size:28px;font-weight:900">$29<span style="font-size:13px;color:#888">/mo</span></div><div class="sub">Solo businesses</div>
+          <ul class="feat"><li>2,000 contacts</li><li>Unlimited campaigns</li><li>AI sales responder 24/7</li><li>Hot-lead alerts + daily report</li><li>Drips & smart segments</li><li>Number protection (warm-up)</li></ul>
+          <button class="btn sm ghost" onclick="hidePublic()">Create account</button></div>
+        <div class="card" style="border:2px solid #0a0a0a"><h3>Pro</h3><div style="font-size:28px;font-weight:900">$49<span style="font-size:13px;color:#888">/mo</span></div><div class="sub">Most popular</div>
+          <ul class="feat"><li>Everything in Starter</li><li>10,000 contacts</li><li><b>📊 Campaign Analytics</b> — delivery, read & reply rates</li><li>Priority AI responses</li><li>Priority support</li></ul>
+          <button class="btn sm" onclick="hidePublic()">Create account</button></div>
+        <div class="card"><h3>Agency</h3><div style="font-size:28px;font-weight:900">$99<span style="font-size:13px;color:#888">/mo</span></div><div class="sub">Teams &amp; agencies</div>
+          <ul class="feat"><li>Everything in Pro</li><li>Unlimited contacts</li><li>Multiple numbers (soon)</li><li>White-label (soon)</li><li>Dedicated support</li></ul>
+          <button class="btn sm ghost" onclick="hidePublic()">Create account</button></div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <div class="row" style="justify-content:space-between;flex-wrap:wrap;gap:10px">
+          <div><h3 style="margin-bottom:4px">🤝 "Do it for me" — Concierge setup</h3>
+          <p class="sub" style="margin:0">We connect your WhatsApp Cloud API with you on a 15-min call, create your first template, and send your first test — done today.</p></div>
+          <div style="text-align:center"><div style="font-size:24px;font-weight:900">$25<span style="font-size:12px;color:#888"> one-time</span></div>
+          <a href="https://wa.me/9613000000?text=Hi!%20I%20want%20the%20WA-Marketer%20concierge%20setup%20($25)" target="_blank" class="btn sm wa" style="text-decoration:none;display:inline-block;margin-top:4px">Book on WhatsApp</a></div>
+        </div>
+      </div>
+      <div class="note">📊 Campaign Analytics (delivery/read/reply rates) is included in <b>Pro and Agency</b> plans. Payments are activated manually during beta — create an account and the team upgrades you after checkout via WhatsApp/bank transfer.</div>
+    </div>
+
+    <div class="pub-pg hidden" id="pub-about">
+      <h1>About us</h1>
+      <div class="card"><p style="font-size:14px;line-height:1.9;color:#444">
+        WA-Marketer was built in Beirut 🇱🇧 for businesses that live on WhatsApp — because in MENA, WhatsApp <i>is</i> the storefront, the support desk, and the sales channel.<br><br>
+        Big marketing platforms treat WhatsApp as an afterthought and price in dollars that don't make sense here. We built the opposite: a focused tool where broadcast campaigns, an AI assistant that answers customers 24/7 in Arabic and English, automatic lead capture, and drip follow-ups all work from one simple dashboard — on your own WhatsApp Business number, under your control.<br><br>
+        You own your number. You own your contact list. You own your customer relationships. We just give them superpowers.
+      </p></div>
+    </div>
+
+    <div class="pub-pg hidden" id="pub-faq">
+      <h1>FAQ</h1>
+      <div class="card"><h3>Do I need a special WhatsApp account?</h3><p class="sub" style="margin:0">You need a free Meta WhatsApp Business Cloud API number (not your personal WhatsApp). Setup takes ~10 minutes — full steps are inside the app's Settings page.</p></div>
+      <div class="card"><h3>Can I message anyone?</h3><p class="sub" style="margin:0">You can freely reply to anyone who messaged you in the last 24 hours. To start conversations (campaigns/drips), WhatsApp requires pre-approved message templates and opted-in contacts. The app enforces this so your number stays safe.</p></div>
+      <div class="card"><h3>How does the AI responder work?</h3><p class="sub" style="margin:0">You paste your business info (products, prices, policies) once. Claude AI reads every inbound message and replies instantly in the customer's language, collects their name and interest, and saves them as a lead.</p></div>
+      <div class="card"><h3>What does WhatsApp/Meta charge?</h3><p class="sub" style="margin:0">Meta's free tier covers 1,000 service conversations per month per number. Beyond that Meta bills your Meta account directly at their local rates — we never touch it.</p></div>
+      <div class="card"><h3>Is my data safe?</h3><p class="sub" style="margin:0">Your contacts and conversations are stored per-account, isolated, and never shared or sold. Your WhatsApp token is stored encrypted at rest and only used to send your messages.</p></div>
+      <div class="card"><h3>What happens after the 24h demo?</h3><p class="sub" style="margin:0">The demo account expires and locks. Create a real account anytime — imports take minutes.</p></div>
+    </div>
+
+    <div class="pub-pg hidden" id="pub-legal">
+      <h1>Terms of Service &amp; Legal</h1>
+      <div class="card">
+        <h3>1. Service</h3><p class="sub">WA-Marketer provides software to manage WhatsApp marketing using YOUR OWN Meta WhatsApp Cloud API credentials. We are not affiliated with Meta or WhatsApp.</p>
+        <h3>2. Acceptable use</h3><p class="sub">You must only message contacts who opted in to hear from you. Spam, harassment, illegal content, and cold-messaging purchased lists are strictly prohibited and cause account termination. You are solely responsible for complying with WhatsApp Business Policy and local law.</p>
+        <h3>3. Your number, your risk</h3><p class="sub">Meta may restrict numbers that violate its policies. We enforce best practices (templates, opt-in, rate limits) but cannot guarantee Meta's decisions.</p>
+        <h3>4. AI responses</h3><p class="sub">AI replies are generated from the business information you provide. Review your AI configuration; you are responsible for what your assistant tells customers.</p>
+        <h3>5. Data &amp; privacy</h3><p class="sub">We store your account data, contacts, and message logs to provide the service. We never sell data or use it to train AI models. Request deletion anytime and your account and all data are erased.</p>
+        <h3>6. Payments</h3><p class="sub">Subscriptions are billed monthly, cancel anytime, effective end of period. Demo accounts are free and expire after 24 hours.</p>
+        <h3>7. Liability</h3><p class="sub">Service provided "as is". Our liability is limited to the fees you paid in the last month. Governing law: Lebanon.</p>
+      </div>
+    </div>
+
+    <div class="pub-pg hidden" id="pub-admin">
+      <h1>Admin</h1>
+      <div class="card" id="adm-gate">
+        <h3>🔐 Admin access</h3>
+        <div class="field"><label>Admin password</label><input id="adm-pass" type="password" onkeydown="if(event.key==='Enter')admLogin()"></div>
+        <button class="btn sm" onclick="admLogin()">Enter</button>
+      </div>
+      <div class="hidden" id="adm-panel">
+        <div class="grid4" id="adm-totals"></div>
+        <div class="card" style="margin-top:16px">
+          <h3>👥 Users — approve, reject, supervise</h3>
+          <table><thead><tr><th>Email</th><th>Status</th><th>Plan</th><th>Contacts</th><th>Msgs</th><th>Sent</th><th>Last seen</th><th>Actions</th></tr></thead><tbody id="adm-users"></tbody></table>
+        </div>
+        <div class="card hidden" id="adm-detail-card">
+          <div class="row" style="justify-content:space-between"><h3 id="adm-detail-title">User detail</h3><button class="link" onclick="$('adm-detail-card').classList.add('hidden')">close</button></div>
+          <div id="adm-detail"></div>
+        </div>
+        <div class="card">
+          <h3>📡 Live activity feed</h3>
+          <table><thead><tr><th>When</th><th>User</th><th>Event</th><th>Detail</th></tr></thead><tbody id="adm-events"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════ APP ═══════ -->
+<div id="app">
+  <div id="demo-banner"><span id="demo-banner-text"></span><a onclick="showPublic('pricing')">See plans →</a></div>
+  <div id="ws-banner" style="display:none;background:#25D366;color:#fff;padding:9px 24px;font-size:12px;align-items:center;gap:10px"><span id="ws-banner-text"></span><a onclick="wsBack()" style="color:#fff;font-weight:700;cursor:pointer;text-decoration:underline">← Back to agency</a></div>
+  <div id="topbar">
+    <span class="brand" style="font-size:16px;margin-right:14px">WA·<span>M</span></span>
+    <button class="nav-btn on" data-p="dash" onclick="nav('dash')">Dashboard</button>
+    <button class="nav-btn" data-p="contacts" onclick="nav('contacts')">Contacts</button>
+    <button class="nav-btn" data-p="campaigns" onclick="nav('campaigns')">Campaigns</button>
+    <button class="nav-btn" data-p="drips" onclick="nav('drips')">Drips</button>
+    <button class="nav-btn" data-p="ai" onclick="nav('ai')">AI Responder</button>
+    <button class="nav-btn" data-p="settings" onclick="nav('settings')">Settings</button>
+    <button class="nav-btn hidden" id="nav-ws" data-p="ws" onclick="nav('ws')">Workspaces</button>
+    <span id="user-email"></span>
+    <button class="link" onclick="logout()" style="margin-left:10px">Logout</button>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="page on" id="pg-dash">
+    <h1>Dashboard</h1><div class="sub">Your WhatsApp marketing at a glance.</div>
+    <div class="grid4">
+      <div class="stat"><b id="st-contacts">—</b><span>Contacts</span></div>
+      <div class="stat"><b id="st-sent">—</b><span>Messages sent</span></div>
+      <div class="stat"><b id="st-leads">—</b><span>Inbound leads</span></div>
+      <div class="stat"><b id="st-wa">—</b><span>WhatsApp status</span></div>
+    </div>
+    <div class="grid2" style="margin-top:16px;grid-template-columns:1fr 1fr 1fr">
+      <div class="card" style="margin:0">
+        <h3>🛡 Number health</h3>
+        <div style="text-align:center;padding:6px 0">
+          <div style="font-size:34px;font-weight:900" id="hl-score">—</div>
+          <div style="font-size:11px;color:#888">quality score</div>
+        </div>
+        <table style="font-size:12px">
+          <tr><td style="color:#888">Today's sends</td><td id="hl-sends">—</td></tr>
+          <tr><td style="color:#888">Warm-up</td><td id="hl-warm">—</td></tr>
+          <tr><td style="color:#888">Read rate (7d)</td><td id="hl-read">—</td></tr>
+          <tr><td style="color:#888">Reply rate (7d)</td><td id="hl-reply">—</td></tr>
+        </table>
+        <div style="font-size:11px;color:#25D366;margin-top:8px">✓ We protect your number with smart daily limits</div>
+      </div>
+      <div class="card" style="margin:0">
+        <h3>💼 My account</h3>
+        <table style="font-size:13px">
+          <tr><td style="color:#888">Plan</td><td><b id="acc-plan">—</b></td></tr>
+          <tr><td style="color:#888">Status</td><td id="acc-status">—</td></tr>
+          <tr><td style="color:#888">WhatsApp</td><td id="acc-wa">—</td></tr>
+          <tr><td style="color:#888">AI responder</td><td id="acc-ai">—</td></tr>
+        </table>
+        <button class="btn sm ghost" style="margin-top:10px" onclick="showPublic('pricing')">Upgrade plan →</button>
+      </div>
+      <div class="card" style="margin:0">
+        <h3>🚀 Quick actions</h3>
+        <div class="row" style="flex-direction:column;align-items:stretch;gap:8px">
+          <button class="btn sm ghost" onclick="nav('contacts')">➕ Add contacts</button>
+          <button class="btn sm ghost" onclick="nav('campaigns')">📢 New campaign</button>
+          <button class="btn sm ghost" onclick="nav('ai')">🤖 Configure AI responder</button>
+          <button class="btn sm ghost" onclick="nav('settings')">🔌 Connect WhatsApp</button>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <h3>📨 Recent messages</h3>
+      <table><thead><tr><th>Phone</th><th>Dir</th><th>Message</th><th>Type</th><th>When</th></tr></thead><tbody id="msg-log"><tr><td colspan="5" style="color:#aaa">Loading…</td></tr></tbody></table>
+    </div>
+  </div>
+
+  <!-- CONTACTS -->
+  <div class="page" id="pg-contacts">
+    <h1>Contacts</h1><div class="sub">Segment your audience into categories — campaigns and drips target categories.</div>
+    <div class="grid2">
+      <div class="card">
+        <h3>➕ Add contact</h3>
+        <div class="field"><label>Phone (with country code, e.g. 9613123456)</label><input id="c-phone" placeholder="9613123456"></div>
+        <div class="field"><label>Name</label><input id="c-name" placeholder="Ahmad"></div>
+        <div class="field"><label>Category</label><input id="c-cat" placeholder="vip / customers / leads…" value="general"></div>
+        <button class="btn sm" onclick="addContact()">Add</button>
+      </div>
+      <div class="card">
+        <h3>📥 Import CSV</h3>
+        <div class="field"><label>Paste CSV — one per line: phone,name,category</label><textarea id="c-csv" rows="5" placeholder="9613111111,Ahmad,vip&#10;9715022222,Sara,customers"></textarea></div>
+        <div class="field"><label>Default category (if column missing)</label><input id="c-csv-cat" value="general"></div>
+        <button class="btn sm" onclick="importCSV()">Import</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="row" style="justify-content:space-between;margin-bottom:12px">
+        <h3 style="margin:0">📇 Your contacts</h3>
+        <div class="row">
+          <button class="seg-chip" onclick="segFilter('seg:hot')">🔥 Hot</button>
+          <button class="seg-chip" onclick="segFilter('seg:warm')">🌡 Warm</button>
+          <button class="seg-chip" onclick="segFilter('seg:replied7d')">💬 Replied 7d</button>
+          <button class="seg-chip" onclick="segFilter('seg:never')">😴 Never replied</button>
+          <button class="seg-chip" onclick="segFilter('seg:new7d')">🆕 New 7d</button>
+          <select id="c-filter" onchange="loadContacts()" style="padding:8px 12px;border:1.5px solid rgba(0,0,0,0.12);border-radius:8px"><option value="all">All categories</option></select>
+        </div>
+      </div>
+      <table><thead><tr><th>Phone</th><th>Name</th><th>Category</th><th>Intent</th><th>Interest / Order</th><th>Source</th><th></th></tr></thead><tbody id="c-list"></tbody></table>
+    </div>
+  </div>
+
+  <!-- CAMPAIGNS -->
+  <div class="page" id="pg-campaigns">
+    <h1>Broadcast campaigns</h1><div class="sub">Send a template message to an entire category. Templates must be approved in Meta Business Manager first.</div>
+    <div class="card" style="border:2px solid #0a0a0a">
+      <h3>✨ AI writes your message</h3>
+      <p class="sub" style="margin-bottom:10px">Describe the offer — Claude writes a Meta-approval-ready template in English, Arabic, or both.</p>
+      <div class="grid2" style="grid-template-columns:1fr 160px">
+        <input id="aw-goal" placeholder="e.g. 30% off Lebanese olive oil this week, free delivery over $30" style="padding:10px 13px;border:1.5px solid rgba(0,0,0,0.12);border-radius:10px">
+        <select id="aw-lang" style="padding:10px;border:1.5px solid rgba(0,0,0,0.12);border-radius:10px"><option value="en">English</option><option value="ar">Arabic</option><option value="both">Both</option></select>
+      </div>
+      <button class="btn sm wa" style="margin-top:10px" onclick="aiWrite()" id="aw-btn">✨ Write it</button>
+      <div class="hidden" id="aw-out" style="margin-top:14px">
+        <div class="field"><label>Template name (use this in Meta) <button class="link" onclick="copyTxt($('aw-name').textContent)">copy</button></label><code id="aw-name" style="font-size:13px"></code></div>
+        <div class="field hidden" id="aw-en-wrap"><label>English body <button class="link" onclick="copyTxt($('aw-en').textContent)">copy</button> <button class="link" onclick="useBody('en')">use as free-text</button></label><div id="aw-en" style="background:#f8f8f8;border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:10px;font-size:13px;white-space:pre-wrap"></div></div>
+        <div class="field hidden" id="aw-ar-wrap"><label>Arabic body <button class="link" onclick="copyTxt($('aw-ar').textContent)">copy</button> <button class="link" onclick="useBody('ar')">use as free-text</button></label><div id="aw-ar" dir="rtl" style="background:#f8f8f8;border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:10px;font-size:13px;white-space:pre-wrap"></div></div>
+        <div class="note" id="aw-tip"></div>
+        <div class="note">Next: Meta Business Manager → <b>Message Templates → Create</b> → paste the name + body → once approved (usually minutes-hours), enter the template name in the campaign form below.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🚀 New campaign</h3>
+      <div class="grid2">
+        <div class="field"><label>Campaign name</label><input id="cp-name" placeholder="Summer promo"></div>
+        <div class="field"><label>Target audience</label><select id="cp-cat">
+          <option value="all">All contacts</option>
+          <optgroup label="⚡ Smart segments (auto)">
+            <option value="seg:hot">🔥 Hot leads (AI-detected)</option>
+            <option value="seg:warm">🌡 Warm leads</option>
+            <option value="seg:replied7d">💬 Replied last 7 days</option>
+            <option value="seg:never">😴 Never replied</option>
+            <option value="seg:new7d">🆕 New this week</option>
+          </optgroup>
+        </select></div>
+        <div class="field"><label>Mode</label><select id="cp-mode" onchange="cpMode()"><option value="template">Template (works for everyone)</option><option value="text">Free text (only 24h-active chats)</option></select></div>
+        <div class="field" id="cp-tpl-wrap"><label>Template name (from Meta)</label><input id="cp-tpl" placeholder="summer_promo_v1"></div>
+        <div class="field"><label>Language code</label><input id="cp-lang" value="en" placeholder="en / ar"></div>
+        <div class="field"><label>{{1}} variable = contact's…</label><select id="cp-var"><option value="name">name</option><option value="interest">interest</option><option value="phone">phone</option></select></div>
+      </div>
+      <div class="field hidden" id="cp-body-wrap"><label>Message text (use {{1}} for the variable)</label><textarea id="cp-body" rows="3" placeholder="Hi {{1}}! Our summer sale is live 🎉"></textarea></div>
+      <div class="row">
+        <button class="btn sm wa" onclick="sendCampaign('send')">Send now</button>
+        <input id="cp-when" type="datetime-local" style="padding:9px 12px;border:1.5px solid rgba(0,0,0,0.12);border-radius:8px">
+        <button class="btn sm ghost" onclick="sendCampaign('schedule')">Schedule</button>
+      </div>
+      <div class="note">⚠️ WhatsApp rules: business-initiated messages require an <b>approved template</b>. Free-text only delivers to contacts who messaged you in the last 24h. Sends run in batches of 30 — big lists continue automatically every 15 minutes.</div>
+    </div>
+    <div class="card">
+      <h3>📋 Campaign history</h3>
+      <table><thead><tr><th>Name</th><th>Category</th><th>Status</th><th>Sent</th><th>Failed</th><th></th></tr></thead><tbody id="cp-list"></tbody></table>
+    </div>
+    <div class="card hidden" id="an-card">
+      <div class="row" style="justify-content:space-between"><h3 id="an-title">📊 Analytics</h3><button class="link" onclick="$('an-card').classList.add('hidden')">close</button></div>
+      <div id="an-body"></div>
+    </div>
+  </div>
+
+  <!-- DRIPS -->
+  <div class="page" id="pg-drips">
+    <h1>Drip sequences</h1><div class="sub">Day-based follow-up flows. Enroll a category once — messages send automatically on schedule.</div>
+    <div class="card">
+      <h3>💧 New sequence</h3>
+      <div class="grid2">
+        <div class="field"><label>Sequence name</label><input id="d-name" placeholder="New lead nurture"></div>
+        <div class="field"><label>Target category</label><select id="d-cat"><option value="all">All contacts</option></select></div>
+      </div>
+      <label style="font-size:12px;color:#888;display:block;margin-bottom:6px">Steps — day 0 = immediately on enrollment</label>
+      <div id="d-steps"></div>
+      <button class="btn sm ghost" onclick="addStep()">+ Add step</button>
+      <div class="row" style="margin-top:12px"><button class="btn sm wa" onclick="createDrip()">Create sequence</button></div>
+      <div class="note">Each step is a template name (recommended) or free text. Timing counts from enrollment: day 0, day 3, day 7…</div>
+    </div>
+    <div class="card">
+      <h3>🔁 Your sequences</h3>
+      <div id="d-list"></div>
+    </div>
+  </div>
+
+  <!-- AI RESPONDER -->
+  <div class="page" id="pg-ai">
+    <h1>AI auto-responder</h1><div class="sub">Claude answers every inbound WhatsApp 24/7 — qualifies leads, captures name & interest automatically.</div>
+    <div class="card">
+      <div class="row" style="justify-content:space-between">
+        <h3 style="margin:0">🤖 Status</h3>
+        <label class="row" style="gap:8px;font-size:13px"><input type="checkbox" id="ai-on" style="width:18px;height:18px"> Enabled</label>
+      </div>
+      <div class="field" style="margin-top:14px"><label>Business knowledge — everything the AI should know (products, prices, hours, tone, FAQs). Arabic + English both fine.</label>
+      <textarea id="ai-prompt" rows="9" placeholder="We are Beirut Roasters. We sell specialty coffee...&#10;Prices: 250g bag $12, 1kg $40...&#10;Delivery: all Lebanon, 24-48h, $3 fee, free over $30...&#10;Tone: friendly, casual Lebanese..."></textarea></div>
+      <button class="btn sm" onclick="saveAI()">Save</button>
+      <div class="note">💡 Lead capture is built in: the AI naturally asks for name + interest and saves them to the contact record. Anyone who messages you becomes a contact in category "inbound".</div>
+    </div>
+  </div>
+
+  <!-- WORKSPACES (Agency) -->
+  <div class="page" id="pg-ws">
+    <h1>Workspaces</h1><div class="sub">Manage multiple businesses & WhatsApp numbers under one Agency login. Each workspace is a full isolated account.</div>
+    <div class="card">
+      <h3>➕ New workspace</h3>
+      <div class="row">
+        <input id="ws-label" placeholder="Client / business name — e.g. Beirut Roasters" style="flex:1;padding:10px 13px;border:1.5px solid rgba(0,0,0,0.12);border-radius:10px">
+        <button class="btn sm" onclick="wsCreate()">Create</button>
+      </div>
+    </div>
+    <div class="card">
+      <h3>🗂 Your workspaces</h3>
+      <table><thead><tr><th>Business</th><th>WhatsApp</th><th>Contacts</th><th>Last active</th><th></th></tr></thead><tbody id="ws-list"></tbody></table>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="page" id="pg-settings">
+    <h1>Settings</h1><div class="sub">Connect your own WhatsApp Business Cloud API — 10 minutes, free, no approvals.</div>
+    <div class="card">
+      <h3>🔌 WhatsApp connection</h3>
+      <div class="ok-msg" id="s-ok"></div><div class="err" id="s-err"></div>
+      <div class="grid2">
+        <div class="field"><label>Business name</label><input id="s-biz" placeholder="Beirut Roasters"></div>
+        <div class="field"><label>Phone Number ID</label><input id="s-pnid" placeholder="123456789012345"></div>
+        <div class="field"><label>WABA ID (optional)</label><input id="s-waba" placeholder="98765…"></div>
+        <div class="field"><label>Permanent access token</label><input id="s-token" placeholder="EAAG…"></div>
+      </div>
+      <div class="row">
+        <button class="btn sm" onclick="saveSettings()">Save</button>
+        <input id="s-test" placeholder="Your phone to test: 9613…" style="padding:9px 12px;border:1.5px solid rgba(0,0,0,0.12);border-radius:8px">
+        <button class="btn sm wa" onclick="testSend()">Send test message</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🧭 Guided setup — 10 minutes, once</h3>
+      <div class="wiz-step"><span class="wiz-n">1</span><div><b>Create your Meta app</b><br><span class="wiz-t">Go to <a href="https://developers.facebook.com/apps" target="_blank" style="color:#0a0a0a;text-decoration:underline">developers.facebook.com/apps</a> → Create App → type <b>Business</b> → after creating, click <b>Add product → WhatsApp → Set up</b>.</span></div></div>
+      <div class="wiz-step"><span class="wiz-n">2</span><div><b>Copy your Phone Number ID</b><br><span class="wiz-t">In WhatsApp → <b>API Setup</b> you'll see "Phone number ID" under your number. Copy it into the field above.</span></div></div>
+      <div class="wiz-step"><span class="wiz-n">3</span><div><b>Create a permanent token</b><br><span class="wiz-t"><a href="https://business.facebook.com/settings/system-users" target="_blank" style="color:#0a0a0a;text-decoration:underline">Business Settings → System Users</a> → Add → name it "wamarketer" (Admin) → <b>Generate token</b> → select your app → check <b>whatsapp_business_messaging</b> + <b>whatsapp_business_management</b> → copy the token above. (Tokens from API Setup expire in 24h — use a System User token!)</span></div></div>
+      <div class="wiz-step"><span class="wiz-n">4</span><div><b>Connect the webhook</b><br><span class="wiz-t">WhatsApp → <b>Configuration</b> → Webhook → Edit:<br>
+        Callback URL: <code id="s-hook">…</code> <button class="link" onclick="copyTxt($('s-hook').textContent)">copy</button><br>
+        Verify token: <code>wamark-verify</code> <button class="link" onclick="copyTxt('wamark-verify')">copy</button><br>
+        Then click <b>Manage</b> → subscribe to <b>messages</b>.</span></div></div>
+      <div class="wiz-step"><span class="wiz-n">5</span><div><b>Save above → Send test message</b><br><span class="wiz-t">If the test arrives on your phone — you're live. 🎉</span></div></div>
+      <div class="note" style="background:#f0fdf4;border-color:#bbf7d0">
+        🤝 <b>Don't want to do this yourself?</b> We set it up WITH you on a 15-min WhatsApp call — <b>$25</b>, done today.
+        <a href="https://wa.me/9613000000?text=Hi!%20I%20want%20the%20WA-Marketer%20concierge%20setup%20($25)" target="_blank" style="color:#16a34a;font-weight:700">→ Book concierge setup</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>📊 Daily owner report</h3>
+      <p class="sub" style="margin-bottom:12px">Every morning at 7 AM, get yesterday's numbers on WhatsApp: conversations, new leads, hot leads with names — so you know exactly who to call.</p>
+      <div class="grid2">
+        <div class="field"><label>Your personal WhatsApp (with country code)</label><input id="s-owner" placeholder="9613123456"></div>
+        <div class="field" style="display:flex;align-items:flex-end"><label class="row" style="gap:8px;font-size:13px;margin:0"><input type="checkbox" id="s-daily" style="width:18px;height:18px"> Send me the daily report</label></div>
+      </div>
+      <button class="btn sm" onclick="saveDaily()">Save report settings</button>
+      <div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(0,0,0,0.07)">
+        <label class="row" style="gap:8px;font-size:13px"><input type="checkbox" id="s-warmup" checked style="width:18px;height:18px"> 🛡 <b>Number protection (warm-up limits)</b> — recommended</label>
+        <p class="sub" style="margin:6px 0 0">Gradually increases your daily send limit (50 → 200 → 500 → 1,000/day) so Meta trusts your number. Turning this off removes limits and increases ban risk.</p>
+        <button class="btn sm ghost" style="margin-top:8px" onclick="saveWarmup()">Save protection setting</button>
+      </div>
+      <div class="note">Tip: message your business number once from your personal phone ("subscribe") — then reports always arrive as normal messages. Otherwise create a template named <code>daily_summary</code> with body: <code>📊 Daily report {{1}}: {{2}}</code> and we fall back to it automatically.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = '';
+let TOKEN = localStorage.getItem('wm-token') || '';
+let EMAIL = localStorage.getItem('wm-email') || '';
+let authMode = 'signup';
+let CATS = [];
+
+const $ = id => document.getElementById(id);
+const H = () => ({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + TOKEN });
+function toast(m){ const t=$('toast'); t.textContent=m; t.style.display='block'; setTimeout(()=>t.style.display='none',3000); }
+
+// ── auth ──
+function toggleAuth(){
+  authMode = authMode==='signup' ? 'login' : 'signup';
+  $('auth-btn').textContent = authMode==='signup' ? 'Create account' : 'Sign in';
+  $('auth-switch').innerHTML = authMode==='signup'
+    ? 'Already have an account? <a onclick="toggleAuth()">Sign in</a>'
+    : 'New here? <a onclick="toggleAuth()">Create account</a>';
+}
+async function doAuth(){
+  const err=$('auth-err'); err.style.display='none';
+  try{
+    const r = await fetch(API+'/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({action:authMode,email:$('a-email').value,password:$('a-pass').value})});
+    const d = await r.json();
+    if(!r.ok){ err.textContent=d.error||'Failed'; err.style.display='block'; return; }
+    TOKEN=d.token; EMAIL=d.email;
+    localStorage.setItem('wm-token',TOKEN); localStorage.setItem('wm-email',EMAIL);
+    localStorage.setItem('wm-status',d.status||'active'); localStorage.setItem('wm-plan',d.plan||'free');
+    localStorage.setItem('wm-expires',d.demo_expires||'');
+    boot();
+    if(d.status==='pending') toast('Account created! Pending approval — you can start working now.');
+  }catch(e){ err.textContent='Network error'; err.style.display='block'; }
+}
+function logout(){ localStorage.removeItem('wm-token'); localStorage.removeItem('wm-email'); location.reload(); }
+
+// ── shell ──
+function nav(p){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('.nav-btn').forEach(x=>x.classList.remove('on'));
+  $('pg-'+p).classList.add('on');
+  document.querySelector(`.nav-btn[data-p="${p}"]`).classList.add('on');
+  if(p==='dash') loadDash();
+  if(p==='contacts') loadContacts();
+  if(p==='campaigns'){ loadCampaigns(); fillCats('cp-cat'); }
+  if(p==='drips'){ loadDrips(); fillCats('d-cat'); }
+  if(p==='ai') loadSettings();
+  if(p==='settings') loadSettings();
+  if(p==='ws') wsLoad();
+}
+function boot(){
+  $('auth').style.display='none'; $('auth').classList.add('hidden');
+  $('public-wrap').classList.add('hidden');
+  $('app').style.display='block';
+  paintBanner();
+  $('nav-ws').classList.toggle('hidden', (localStorage.getItem('wm-plan')!=='agency') && !localStorage.getItem('wm-parent-token'));
+  const wsn = localStorage.getItem('wm-ws-name');
+  if(localStorage.getItem('wm-parent-token') && wsn){
+    $('ws-banner').style.display='flex';
+    $('ws-banner-text').textContent = '🗂 Managing workspace: ' + wsn;
+  } else $('ws-banner').style.display='none';
+  $('user-email').textContent=EMAIL;
+  $('s-hook').textContent = location.origin + '/api/webhook';
+  loadDash(); loadContacts();
+}
+
+// ── dashboard ──
+async function loadDash(){
+  try{
+    const r = await fetch(API+'/api/contacts',{headers:H()}); const d = await r.json();
+    const items = d.items||[];
+    $('st-contacts').textContent = items.length;
+    $('st-leads').textContent = items.filter(c=>c.source==='inbound').length;
+    CATS = d.categories||[];
+    const sr = await fetch(API+'/api/settings',{headers:H()}); const sd = await sr.json();
+    $('st-wa').textContent = sd.settings?.access_token ? '✅' : '—';
+    loadCRM(); loadHealth();
+  }catch(e){}
+}
+async function loadLog(){
+  // lightweight: reuse contacts of inbound + show placeholder; real log needs endpoint — omitted for brevity
+  $('msg-log').innerHTML = '<tr><td colspan="5" style="color:#aaa">Messages appear here as campaigns and the AI responder run.</td></tr>';
+}
+
+// ── contacts ──
+function fillCats(sel){
+  const s=$(sel); const cur=s.value;
+  s.innerHTML='<option value="all">All contacts</option>' + CATS.map(c=>`<option value="${c}">${c}</option>`).join('');
+  s.value=cur||'all';
+}
+async function loadContacts(){
+  const cat = $('c-filter').value||'all';
+  const r = await fetch(API+`/api/contacts?category=${encodeURIComponent(cat)}`,{headers:H()});
+  const d = await r.json();
+  if(r.status===401){ logout(); return; }
+  CATS = d.categories||[];
+  const f=$('c-filter'); const cur=f.value;
+  f.innerHTML='<option value="all">All categories</option>'+CATS.map(c=>`<option value="${c}">${c}</option>`).join('');
+  f.value=cur;
+  renderContacts(d);
+}
+function renderContacts(d){
+  CATS = d.categories||CATS;
+  $('c-list').innerHTML=(d.items||[]).map(c=>`<tr>
+    <td>${c.phone}</td><td>${c.name||'—'}</td>
+    <td><span class="pill">${c.category}</span></td>
+    <td>${c.intent==='hot'?'<span class="pill" style="background:#ef4444;color:#fff;border-color:#ef4444">🔥 hot</span>':c.intent==='warm'?'<span class="pill" style="background:#f59e0b;color:#fff;border-color:#f59e0b">warm</span>':'<span class="pill">cold</span>'}</td>
+    <td>${c.order_note?'🛒 '+c.order_note:(c.interest||'—')}</td><td>${c.source}</td>
+    <td><button class="link" onclick="delContact(${c.id})">delete</button></td>
+  </tr>`).join('') || '<tr><td colspan="7" style="color:#aaa">No contacts yet — add or import above.</td></tr>';
+}
+async function addContact(){
+  const r = await fetch(API+'/api/contacts',{method:'POST',headers:H(),body:JSON.stringify({phone:$('c-phone').value,name:$('c-name').value,category:$('c-cat').value})});
+  const d = await r.json();
+  if(d.ok){ toast('Contact added'); $('c-phone').value='';$('c-name').value=''; loadContacts(); }
+  else toast(d.error||'Failed');
+}
+async function importCSV(){
+  const rows = $('c-csv').value.split('\n').map(l=>{const p=l.split(',');return {phone:p[0],name:p[1],category:p[2]};}).filter(x=>x.phone);
+  const r = await fetch(API+'/api/contacts',{method:'POST',headers:H(),body:JSON.stringify({action:'import',rows,category:$('c-csv-cat').value})});
+  const d = await r.json();
+  if(d.ok){ toast(`Imported ${d.imported} contacts`); $('c-csv').value=''; loadContacts(); }
+  else toast(d.error||'Import failed');
+}
+async function delContact(id){
+  await fetch(API+`/api/contacts?id=${id}`,{method:'DELETE',headers:H()}); loadContacts();
+}
+
+// ── campaigns ──
+function cpMode(){
+  const tpl = $('cp-mode').value==='template';
+  $('cp-tpl-wrap').classList.toggle('hidden',!tpl);
+  $('cp-body-wrap').classList.toggle('hidden',tpl);
+}
+async function sendCampaign(action){
+  const payload={action,name:$('cp-name').value,mode:$('cp-mode').value,template_name:$('cp-tpl').value,lang:$('cp-lang').value,body:$('cp-body').value,var1_field:$('cp-var').value,category:$('cp-cat').value};
+  if(action==='schedule'){ const w=$('cp-when').value; if(!w){toast('Pick date & time');return;} payload.scheduled_at=new Date(w).toISOString(); }
+  const r = await fetch(API+'/api/campaigns',{method:'POST',headers:H(),body:JSON.stringify(payload)});
+  const d = await r.json();
+  if(d.ok){ toast(d.scheduled?'Scheduled ✓':`Sending — ${d.sent||0} in first batch`); loadCampaigns(); }
+  else toast(d.error||'Failed');
+}
+async function loadCampaigns(){
+  const r = await fetch(API+'/api/campaigns',{headers:H()}); const d = await r.json();
+  $('cp-list').innerHTML=(d.items||[]).map(c=>`<tr>
+    <td>${c.name}</td><td><span class="pill">${c.category}</span></td>
+    <td><span class="pill ${c.status==='done'?'green':c.status==='sending'?'dark':''}">${c.status}</span></td>
+    <td>${c.sent}</td><td>${c.failed}</td>
+    <td class="row" style="gap:4px"><button class="link" onclick="showAnalytics(${c.id},'${(c.name||'').replace(/'/g,'')}')">📊 stats</button><button class="link" onclick="delCampaign(${c.id})">delete</button></td>
+  </tr>`).join('') || '<tr><td colspan="6" style="color:#aaa">No campaigns yet.</td></tr>';
+}
+async function delCampaign(id){ await fetch(API+`/api/campaigns?id=${id}`,{method:'DELETE',headers:H()}); loadCampaigns(); }
+
+// ── drips ──
+let stepCount=0;
+function addStep(){
+  stepCount++;
+  const div=document.createElement('div'); div.className='step-row'; div.id='step-'+stepCount;
+  div.innerHTML=`
+    <input type="number" min="0" placeholder="Day" class="st-day" value="${stepCount===1?0:''}">
+    <select class="st-mode"><option value="template">template</option><option value="text">text</option></select>
+    <input placeholder="Template name — or message text if mode=text" class="st-content">
+    <button class="link" onclick="this.parentElement.remove()">✕</button>`;
+  $('d-steps').appendChild(div);
+}
+async function createDrip(){
+  const steps=[...document.querySelectorAll('.step-row')].map(r=>{
+    const mode=r.querySelector('.st-mode').value;
+    const content=r.querySelector('.st-content').value;
+    return {day_offset:r.querySelector('.st-day').value,mode,template_name:mode==='template'?content:'',body:mode==='text'?content:'',lang:'en',var1_field:'name'};
+  }).filter(s=>s.template_name||s.body);
+  if(!steps.length){toast('Add at least one step');return;}
+  const r = await fetch(API+'/api/drips',{method:'POST',headers:H(),body:JSON.stringify({action:'create',name:$('d-name').value,category:$('d-cat').value,steps})});
+  const d = await r.json();
+  if(d.ok){ toast('Sequence created'); $('d-steps').innerHTML=''; stepCount=0; addStep(); loadDrips(); }
+  else toast(d.error||'Failed');
+}
+async function loadDrips(){
+  const r = await fetch(API+'/api/drips',{headers:H()}); const d = await r.json();
+  $('d-list').innerHTML=(d.drips||[]).map(dr=>`
+    <div style="border:1px solid rgba(0,0,0,0.08);border-radius:10px;padding:14px;margin-bottom:10px">
+      <div class="row" style="justify-content:space-between">
+        <b>${dr.name}</b>
+        <span class="row">
+          <span class="pill">${dr.category}</span>
+          <span class="pill ${dr.active?'green':''}">${dr.active?'active':'paused'}</span>
+        </span>
+      </div>
+      <div style="font-size:12px;color:#888;margin:6px 0">${dr.steps.map(s=>`Day ${s.day_offset}: ${s.template_name||s.body?.slice(0,30)}`).join(' → ')||'no steps'}</div>
+      <div style="font-size:12px;color:#888;margin-bottom:8px">${dr.stats.active} active · ${dr.stats.done} completed</div>
+      <div class="row">
+        <button class="btn sm wa" onclick="enrollDrip(${dr.id})">Enroll "${dr.category}" now</button>
+        <button class="btn sm ghost" onclick="toggleDrip(${dr.id},${!dr.active})">${dr.active?'Pause':'Resume'}</button>
+        <button class="link" onclick="delDrip(${dr.id})">delete</button>
+      </div>
+    </div>`).join('') || '<p style="color:#aaa;font-size:13px">No sequences yet.</p>';
+}
+async function enrollDrip(id){
+  const r = await fetch(API+'/api/drips',{method:'POST',headers:H(),body:JSON.stringify({action:'enroll',dripId:id})});
+  const d = await r.json();
+  toast(d.ok?`Enrolled ${d.enrolled} contacts (${d.skipped} already in)`:(d.error||'Failed'));
+  loadDrips();
+}
+async function toggleDrip(id,active){
+  await fetch(API+'/api/drips',{method:'POST',headers:H(),body:JSON.stringify({action:'toggle',dripId:id,active})}); loadDrips();
+}
+async function delDrip(id){ await fetch(API+`/api/drips?id=${id}`,{method:'DELETE',headers:H()}); loadDrips(); }
+
+// ── settings + AI ──
+async function loadSettings(){
+  const r = await fetch(API+'/api/settings',{headers:H()}); const d = await r.json();
+  const s = d.settings||{};
+  $('s-biz').value=s.business_name||''; $('s-pnid').value=s.phone_number_id||'';
+  $('s-waba').value=s.waba_id||''; $('s-token').value=s.access_token||'';
+  $('ai-on').checked=!!s.ai_enabled; $('ai-prompt').value=s.ai_prompt||'';
+  $('s-owner').value=s.owner_phone||''; $('s-daily').checked=!!s.daily_summary;
+  $('s-warmup').checked = s.warmup!==false;
+}
+async function saveSettings(){
+  const r = await fetch(API+'/api/settings',{method:'PUT',headers:H(),body:JSON.stringify({business_name:$('s-biz').value,phone_number_id:$('s-pnid').value,waba_id:$('s-waba').value,access_token:$('s-token').value})});
+  const d = await r.json();
+  if(d.ok){ $('s-ok').textContent='Saved ✓'; $('s-ok').style.display='block'; setTimeout(()=>$('s-ok').style.display='none',2500); }
+  else { $('s-err').textContent=d.error||'Failed'; $('s-err').style.display='block'; }
+}
+async function testSend(){
+  const r = await fetch(API+'/api/settings',{method:'POST',headers:H(),body:JSON.stringify({to:$('s-test').value})});
+  const d = await r.json();
+  toast(d.ok?'Test sent ✓ check WhatsApp':(d.error||'Failed'));
+}
+function copyTxt(t){ navigator.clipboard?.writeText(t); toast('Copied ✓'); }
+let SEG='';
+function segFilter(s){
+  SEG = SEG===s ? '' : s;
+  document.querySelectorAll('.seg-chip').forEach(c=>c.classList.remove('on'));
+  if(SEG) event.target.classList.add('on');
+  loadContactsSeg();
+}
+async function loadContactsSeg(){
+  const cat = SEG || ($('c-filter').value||'all');
+  const r = await fetch(API+`/api/contacts?category=${encodeURIComponent(cat)}`,{headers:H()});
+  const d = await r.json();
+  renderContacts(d);
+}
+async function loadHealth(){
+  try{
+    const r = await fetch(API+'/api/health',{headers:H()});
+    if(!r.ok) return;
+    const d = await r.json();
+    $('hl-score').textContent = d.score;
+    $('hl-score').style.color = d.score>=80?'#16a34a':d.score>=50?'#d97706':'#dc2626';
+    $('hl-sends').textContent = `${d.sent_today} / ${d.cap}`;
+    $('hl-warm').textContent = d.warmup ? `ON · day ${d.warmup_day}` : 'off';
+    $('hl-read').textContent = d.week.read_rate!==undefined ? d.week.reply_rate+'%' : (d.week.read+' read');
+    $('hl-read').textContent = Math.round((d.week.read/(d.week.sent||1))*100)+'%';
+    $('hl-reply').textContent = d.week.reply_rate+'%';
+  }catch(e){}
+}
+async function showAnalytics(id,name){
+  const r = await fetch(API+`/api/analytics?campaignId=${id}`,{headers:H()});
+  const d = await r.json();
+  $('an-card').classList.remove('hidden');
+  $('an-title').textContent = '📊 '+(name||'Campaign');
+  if(r.status===402){
+    $('an-body').innerHTML = `<div class="note" style="background:#fffbeb;border-color:#fde68a">🔒 ${d.message||'Analytics is a Pro feature.'} <a style="color:#0a0a0a;font-weight:700;cursor:pointer;text-decoration:underline" onclick="showPublic('pricing')">See Pro plan →</a></div>`;
+    return;
+  }
+  if(!d.ok){ $('an-body').innerHTML = `<p class="sub">${d.error||'Failed'}</p>`; return; }
+  const bar=(l,v,n)=>`<div style="font-size:12px"><b>${l}</b> — ${v}% (${n})</div><div class="an-bar"><div class="an-fill" style="width:${v}%"></div></div>`;
+  $('an-body').innerHTML =
+    `<p class="sub" style="margin-bottom:10px">${d.total} messages tracked</p>` +
+    bar('Delivered',d.rates.delivered,d.delivered) +
+    bar('Read',d.rates.read,d.read) +
+    bar('Replied',d.rates.replied,d.replies) +
+    `<div style="font-size:12px"><b>Failed</b> — ${d.rates.failed}% (${d.failed})</div><div class="an-bar"><div class="an-fill" style="width:${d.rates.failed}%;background:#ef4444"></div></div>`;
+  window.scrollTo(0,$('an-card').offsetTop-80);
+}
+async function aiWrite(){
+  const goal=$('aw-goal').value;
+  if(goal.length<10){ toast('Describe the offer first'); return; }
+  $('aw-btn').textContent='Writing…'; $('aw-btn').disabled=true;
+  try{
+    const r = await fetch(API+'/api/ai-writer',{method:'POST',headers:H(),body:JSON.stringify({goal,language:$('aw-lang').value})});
+    const d = await r.json();
+    if(!d.ok){ toast(d.error||'Failed'); }
+    else{
+      $('aw-out').classList.remove('hidden');
+      $('aw-name').textContent=d.template_name||'my_template';
+      $('aw-en-wrap').classList.toggle('hidden',!d.body_en);
+      $('aw-ar-wrap').classList.toggle('hidden',!d.body_ar);
+      if(d.body_en) $('aw-en').textContent=d.body_en;
+      if(d.body_ar) $('aw-ar').textContent=d.body_ar;
+      $('aw-tip').textContent='💡 '+(d.tip||'');
+      $('cp-tpl').value=d.template_name||'';
+    }
+  }catch(e){ toast('Network error'); }
+  $('aw-btn').textContent='✨ Write it'; $('aw-btn').disabled=false;
+}
+function useBody(lang){
+  $('cp-mode').value='text'; cpMode();
+  $('cp-body').value = lang==='ar' ? $('aw-ar').textContent : $('aw-en').textContent;
+  $('cp-lang').value = lang;
+  toast('Loaded into campaign form below (free-text mode: 24h-active chats only)');
+}
+async function saveDaily(){
+  const r = await fetch(API+'/api/settings',{method:'PUT',headers:H(),body:JSON.stringify({owner_phone:$('s-owner').value,daily_summary:$('s-daily').checked})});
+  const d = await r.json();
+  toast(d.ok?'Daily report saved ✓ first one arrives tomorrow 7 AM':(d.error||'Failed'));
+}
+async function saveAI(){
+  const r = await fetch(API+'/api/settings',{method:'PUT',headers:H(),body:JSON.stringify({ai_enabled:$('ai-on').checked,ai_prompt:$('ai-prompt').value})});
+  const d = await r.json();
+  toast(d.ok?'AI responder saved ✓':(d.error||'Failed'));
+}
+
+// ── demo mode ──
+async function startDemo(){
+  try{
+    const r = await fetch(API+'/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'demo'})});
+    const d = await r.json();
+    if(!r.ok){ toast(d.error||'Demo failed'); return; }
+    TOKEN=d.token; EMAIL=d.email;
+    localStorage.setItem('wm-token',TOKEN); localStorage.setItem('wm-email',EMAIL);
+    localStorage.setItem('wm-status',d.status||''); localStorage.setItem('wm-expires',d.demo_expires||'');
+    localStorage.setItem('wm-plan',d.plan||'demo');
+    boot(); toast('⚡ 24-hour demo started — welcome!');
+  }catch(e){ toast('Network error'); }
+}
+
+// ── public pages ──
+function showPublic(p){
+  $('auth').classList.add('hidden'); $('app').style.display='none';
+  $('public-wrap').classList.remove('hidden');
+  document.querySelectorAll('.pub-pg').forEach(x=>x.classList.add('hidden'));
+  $('pub-'+p).classList.remove('hidden');
+  window.scrollTo(0,0);
+}
+function hidePublic(){
+  $('public-wrap').classList.add('hidden');
+  if(TOKEN){ $('app').style.display='block'; }
+  else { $('auth').classList.remove('hidden'); $('auth').style.display='flex'; }
+}
+
+// ── demo/pending banner ──
+function paintBanner(){
+  const st = localStorage.getItem('wm-status')||'';
+  const ex = localStorage.getItem('wm-expires')||'';
+  const b = $('demo-banner');
+  if(st==='demo'){
+    const left = ex ? Math.max(0, Math.round((new Date(ex)-Date.now())/3600000)) : 24;
+    $('demo-banner-text').textContent = `⚡ Demo mode — ${left}h remaining · 25 contacts max · create a free account to keep your work.`;
+    b.style.display='flex';
+  } else if(st==='pending'){
+    $('demo-banner-text').textContent = '⏳ Account pending approval — demo limits apply until the team approves you (usually < 24h).';
+    b.style.display='flex';
+  } else b.style.display='none';
+}
+
+// ── CRM dashboard data ──
+async function loadCRM(){
+  try{
+    const sr = await fetch(API+'/api/settings',{headers:H()}); const sd = await sr.json();
+    const s = sd.settings||{};
+    $('acc-plan').textContent = localStorage.getItem('wm-plan')||'free';
+    $('acc-status').textContent = localStorage.getItem('wm-status')||'active';
+    $('acc-wa').textContent = s.access_token ? '✅ connected' : '— not connected';
+    $('acc-ai').textContent = s.ai_enabled ? '🤖 ON' : 'off';
+    const mr = await fetch(API+'/api/messages',{headers:H()}); const md = await mr.json();
+    const rows=(md.items||[]).slice(0,30);
+    $('st-sent').textContent = (md.items||[]).filter(m=>m.direction==='out').length + (md.count>=100?'+':'');
+    $('msg-log').innerHTML = rows.map(m=>`<tr>
+      <td>${m.phone}</td><td>${m.direction==='in'?'⬅ in':'➡ out'}</td>
+      <td style="max-width:340px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${(m.body||'').replace(/</g,'&lt;')}</td>
+      <td><span class="pill">${m.kind}</span></td>
+      <td style="color:#aaa">${new Date(m.created_at).toLocaleString()}</td>
+    </tr>`).join('') || '<tr><td colspan="5" style="color:#aaa">No messages yet — they appear as campaigns, drips and the AI responder run.</td></tr>';
+  }catch(e){}
+}
+
+// ── admin ──
+let ADM = sessionStorage.getItem('wm-adm')||'';
+const AH = () => ({'Content-Type':'application/json','X-Admin-Pass':ADM});
+async function admLogin(){
+  ADM = $('adm-pass').value;
+  const r = await fetch(API+'/api/admin',{headers:AH()});
+  if(r.status===401){ toast('Wrong admin password'); return; }
+  sessionStorage.setItem('wm-adm',ADM);
+  $('adm-gate').classList.add('hidden'); $('adm-panel').classList.remove('hidden');
+  admLoad(await r.json());
+}
+async function admRefresh(){
+  const r = await fetch(API+'/api/admin',{headers:AH()});
+  if(r.ok) admLoad(await r.json());
+}
+function admLoad(d){
+  const t=d.totals||{};
+  $('adm-totals').innerHTML = [
+    ['Users',t.users],['Pending ⏳',t.pending],['Active ✅',t.active],['Demos ⚡',t.demos]
+  ].map(([l,v])=>`<div class="stat"><b>${v??0}</b><span>${l}</span></div>`).join('');
+  $('adm-users').innerHTML = (d.users||[]).map(u=>`<tr>
+    <td>${u.email}</td>
+    <td><span class="pill ${u.status==='active'?'green':u.status==='pending'?'dark':''}">${u.status}</span></td>
+    <td><select onchange="admPlan(${u.id},this.value)" style="padding:4px;border:1px solid rgba(0,0,0,0.12);border-radius:6px;font-size:12px">
+      ${['free','demo','starter','pro','agency'].map(p=>`<option ${p===u.plan?'selected':''}>${p}</option>`).join('')}</select></td>
+    <td>${u.contacts}</td><td>${u.messages}</td><td>${u.sent}</td>
+    <td style="color:#aaa;font-size:11px">${u.last_seen?new Date(u.last_seen).toLocaleString():'—'}</td>
+    <td class="row" style="gap:4px">
+      ${u.status==='pending'?`<button class="link" onclick="admStatus(${u.id},'active')">✅ approve</button><button class="link" onclick="admStatus(${u.id},'rejected')">✕ reject</button>`:''}
+      ${u.status==='active'?`<button class="link" onclick="admStatus(${u.id},'suspended')">suspend</button>`:''}
+      ${u.status==='suspended'?`<button class="link" onclick="admStatus(${u.id},'active')">reactivate</button>`:''}
+      <button class="link" onclick="admDetail(${u.id})">👁 view</button>
+      <button class="link" style="color:#dc2626" onclick="admDelete(${u.id})">delete</button>
+    </td>
+  </tr>`).join('');
+  $('adm-events').innerHTML = (d.events||[]).slice(0,80).map(e=>`<tr>
+    <td style="color:#aaa;font-size:11px">${new Date(e.created_at).toLocaleString()}</td>
+    <td>${e.email||e.user_id||'—'}</td>
+    <td><span class="pill">${e.event}</span></td>
+    <td style="color:#888">${e.meta||''}</td>
+  </tr>`).join('') || '<tr><td colspan="4" style="color:#aaa">No activity yet.</td></tr>';
+}
+async function admStatus(id,status){
+  await fetch(API+'/api/admin',{method:'POST',headers:AH(),body:JSON.stringify({action:'status',userId:id,status})});
+  toast('Status → '+status); admRefresh();
+}
+async function admPlan(id,plan){
+  await fetch(API+'/api/admin',{method:'POST',headers:AH(),body:JSON.stringify({action:'plan',userId:id,plan})});
+  toast('Plan → '+plan);
+}
+async function admDelete(id){
+  if(!confirm('Delete this user and ALL their data?')) return;
+  await fetch(API+`/api/admin?userId=${id}`,{method:'DELETE',headers:AH()});
+  toast('User deleted'); admRefresh();
+}
+async function admDetail(id){
+  const r = await fetch(API+`/api/admin?userId=${id}`,{headers:AH()});
+  const d = await r.json();
+  $('adm-detail-card').classList.remove('hidden');
+  $('adm-detail-title').textContent = '👁 ' + (d.user?.email||'user');
+  $('adm-detail').innerHTML = `
+    <div class="grid2">
+      <div><b style="font-size:13px">Business:</b> <span style="font-size:13px">${d.settings?.business_name||'—'} · WA: ${d.settings?.phone_number_id?'connected':'not set'} · AI: ${d.settings?.ai_enabled?'ON':'off'}</span></div>
+      <div><b style="font-size:13px">Campaigns:</b> <span style="font-size:13px">${(d.campaigns||[]).map(c=>`${c.name} (${c.status}, ${c.sent} sent)`).join(' · ')||'none'}</span></div>
+    </div>
+    <p style="font-size:12px;color:#888;margin:10px 0 4px"><b>AI prompt:</b> ${(d.settings?.ai_prompt||'—').slice(0,300).replace(/</g,'&lt;')}</p>
+    <p style="font-size:12px;color:#888;margin:4px 0"><b>Contacts (${(d.contacts||[]).length}):</b> ${(d.contacts||[]).slice(0,15).map(c=>c.phone+(c.name?' ('+c.name+')':'')).join(', ')||'none'}</p>
+    <p style="font-size:12px;color:#888;margin:4px 0"><b>Recent messages:</b></p>
+    <div style="max-height:200px;overflow-y:auto;border:1px solid rgba(0,0,0,0.07);border-radius:8px;padding:8px;font-size:12px">
+      ${(d.messages||[]).map(m=>`<div style="margin-bottom:4px"><b>${m.direction==='in'?'⬅':'➡'} ${m.phone}</b>: ${(m.body||'').slice(0,120).replace(/</g,'&lt;')}</div>`).join('')||'no messages'}
+    </div>`;
+  window.scrollTo(0, $('adm-detail-card').offsetTop - 80);
+}
+
+// ── workspaces (agency) ──
+async function wsLoad(){
+  const r = await fetch(API+'/api/workspaces',{headers:H()});
+  const d = await r.json();
+  if(r.status===402){ $('ws-list').innerHTML=`<tr><td colspan="5"><div class="note">🔒 ${d.message} <a style="font-weight:700;text-decoration:underline;cursor:pointer" onclick="showPublic('pricing')">See Agency plan →</a></div></td></tr>`; return; }
+  $('ws-list').innerHTML=(d.workspaces||[]).map(w=>`<tr>
+    <td><b>${w.business_name||w.email}</b></td>
+    <td>${w.connected?'✅ connected':'—'}</td>
+    <td>${w.contacts}</td>
+    <td style="color:#aaa;font-size:11px">${w.last_seen?new Date(w.last_seen).toLocaleString():'—'}</td>
+    <td class="row" style="gap:6px"><button class="btn sm wa" onclick="wsSwitch(${w.id},'${(w.business_name||'').replace(/'/g,'')}')">Open →</button><button class="link" onclick="wsDelete(${w.id})">delete</button></td>
+  </tr>`).join('') || '<tr><td colspan="5" style="color:#aaa">No workspaces yet — create your first client above.</td></tr>';
+}
+async function wsCreate(){
+  const label=$('ws-label').value.trim();
+  if(!label){ toast('Name the workspace'); return; }
+  const r = await fetch(API+'/api/workspaces',{method:'POST',headers:H(),body:JSON.stringify({action:'create',label})});
+  const d = await r.json();
+  if(d.ok){ toast('Workspace created ✓'); $('ws-label').value=''; wsLoad(); }
+  else toast(d.message||d.error||'Failed');
+}
+async function wsSwitch(id,name){
+  const r = await fetch(API+'/api/workspaces',{method:'POST',headers:H(),body:JSON.stringify({action:'switch',childId:id})});
+  const d = await r.json();
+  if(!d.ok){ toast(d.error||'Failed'); return; }
+  localStorage.setItem('wm-parent-token',TOKEN); localStorage.setItem('wm-parent-email',EMAIL);
+  localStorage.setItem('wm-parent-plan',localStorage.getItem('wm-plan')||'agency');
+  TOKEN=d.token; EMAIL=d.email;
+  localStorage.setItem('wm-token',TOKEN); localStorage.setItem('wm-email',EMAIL);
+  localStorage.setItem('wm-plan',d.plan||'pro'); localStorage.setItem('wm-status',d.status||'active');
+  localStorage.setItem('wm-ws-name',name||d.email);
+  boot(); nav('dash'); toast('Now managing: '+(name||d.email));
+}
+function wsBack(){
+  const pt=localStorage.getItem('wm-parent-token');
+  if(!pt) return;
+  TOKEN=pt; EMAIL=localStorage.getItem('wm-parent-email')||'';
+  localStorage.setItem('wm-token',TOKEN); localStorage.setItem('wm-email',EMAIL);
+  localStorage.setItem('wm-plan',localStorage.getItem('wm-parent-plan')||'agency');
+  localStorage.setItem('wm-status','active');
+  ['wm-parent-token','wm-parent-email','wm-parent-plan','wm-ws-name'].forEach(k=>localStorage.removeItem(k));
+  boot(); nav('ws'); toast('Back to agency account');
+}
+async function wsDelete(id){
+  if(!confirm('Delete this workspace and ALL its data?')) return;
+  await fetch(API+`/api/workspaces?childId=${id}`,{method:'DELETE',headers:H()});
+  wsLoad();
+}
+async function saveWarmup(){
+  const r = await fetch(API+'/api/settings',{method:'PUT',headers:H(),body:JSON.stringify({warmup:$('s-warmup').checked})});
+  const d = await r.json();
+  toast(d.ok?($('s-warmup').checked?'🛡 Protection ON':'⚠️ Protection OFF — higher ban risk'):(d.error||'Failed'));
+}
+
+// ── init ──
+addStep();
+if(TOKEN) boot();
+</script>
+</body>
+</html>
