@@ -420,6 +420,7 @@ td{padding:9px 10px;border-bottom:1px solid rgba(0,0,0,0.05)}
     <button class="nav-btn on" data-p="dash" onclick="nav('dash')">Dashboard</button>
     <button class="nav-btn" data-p="contacts" onclick="nav('contacts')">Contacts</button>
     <button class="nav-btn" data-p="campaigns" onclick="nav('campaigns')">Campaigns</button>
+    <button class="nav-btn" data-p="tickets" onclick="nav('tickets')">📞 Call Center</button>
     <button class="nav-btn" data-p="drips" onclick="nav('drips')">Drips</button>
     <button class="nav-btn" data-p="ai" onclick="nav('ai')">AI Responder</button>
     <button class="nav-btn" data-p="settings" onclick="nav('settings')">Settings</button>
@@ -590,6 +591,26 @@ td{padding:9px 10px;border-bottom:1px solid rgba(0,0,0,0.05)}
     </div>
   </div>
 
+  <!-- CALL CENTER / TICKETS -->
+  <div class="page" id="pg-tickets">
+    <h1>📞 Call Center — CRM</h1><div class="sub">Every incoming WhatsApp is auto-classified into a ticket with category, priority, country & local time. Follow up on everything, across the region, 24/7.</div>
+    <div class="grid4" id="tk-counts"></div>
+    <div class="card" style="margin-top:14px">
+      <div class="row" style="gap:6px;margin-bottom:12px;flex-wrap:wrap">
+        <button class="seg-chip on" data-f="all" onclick="tkFilter('status','all',this)">All open</button>
+        <button class="seg-chip" data-f="new" onclick="tkFilter('status','new',this)">🆕 New</button>
+        <button class="seg-chip" data-f="in_progress" onclick="tkFilter('status','in_progress',this)">⏳ In progress</button>
+        <button class="seg-chip" data-f="resolved" onclick="tkFilter('status','resolved',this)">✅ Resolved</button>
+        <button class="seg-chip" data-f="fu" onclick="tkFilter('followup','1',this)">📌 Needs follow-up</button>
+        <span style="width:1px;height:20px;background:rgba(0,0,0,0.1);margin:0 4px"></span>
+        <select id="tk-cat" onchange="loadTickets()" style="padding:7px 10px;border:1.5px solid rgba(0,0,0,0.12);border-radius:8px;font-size:12px">
+          <option value="all">All categories</option><option value="inquiry">Inquiry</option><option value="order">Order</option><option value="complaint">Complaint</option><option value="support">Support</option><option value="billing">Billing</option><option value="followup">Follow-up</option><option value="other">Other</option>
+        </select>
+      </div>
+      <div id="tk-list"></div>
+    </div>
+  </div>
+
   <!-- AI RESPONDER -->
   <div class="page" id="pg-ai">
     <h1>AI auto-responder</h1><div class="sub">Claude answers every inbound WhatsApp 24/7 — qualifies leads, captures name & interest automatically.</div>
@@ -601,7 +622,15 @@ td{padding:9px 10px;border-bottom:1px solid rgba(0,0,0,0.05)}
       <div class="field" style="margin-top:14px"><label>Business knowledge — everything the AI should know (products, prices, hours, tone, FAQs). Arabic + English both fine.</label>
       <textarea id="ai-prompt" rows="9" placeholder="We are Beirut Roasters. We sell specialty coffee...&#10;Prices: 250g bag $12, 1kg $40...&#10;Delivery: all Lebanon, 24-48h, $3 fee, free over $30...&#10;Tone: friendly, casual Lebanese..."></textarea></div>
       <button class="btn sm" onclick="saveAI()">Save</button>
-      <div class="note">💡 Lead capture is built in: the AI naturally asks for name + interest and saves them to the contact record. Anyone who messages you becomes a contact in category "inbound".</div>
+      <div class="note">💡 Lead capture is built in: the AI naturally asks for name + interest and saves them to the contact record.</div>
+    </div>
+    <div class="card">
+      <div class="row" style="justify-content:space-between">
+        <h3 style="margin:0">📞 Call-Center mode (CRM classification)</h3>
+        <label class="row" style="gap:8px;font-size:13px"><input type="checkbox" id="cc-on" style="width:18px;height:18px"> Enabled</label>
+      </div>
+      <p class="sub" style="margin-top:10px">When ON, every inbound message is auto-classified into a CRM ticket (category, priority, country, local time) in the 📞 Call Center tab. Urgent messages & complaints ping your owner phone instantly. Perfect for handling customers across the region, 24/7.</p>
+      <button class="btn sm" onclick="saveCC()">Save</button>
     </div>
   </div>
 
@@ -730,6 +759,7 @@ function nav(p){
   if(p==='campaigns'){ loadCampaigns(); fillCats('cp-cat'); }
   if(p==='drips'){ loadDrips(); fillCats('d-cat'); }
   if(p==='ai') loadSettings();
+  if(p==='tickets') loadTickets();
   if(p==='settings') loadSettings();
   if(p==='ws') wsLoad();
 }
@@ -901,6 +931,7 @@ async function loadSettings(){
   $('ai-on').checked=!!s.ai_enabled; $('ai-prompt').value=s.ai_prompt||'';
   $('s-owner').value=s.owner_phone||''; $('s-daily').checked=!!s.daily_summary;
   $('s-warmup').checked = s.warmup!==false;
+  if($('cc-on')) $('cc-on').checked = !!s.callcenter;
 }
 async function saveSettings(){
   const r = await fetch(API+'/api/settings',{method:'PUT',headers:H(),body:JSON.stringify({business_name:$('s-biz').value,phone_number_id:$('s-pnid').value,waba_id:$('s-waba').value,access_token:$('s-token').value})});
@@ -1241,6 +1272,70 @@ async function admSlots(){
   }).join('') || '<tr><td colspan="4" style="color:#aaa">No slots yet — add some above.</td></tr>';
 }
 async function admDelSlot(id){ await fetch(API+`/api/demo?id=${id}`,{method:'DELETE',headers:AH()}); admSlots(); }
+
+// ── Call Center / tickets ──
+let TKF = { key:'status', val:'all' };
+function tkFilter(key,val,el){
+  TKF = { key, val };
+  document.querySelectorAll('#pg-tickets .seg-chip').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  loadTickets();
+}
+async function loadTickets(){
+  let url = API+'/api/tickets?';
+  if(TKF.key==='followup') url+='followup=1';
+  else if(TKF.val!=='all') url+='status='+TKF.val;
+  const cat=$('tk-cat').value; if(cat!=='all') url+='&category='+cat;
+  const r = await fetch(url,{headers:H()}); const d = await r.json();
+  if(r.status===401){ logout(); return; }
+  const c=d.counts||{};
+  $('tk-counts').innerHTML=[
+    ['🆕 New',c.new||0],['⏳ In progress',c.in_progress||0],['📌 Follow-up',c.followup||0],['🔥 Urgent',c.urgent||0]
+  ].map(([l,v])=>`<div class="stat"><b>${v}</b><span>${l}</span></div>`).join('');
+  const catIcon={inquiry:'❓',order:'🛒',complaint:'⚠️',support:'🛠',billing:'💳',followup:'📌',other:'💬'};
+  const prCol={urgent:'#ef4444',normal:'#888',low:'#bbb'};
+  $('tk-list').innerHTML=(d.items||[]).map(t=>`
+    <div style="border:1px solid rgba(0,0,0,0.1);border-radius:12px;padding:14px;margin-bottom:10px;border-left:4px solid ${prCol[t.priority]||'#888'}">
+      <div class="row" style="justify-content:space-between;flex-wrap:wrap;gap:6px">
+        <div class="row" style="gap:8px">
+          <b>${catIcon[t.category]||'💬'} ${t.contact_name||t.phone}</b>
+          <span class="pill">${t.category}</span>
+          ${t.priority==='urgent'?'<span class="pill" style="background:#ef4444;color:#fff;border-color:#ef4444">urgent</span>':''}
+          ${t.needs_followup?'<span class="pill" style="background:#f59e0b;color:#fff;border-color:#f59e0b">📌 follow-up</span>':''}
+        </div>
+        <span style="font-size:11px;color:#aaa">${t.country||''} ${t.local_time?'· '+t.local_time+' local':''}</span>
+      </div>
+      <p style="font-size:13px;color:#444;margin:8px 0">${(t.summary||t.last_message||'').replace(/</g,'&lt;')}</p>
+      ${t.suggested_reply?`<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:8px 10px;font-size:12px;color:#166534;margin-bottom:8px"><b>💡 Suggested reply:</b> ${t.suggested_reply.replace(/</g,'&lt;')}</div>`:''}
+      <div class="row" style="gap:6px;flex-wrap:wrap">
+        <input id="tkr-${t.id}" placeholder="Type a reply…" style="flex:1;min-width:160px;padding:8px 10px;border:1.5px solid rgba(0,0,0,0.12);border-radius:8px;font-size:13px" value="${(t.suggested_reply||'').replace(/"/g,'&quot;')}">
+        <button class="btn sm wa" onclick="tkReply(${t.id})">Send</button>
+        <select onchange="tkStatus(${t.id},this.value)" style="padding:7px;border:1.5px solid rgba(0,0,0,0.12);border-radius:8px;font-size:12px">
+          <option value="">status…</option><option value="new">🆕 new</option><option value="in_progress">⏳ in progress</option><option value="resolved">✅ resolved</option>
+        </select>
+        <button class="link" onclick="tkFollow(${t.id},${!t.needs_followup})">${t.needs_followup?'unflag':'📌 flag'}</button>
+        <a class="link" href="https://wa.me/${t.phone}" target="_blank">open chat ↗</a>
+      </div>
+    </div>`).join('') || '<p style="color:#aaa;font-size:13px">No tickets here. Enable Call-Center mode in AI Responder, then incoming messages appear as tickets.</p>';
+}
+async function tkReply(id){
+  const txt=$('tkr-'+id).value.trim(); if(!txt){ toast('Type a reply'); return; }
+  const r=await fetch(API+'/api/tickets',{method:'POST',headers:H(),body:JSON.stringify({id,text:txt})});
+  const d=await r.json();
+  toast(d.ok?'Sent ✓':(d.error||'Failed')); if(d.ok) loadTickets();
+}
+async function tkStatus(id,status){
+  if(!status) return;
+  await fetch(API+'/api/tickets',{method:'PUT',headers:H(),body:JSON.stringify({id,status})}); loadTickets();
+}
+async function tkFollow(id,val){
+  await fetch(API+'/api/tickets',{method:'PUT',headers:H(),body:JSON.stringify({id,needs_followup:val})}); loadTickets();
+}
+async function saveCC(){
+  const r=await fetch(API+'/api/settings',{method:'PUT',headers:H(),body:JSON.stringify({callcenter:$('cc-on').checked})});
+  const d=await r.json();
+  toast(d.ok?($('cc-on').checked?'📞 Call-Center ON':'Call-Center off'):(d.error||'Failed'));
+}
 
 // ── init ──
 addStep();
