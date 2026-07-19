@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WA-Marketer — WhatsApp Marketing on Autopilot</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<title>Z24SEVEN.tel — Your 24/7 AI Sales Employee on WhatsApp</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Caveat:wght@500;700&family=Patrick+Hand&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:#fafafa;color:#0a0a0a}
@@ -81,21 +81,206 @@ td{padding:9px 10px;border-bottom:1px solid rgba(0,0,0,0.05)}
 #demo-banner a{color:#25D366;font-weight:600;cursor:pointer}
 #toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#0a0a0a;color:#fff;border-radius:99px;padding:10px 22px;font-size:13px;z-index:999;display:none}
 @media(max-width:720px){.grid2,.grid4{grid-template-columns:1fr}.step-row{grid-template-columns:1fr}}
+
+/* ═══ Z24SEVEN LOGO ═══ */
+.z24logo{font-family:'Caveat',cursive;font-weight:700;display:inline-flex;align-items:baseline;letter-spacing:-0.5px;line-height:1}
+.z24logo .z24-z{font-size:1.5em;color:#0a0a0a}
+.z24logo .z24-24{font-size:1.5em;color:#25D366;margin:0 1px}
+.z24logo .z24-7{font-size:1.5em;color:#0a0a0a}
+.z24logo .z24-tel{font-family:'Patrick Hand',cursive;font-size:0.75em;color:#888;margin-left:2px;align-self:flex-end}
+.z24logo.z24-big{font-size:34px}
+.z24logo.z24-big .z24-z,.z24logo.z24-big .z24-24,.z24logo.z24-big .z24-7{font-size:2.4em}
+.z24-inv .z24-z,.z24-inv .z24-7{color:#fff}
+.z24-inv .z24-tel{color:#aaa}
+/* booking modal */
+#booking{position:fixed;inset:0;background:rgba(10,10,10,0.5);z-index:300;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px)}
+#booking.open{display:flex}
+.book-box{background:#FFFDF6;border:2.5px solid #0a0a0a;border-radius:18px;padding:30px;width:480px;max-width:94vw;max-height:88vh;overflow-y:auto;position:relative;box-shadow:6px 6px 0 #0a0a0a}
+.slot-chip{font-family:'Patrick Hand',cursive;font-size:13px;padding:8px 12px;border:2px solid #0a0a0a;border-radius:12px 3px 12px 3px;background:#fff;cursor:pointer}
+.slot-chip.on{background:#25D366}
+.slot-chip:hover{background:#eafff1}
+/* ═══ HAND-DRAWN LANDING ═══ */
+#landing{background:#FFFDF6;min-height:100vh;overflow-x:hidden}
+.hd{font-family:'Caveat',cursive}
+.hd2{font-family:'Patrick Hand',cursive}
+.wob{border:2.5px solid #0a0a0a;border-radius:255px 15px 225px 15px/15px 225px 15px 255px}
+.wob2{border:2.5px solid #0a0a0a;border-radius:15px 255px 15px 225px/225px 15px 255px 15px}
+.mark{background:linear-gradient(104deg,rgba(37,211,102,0) 0.9%,rgba(37,211,102,0.45) 2.4%,rgba(37,211,102,0.35) 97.5%,rgba(37,211,102,0) 100%);padding:0 6px;border-radius:4px}
+.mark-y{background:linear-gradient(104deg,rgba(255,214,0,0) 0.9%,rgba(255,214,0,0.5) 2.4%,rgba(255,214,0,0.4) 97.5%,rgba(255,214,0,0) 100%);padding:0 6px;border-radius:4px}
+.sket-u{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 8'%3E%3Cpath d='M1 5 Q 25 1 50 5 T 99 4' stroke='%2325D366' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat bottom/100% 8px;padding-bottom:8px}
+.ld-nav{position:sticky;top:0;z-index:60;background:rgba(255,253,246,0.94);backdrop-filter:blur(8px);border-bottom:2.5px solid #0a0a0a;padding:12px 26px;display:flex;align-items:center;gap:18px}
+.ld-nav .brand{font-family:'Caveat',cursive;font-size:26px;font-weight:700}
+.ld-link{font-family:'Patrick Hand',cursive;font-size:16px;color:#333;cursor:pointer;background:none;border:none}
+.ld-link:hover{color:#25D366}
+.ld-hero{max-width:1020px;margin:0 auto;padding:64px 26px 40px;position:relative}
+.ld-hero h1{font-size:clamp(34px,6vw,62px);font-weight:900;letter-spacing:-1.5px;line-height:1.06;transform:rotate(-1.2deg);margin-bottom:18px}
+.ld-hero .hd-sub{font-family:'Patrick Hand',cursive;font-size:clamp(17px,2.4vw,22px);color:#333;line-height:1.7;max-width:640px}
+.doodle{position:absolute;font-family:'Caveat',cursive;color:#25D366;pointer-events:none;user-select:none}
+.ld-steps{display:flex;flex-direction:column;gap:14px;margin:30px auto;max-width:620px;text-align:left}
+.ld-step{display:flex;gap:14px;align-items:flex-start;transform:rotate(-0.4deg)}
+.ld-step:nth-child(2){transform:rotate(0.6deg)}
+.ld-step:nth-child(3){transform:rotate(-0.5deg)}
+.ld-n{font-family:'Caveat',cursive;font-size:28px;font-weight:700;flex-shrink:0;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:2.5px solid #0a0a0a;border-radius:50% 45% 55% 48%/48% 55% 45% 52%;background:#fff}
+.ld-step p{font-family:'Patrick Hand',cursive;font-size:17px;color:#222;line-height:1.55;margin-top:8px}
+.ld-cta{font-family:'Patrick Hand',cursive;font-size:18px;background:#25D366;color:#0a0a0a;border:2.5px solid #0a0a0a;border-radius:255px 15px 225px 15px/15px 225px 15px 255px;padding:14px 30px;cursor:pointer;box-shadow:4px 4px 0 #0a0a0a;transition:all 0.12s;font-weight:700}
+.ld-cta:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 #0a0a0a}
+.ld-cta.ghost{background:#fff}
+.ld-sec{max-width:1020px;margin:0 auto;padding:50px 26px;position:relative}
+.ld-sec h2{font-family:'Caveat',cursive;font-size:clamp(30px,4.5vw,44px);font-weight:700;transform:rotate(-1deg);margin-bottom:8px}
+.ld-sec .sub2{font-family:'Patrick Hand',cursive;font-size:17px;color:#555;margin-bottom:28px}
+.ld-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
+.ld-card{background:#fff;padding:22px;transform:rotate(-0.8deg)}
+.ld-card:nth-child(2){transform:rotate(0.7deg)}
+.ld-card:nth-child(3){transform:rotate(-0.5deg)}
+.ld-card:nth-child(4){transform:rotate(0.9deg)}
+.ld-card h3{font-family:'Patrick Hand',cursive;font-size:19px;margin-bottom:8px}
+.ld-card p{font-family:'Patrick Hand',cursive;font-size:15px;color:#555;line-height:1.6}
+.ld-card .big{font-size:30px;margin-bottom:8px;display:block}
+/* dashboard mock */
+.dash-frame{background:#fff;padding:0;overflow:hidden;transform:rotate(-0.6deg);box-shadow:6px 6px 0 rgba(10,10,10,0.9)}
+.dash-bar{border-bottom:2.5px solid #0a0a0a;padding:9px 14px;display:flex;gap:7px;align-items:center;background:#FFFDF6}
+.dash-dot{width:11px;height:11px;border:2px solid #0a0a0a;border-radius:50%}
+.dash-body{padding:18px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;background:#fff}
+.dm-card{border:2px solid #0a0a0a;border-radius:14px 4px 14px 4px;padding:12px}
+.dm-card b{font-family:'Patrick Hand',cursive;font-size:13px;display:block;margin-bottom:6px}
+.dm-big{font-size:26px;font-weight:900}
+.dm-line{font-family:'Patrick Hand',cursive;font-size:12px;color:#555;padding:3px 0;border-bottom:1.5px dashed rgba(0,0,0,0.15)}
+.callout{font-family:'Caveat',cursive;font-size:20px;color:#0a0a0a;font-weight:700}
+@media(max-width:760px){.dash-body{grid-template-columns:1fr}.doodle{display:none}}
 </style>
 </head>
 <body>
 <div id="toast"></div>
 
+
+<!-- ═══════ LANDING (public home) ═══════ -->
+<div id="landing">
+  <nav class="ld-nav">
+    <span class="z24logo"><span class="z24-z">Z</span><span class="z24-24">24</span><span class="z24-7">SEVEN</span><span class="z24-tel">.tel</span></span>
+    <button class="ld-link" onclick="showPublic('pricing')">Pricing</button>
+    <button class="ld-link" onclick="showPublic('about')">About</button>
+    <button class="ld-link" onclick="showPublic('faq')">FAQ</button>
+    <span style="margin-left:auto"></span>
+    <button class="ld-link" onclick="showAuth('login')">Sign in</button>
+    <button class="ld-cta" style="padding:9px 20px;font-size:15px" onclick="openBooking()">⚡ Try free 24h</button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="ld-hero" style="text-align:center">
+    <span class="doodle" style="top:34px;right:6%;font-size:26px;transform:rotate(12deg)">no code, promise! →</span>
+    <span class="doodle" style="top:280px;left:2%;font-size:40px;transform:rotate(-15deg);color:#FFD600">✦</span>
+    <span class="doodle" style="bottom:110px;right:10%;font-size:34px;transform:rotate(8deg)">✳︎</span>
+    <div style="display:flex;justify-content:center;margin-bottom:14px"><span class="z24logo z24-big"><span class="z24-z">Z</span><span class="z24-24">24</span><span class="z24-7">SEVEN</span><span class="z24-tel">.tel</span></span></div>
+    <p class="hd" style="font-size:clamp(24px,4vw,40px);font-weight:700;transform:rotate(-1deg);margin-bottom:10px">Not all WhatsApp are Created Equal.</p>
+    <h1 style="transform:rotate(-1deg)">We built something <span class="sket-u">different.</span></h1>
+    <p class="hd-sub" style="margin:0 auto 8px">Forget "chatbot builders." This is a <span class="mark"><b>24/7 bilingual sales employee</b></span> for your business.</p>
+    <div class="ld-steps">
+      <div class="ld-step"><span class="ld-n">1</span><p>Paste your business info, PDF catalogs, or FAQs.</p></div>
+      <div class="ld-step"><span class="ld-n">2</span><p>The AI instantly takes over customer interactions — <span class="mark-y">24/7, even at 3am.</span></p></div>
+      <div class="ld-step"><span class="ld-n">3</span><p>It naturally switches between English and local dialects — Lebanese, Gulf, Egyptian — without missing a beat. 🇱🇧</p></div>
+    </div>
+    <p class="hd-sub" style="margin:0 auto 26px">It doesn't just answer support tickets. It <b>detects buying intent</b>, <b>collects order details</b>, and puts the 🔥 hot lead directly in front of you.</p>
+    <p class="hd hd-sub" style="font-size:26px;font-weight:700;transform:rotate(-1deg);margin-bottom:22px">Stop building flows. Start closing sales while you sleep. 😴💸</p>
+    <div style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center">
+      <button class="ld-cta" onclick="openBooking()">📅 Book a live demo</button>
+      <button class="ld-cta ghost" onclick="showAuth('login')">Sign in →</button>
+    </div>
+  </section>
+
+  <!-- DASHBOARD SHOWCASE -->
+  <section class="ld-sec">
+    <span class="doodle" style="top:24px;right:4%;font-size:24px;transform:rotate(6deg)">your mission control ↓</span>
+    <h2>Here's what you actually get 👇</h2>
+    <p class="sub2">One dashboard. Everything your WhatsApp business needs — nothing you don't.</p>
+    <div class="dash-frame wob2">
+      <div class="dash-bar"><span class="dash-dot"></span><span class="dash-dot" style="background:#FFD600"></span><span class="dash-dot" style="background:#25D366"></span><span class="hd2" style="font-size:13px;color:#888;margin-left:8px">yourbusiness.wamarketer</span></div>
+      <div class="dash-body">
+        <div class="dm-card"><b>🛡 Number health</b><span class="dm-big" style="color:#25D366">94</span><div class="dm-line">Today's sends: 132 / 500</div><div class="dm-line">Warm-up: ON · day 9</div><div class="dm-line">Reply rate: 38%</div></div>
+        <div class="dm-card"><b>🔥 Hot leads (live)</b><div class="dm-line">Sara — 2kg coffee → Jounieh</div><div class="dm-line">Omar — asking prices 🇦🇪</div><div class="dm-line">Rita — delivery Achrafieh</div><div class="dm-line" style="border:none;color:#25D366">→ alert sent to your phone</div></div>
+        <div class="dm-card"><b>📊 Campaign: Summer promo</b><div class="dm-line">Delivered ▮▮▮▮▮▮▮▮▮ 96%</div><div class="dm-line">Read ▮▮▮▮▮▮▮ 71%</div><div class="dm-line">Replied ▮▮▮ 24%</div><div class="dm-line" style="border:none">Sent to: ⚡ Hot leads segment</div></div>
+      </div>
+    </div>
+    <div style="display:flex;gap:26px;flex-wrap:wrap;margin-top:18px">
+      <span class="callout">↑ anti-ban protection built in</span>
+      <span class="callout">↑ AI qualified these for you</span>
+      <span class="callout">↑ analytics on every blast</span>
+    </div>
+  </section>
+
+  <!-- DEMO BANNER -->
+  <section style="background:#0a0a0a;margin:20px 0;padding:52px 26px;text-align:center;transform:rotate(-0.5deg)">
+    <div style="display:flex;justify-content:center;margin-bottom:14px"><span class="z24logo z24-inv"><span class="z24-z">Z</span><span class="z24-24">24</span><span class="z24-7">SEVEN</span><span class="z24-tel">.tel</span></span></div>
+    <p class="hd" style="font-size:clamp(26px,4vw,40px);color:#fff;font-weight:700;transform:rotate(-1deg);margin-bottom:8px">See it work on <span style="color:#25D366">your</span> business.</p>
+    <p class="hd2" style="color:#ccc;font-size:18px;margin-bottom:24px">Book a free 30-minute live demo — we'll set it up with you, on WhatsApp. 📲</p>
+    <button class="ld-cta" onclick="openBooking()">📅 Ask for a Demo</button>
+  </section>
+
+  <!-- AGENCY / RESULTS -->
+  <section class="ld-sec">
+    <h2>Made for startups, sellers & agencies 🚀</h2>
+    <p class="sub2">Stop letting slow response times kill your ad ROI. Let's scale your capabilities.</p>
+    <div class="ld-cards">
+      <div class="ld-card wob"><span class="big">🎯</span><h3>Cold clicks → qualified leads</h3><p>Turn cold clicks into <span class="mark">instantly qualified leads</span> via automated multi-dialect Arabic AI.</p></div>
+      <div class="ld-card wob2"><span class="big">✍️</span><h3>Campaigns that get approved</h3><p>Write approved broadcast campaigns instantly using the <span class="mark-y">built-in Claude engine</span> — Meta-compliant by design.</p></div>
+      <div class="ld-card wob"><span class="big">🔁</span><h3>Retention on autopilot</h3><p>Keep retention high by fixing the operational bottleneck — drips, segments and follow-ups that run themselves.</p></div>
+      <div class="ld-card wob2"><span class="big">📈</span><h3>Every morning: who to call</h3><p>Daily WhatsApp report — "34 conversations, 6 hot leads, 3 orders" — with the exact numbers to call. ☕</p></div>
+    </div>
+    <div style="text-align:center;margin-top:44px">
+      <p class="hd" style="font-size:30px;font-weight:700;transform:rotate(-1deg);margin-bottom:18px">Your 24/7 sales employee for about <span class="mark">$1/day</span> 🤯</p>
+      <button class="ld-cta" onclick="openBooking()">⚡ Start free — takes 10 seconds</button>
+      <p class="hd2" style="font-size:14px;color:#888;margin-top:10px">no card · no meeting · no "book a demo" 🙃</p>
+    </div>
+  </section>
+
+  <footer style="border-top:2.5px solid #0a0a0a;padding:22px 26px;display:flex;gap:18px;flex-wrap:wrap;align-items:center">
+    <span class="hd" style="font-size:22px;font-weight:700"><span class="z24logo"><span class="z24-z">Z</span><span class="z24-24">24</span><span class="z24-7">SEVEN</span><span class="z24-tel">.tel</span></span> — made in Beirut 🇱🇧</span>
+    <span style="margin-left:auto"></span>
+    <button class="ld-link" onclick="showPublic('pricing')">Pricing</button>
+    <button class="ld-link" onclick="showPublic('about')">About</button>
+    <button class="ld-link" onclick="showPublic('faq')">FAQ</button>
+    <button class="ld-link" onclick="showPublic('legal')">Terms</button>
+    <button class="ld-link" style="opacity:0.4" onclick="showPublic('admin')">Admin</button>
+  </footer>
+</div>
+
+
+<!-- ═══════ DEMO BOOKING MODAL ═══════ -->
+<div id="booking" onclick="if(event.target===this)closeBooking()">
+  <div class="book-box">
+    <button onclick="closeBooking()" style="position:absolute;top:12px;right:16px;background:none;border:none;font-size:20px;cursor:pointer">✕</button>
+    <div style="text-align:center;margin-bottom:8px"><span class="z24logo" style="font-size:22px"><span class="z24-z">Z</span><span class="z24-24">24</span><span class="z24-7">SEVEN</span><span class="z24-tel">.tel</span></span></div>
+    <h2 class="hd" style="font-size:30px;text-align:center;transform:rotate(-1deg);margin-bottom:2px">Book your live demo 📅</h2>
+    <p class="hd2" style="text-align:center;color:#666;font-size:15px;margin-bottom:18px">30 minutes · free · we tailor it to your business</p>
+    <div id="book-slots" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:18px"><p class="hd2" style="color:#999">Loading times…</p></div>
+    <div id="book-form" class="hidden">
+      <div class="field"><label>Your name</label><input id="bk-name" placeholder="Ahmad"></div>
+      <div class="field"><label>Email</label><input id="bk-email" type="email" placeholder="you@business.com"></div>
+      <div class="field"><label>WhatsApp number</label><input id="bk-phone" placeholder="9613…"></div>
+      <div class="field"><label>What's your business? (optional)</label><input id="bk-note" placeholder="e.g. coffee shop, online store…"></div>
+      <button class="ld-cta" style="width:100%" onclick="submitBooking()" id="bk-submit">Confirm my demo →</button>
+    </div>
+    <div id="book-done" class="hidden" style="text-align:center;padding:20px">
+      <div style="font-size:44px">🎉</div>
+      <p class="hd" style="font-size:26px;font-weight:700">You're booked!</p>
+      <p class="hd2" style="color:#666" id="book-done-when"></p>
+      <p class="hd2" style="color:#666;margin-top:8px">We'll message you on WhatsApp to confirm. See you soon!</p>
+    </div>
+  </div>
+</div>
+
 <!-- ═══════ AUTH ═══════ -->
-<div id="auth">
-  <div class="auth-box">
-    <div class="brand">WA·<span>Marketer</span></div>
+<div id="auth" class="hidden" style="position:fixed;inset:0;background:rgba(10,10,10,0.45);z-index:200;backdrop-filter:blur(3px)" onclick="if(event.target===this)closeAuth()">
+  <div class="auth-box" style="position:relative">
+    <button onclick="closeAuth()" style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:18px;color:#aaa;cursor:pointer">✕</button>
+    <div style="display:flex;justify-content:center;margin-bottom:6px"><span class="z24logo"><span class="z24-z">Z</span><span class="z24-24">24</span><span class="z24-7">SEVEN</span><span class="z24-tel">.tel</span></span></div>
     <div class="tag"><b>AI that sells on WhatsApp 24/7</b> — answers customers in Arabic & English, collects orders, alerts you on hot leads. Plus campaigns, segments & drips.</div>
     <div class="err" id="auth-err"></div>
-    <div class="field"><label>Email</label><input id="a-email" type="email" placeholder="you@business.com"></div>
-    <div class="field"><label>Password</label><input id="a-pass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doAuth()"></div>
-    <button class="btn" id="auth-btn" onclick="doAuth()">Create account</button>
-    <button class="btn wa" style="margin-top:8px" onclick="startDemo()">⚡ Try 24-hour demo — no signup</button>
+    <form onsubmit="event.preventDefault();doAuth()">
+    <div class="field"><label>Email</label><input id="a-email" type="email" autocomplete="email" placeholder="you@business.com"></div>
+    <div class="field"><label>Password</label><input id="a-pass" type="password" autocomplete="current-password" placeholder="••••••••"></div>
+    <button class="btn" id="auth-btn" type="submit">Create account</button>
+    </form>
+    <button class="btn wa" style="margin-top:8px" onclick="openBooking()">⚡ Try 24-hour demo — no signup</button>
     <div class="switch-line" id="auth-switch">Already have an account? <a onclick="toggleAuth()">Sign in</a></div>
     <div style="display:flex;gap:14px;justify-content:center;margin-top:20px;padding-top:16px;border-top:1px solid rgba(0,0,0,0.07);font-size:12px">
       <a class="plink" onclick="showPublic('pricing')">Pricing</a>
@@ -122,9 +307,9 @@ td{padding:9px 10px;border-bottom:1px solid rgba(0,0,0,0.05)}
     <div class="pub-pg" id="pub-pricing">
       <h1>Simple pricing</h1><div class="sub"><b>Your 24/7 sales employee for about $1/day.</b> Start free, upgrade when campaigns grow. You bring your own Meta WhatsApp number — Meta's free tier covers 1,000 conversations/month.</div>
       <div class="grid2" style="grid-template-columns:repeat(4,1fr)">
-        <div class="card"><h3>Demo</h3><div style="font-size:28px;font-weight:900">$0</div><div class="sub">24 hours</div>
-          <ul class="feat"><li>Full platform access</li><li>25 contacts max</li><li>AI sales responder</li><li>Expires after 24h</li></ul>
-          <button class="btn sm wa" onclick="hidePublic();startDemo()">Start demo</button></div>
+        <div class="card"><h3>Live demo</h3><div style="font-size:28px;font-weight:900">Free</div><div class="sub">30 minutes with us</div>
+          <ul class="feat"><li>See it on your business</li><li>We set it up with you</li><li>Ask anything</li><li>No commitment</li></ul>
+          <button class="btn sm wa" onclick="hidePublic();openBooking()">📅 Book a demo</button></div>
         <div class="card"><h3>Starter</h3><div style="font-size:28px;font-weight:900">$29<span style="font-size:13px;color:#888">/mo</span></div><div class="sub">Solo businesses</div>
           <ul class="feat"><li>2,000 contacts</li><li>Unlimited campaigns</li><li>AI sales responder 24/7</li><li>Hot-lead alerts + daily report</li><li>Drips & smart segments</li><li>Number protection (warm-up)</li></ul>
           <button class="btn sm ghost" onclick="hidePublic()">Create account</button></div>
@@ -182,11 +367,32 @@ td{padding:9px 10px;border-bottom:1px solid rgba(0,0,0,0.05)}
       <h1>Admin</h1>
       <div class="card" id="adm-gate">
         <h3>🔐 Admin access</h3>
-        <div class="field"><label>Admin password</label><input id="adm-pass" type="password" onkeydown="if(event.key==='Enter')admLogin()"></div>
-        <button class="btn sm" onclick="admLogin()">Enter</button>
+        <form onsubmit="event.preventDefault();admLogin()">
+        <div class="field"><label>Admin password</label><input id="adm-pass" type="password" autocomplete="current-password"></div>
+        <button class="btn sm" type="submit">Enter</button>
+        </form>
       </div>
       <div class="hidden" id="adm-panel">
         <div class="grid4" id="adm-totals"></div>
+        <div class="card" style="margin-top:16px">
+          <h3>➕ Create a user account</h3>
+          <div class="grid2">
+            <div class="field"><label>Email</label><input id="nu-email" type="email" placeholder="client@business.com"></div>
+            <div class="field"><label>Temp password</label><input id="nu-pass" placeholder="min 6 chars"></div>
+            <div class="field"><label>Plan</label><select id="nu-plan"><option value="free">free</option><option value="starter">starter</option><option value="pro">pro</option><option value="agency">agency</option></select></div>
+            <div class="field" style="display:flex;align-items:flex-end"><button class="btn sm" onclick="admCreateUser()">Create user</button></div>
+          </div>
+          <p class="sub" style="margin:0">The user signs in with this email + password at your site. They're active immediately.</p>
+        </div>
+        <div class="card">
+          <div class="row" style="justify-content:space-between"><h3 style="margin:0">📅 Demo availability</h3></div>
+          <p class="sub">Add 30-min slots visitors can book. Add several at once (one datetime per line) or one at a time.</p>
+          <div class="row" style="align-items:flex-start">
+            <textarea id="ds-bulk" rows="3" placeholder="2026-07-22 15:00&#10;2026-07-22 15:30&#10;2026-07-23 11:00" style="flex:1;padding:10px;border:1.5px solid rgba(0,0,0,0.12);border-radius:8px"></textarea>
+            <button class="btn sm" onclick="admAddSlots()">Add slots</button>
+          </div>
+          <table style="margin-top:12px"><thead><tr><th>When</th><th>Status</th><th>Booked by</th><th></th></tr></thead><tbody id="ds-list"></tbody></table>
+        </div>
         <div class="card" style="margin-top:16px">
           <h3>👥 Users — approve, reject, supervise</h3>
           <table><thead><tr><th>Email</th><th>Status</th><th>Plan</th><th>Contacts</th><th>Msgs</th><th>Sent</th><th>Last seen</th><th>Actions</th></tr></thead><tbody id="adm-users"></tbody></table>
@@ -210,7 +416,7 @@ td{padding:9px 10px;border-bottom:1px solid rgba(0,0,0,0.05)}
   <div id="demo-banner"><span id="demo-banner-text"></span><a onclick="showPublic('pricing')">See plans →</a></div>
   <div id="ws-banner" style="display:none;background:#25D366;color:#fff;padding:9px 24px;font-size:12px;align-items:center;gap:10px"><span id="ws-banner-text"></span><a onclick="wsBack()" style="color:#fff;font-weight:700;cursor:pointer;text-decoration:underline">← Back to agency</a></div>
   <div id="topbar">
-    <span class="brand" style="font-size:16px;margin-right:14px">WA·<span>M</span></span>
+    <span class="z24logo" style="font-size:15px;margin-right:14px"><span class="z24-z">Z</span><span class="z24-24">24</span><span class="z24-7">7</span></span>
     <button class="nav-btn on" data-p="dash" onclick="nav('dash')">Dashboard</button>
     <button class="nav-btn" data-p="contacts" onclick="nav('contacts')">Contacts</button>
     <button class="nav-btn" data-p="campaigns" onclick="nav('campaigns')">Campaigns</button>
@@ -480,6 +686,15 @@ const H = () => ({ 'Content-Type': 'application/json', 'Authorization': 'Bearer 
 function toast(m){ const t=$('toast'); t.textContent=m; t.style.display='block'; setTimeout(()=>t.style.display='none',3000); }
 
 // ── auth ──
+function showAuth(mode){
+  $('landing').classList.add('hidden');
+  $('auth').classList.remove('hidden'); $('auth').style.display='flex';
+  if((mode==='login')!==(authMode==='login')) toggleAuth();
+}
+function closeAuth(){
+  $('auth').classList.add('hidden'); $('auth').style.display='none';
+  if(!TOKEN) $('landing').classList.remove('hidden');
+}
 function toggleAuth(){
   authMode = authMode==='signup' ? 'login' : 'signup';
   $('auth-btn').textContent = authMode==='signup' ? 'Create account' : 'Sign in';
@@ -502,7 +717,7 @@ async function doAuth(){
     if(d.status==='pending') toast('Account created! Pending approval — you can start working now.');
   }catch(e){ err.textContent='Network error'; err.style.display='block'; }
 }
-function logout(){ localStorage.removeItem('wm-token'); localStorage.removeItem('wm-email'); location.reload(); }
+function logout(){ ['wm-token','wm-email','wm-status','wm-plan','wm-expires','wm-parent-token','wm-parent-email','wm-parent-plan','wm-ws-name'].forEach(k=>localStorage.removeItem(k)); location.reload(); }
 
 // ── shell ──
 function nav(p){
@@ -519,6 +734,7 @@ function nav(p){
   if(p==='ws') wsLoad();
 }
 function boot(){
+  $('landing').classList.add('hidden');
   $('auth').style.display='none'; $('auth').classList.add('hidden');
   $('public-wrap').classList.add('hidden');
   $('app').style.display='block';
@@ -782,23 +998,49 @@ async function saveAI(){
   toast(d.ok?'AI responder saved ✓':(d.error||'Failed'));
 }
 
-// ── demo mode ──
-async function startDemo(){
+// ── demo booking ──
+let bkSlot=null;
+function openBooking(){
+  $('booking').classList.add('open');
+  $('book-form').classList.add('hidden'); $('book-done').classList.add('hidden');
+  bkSlot=null; loadSlots();
+}
+function closeBooking(){ $('booking').classList.remove('open'); }
+async function loadSlots(){
   try{
-    const r = await fetch(API+'/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'demo'})});
-    const d = await r.json();
-    if(!r.ok){ toast(d.error||'Demo failed'); return; }
-    TOKEN=d.token; EMAIL=d.email;
-    localStorage.setItem('wm-token',TOKEN); localStorage.setItem('wm-email',EMAIL);
-    localStorage.setItem('wm-status',d.status||''); localStorage.setItem('wm-expires',d.demo_expires||'');
-    localStorage.setItem('wm-plan',d.plan||'demo');
-    boot(); toast('⚡ 24-hour demo started — welcome!');
+    const r = await fetch(API+'/api/demo'); const d = await r.json();
+    const slots = d.slots||[];
+    if(!slots.length){ $('book-slots').innerHTML='<p class="hd2" style="color:#999">No open times right now — email hello@z24seven.tel and we\'ll set one up.</p>'; return; }
+    $('book-slots').innerHTML = slots.map(s=>{
+      const dt=new Date(s.slot_at);
+      const lbl=dt.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'})+' · '+dt.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+      return `<button class="slot-chip" data-id="${s.id}" onclick="pickSlot(${s.id},'${lbl.replace(/'/g,'')}')">${lbl}</button>`;
+    }).join('');
+  }catch(e){ $('book-slots').innerHTML='<p class="hd2" style="color:#c00">Could not load times.</p>'; }
+}
+function pickSlot(id,lbl){
+  bkSlot={id,lbl};
+  document.querySelectorAll('.slot-chip').forEach(c=>c.classList.toggle('on', +c.dataset.id===id));
+  $('book-form').classList.remove('hidden');
+}
+async function submitBooking(){
+  if(!bkSlot){ toast('Pick a time first'); return; }
+  const name=$('bk-name').value.trim(), email=$('bk-email').value.trim();
+  if(!name||!email.includes('@')){ toast('Name and valid email needed'); return; }
+  $('bk-submit').textContent='Booking…'; $('bk-submit').disabled=true;
+  try{
+    const r=await fetch(API+'/api/demo',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:bkSlot.id,name,email,phone:$('bk-phone').value,note:$('bk-note').value})});
+    const d=await r.json();
+    if(d.ok){ $('book-form').classList.add('hidden'); $('book-slots').classList.add('hidden'); $('book-done').classList.remove('hidden'); $('book-done-when').textContent=bkSlot.lbl; }
+    else toast(d.error||'Booking failed');
   }catch(e){ toast('Network error'); }
+  $('bk-submit').textContent='Confirm my demo →'; $('bk-submit').disabled=false;
 }
 
 // ── public pages ──
 function showPublic(p){
-  $('auth').classList.add('hidden'); $('app').style.display='none';
+  $('landing').classList.add('hidden');
+  $('auth').classList.add('hidden'); $('auth').style.display='none'; $('app').style.display='none';
   $('public-wrap').classList.remove('hidden');
   document.querySelectorAll('.pub-pg').forEach(x=>x.classList.add('hidden'));
   $('pub-'+p).classList.remove('hidden');
@@ -807,7 +1049,7 @@ function showPublic(p){
 function hidePublic(){
   $('public-wrap').classList.add('hidden');
   if(TOKEN){ $('app').style.display='block'; }
-  else { $('auth').classList.remove('hidden'); $('auth').style.display='flex'; }
+  else { $('landing').classList.remove('hidden'); }
 }
 
 // ── demo/pending banner ──
@@ -815,11 +1057,7 @@ function paintBanner(){
   const st = localStorage.getItem('wm-status')||'';
   const ex = localStorage.getItem('wm-expires')||'';
   const b = $('demo-banner');
-  if(st==='demo'){
-    const left = ex ? Math.max(0, Math.round((new Date(ex)-Date.now())/3600000)) : 24;
-    $('demo-banner-text').textContent = `⚡ Demo mode — ${left}h remaining · 25 contacts max · create a free account to keep your work.`;
-    b.style.display='flex';
-  } else if(st==='pending'){
+  if(st==='pending'){
     $('demo-banner-text').textContent = '⏳ Account pending approval — demo limits apply until the team approves you (usually < 24h).';
     b.style.display='flex';
   } else b.style.display='none';
@@ -855,7 +1093,7 @@ async function admLogin(){
   if(r.status===401){ toast('Wrong admin password'); return; }
   sessionStorage.setItem('wm-adm',ADM);
   $('adm-gate').classList.add('hidden'); $('adm-panel').classList.remove('hidden');
-  admLoad(await r.json());
+  admLoad(await r.json()); admSlots();
 }
 async function admRefresh(){
   const r = await fetch(API+'/api/admin',{headers:AH()});
@@ -973,6 +1211,36 @@ async function saveWarmup(){
   const d = await r.json();
   toast(d.ok?($('s-warmup').checked?'🛡 Protection ON':'⚠️ Protection OFF — higher ban risk'):(d.error||'Failed'));
 }
+
+// ── admin: create user + demo slots ──
+async function admCreateUser(){
+  const email=$('nu-email').value.trim(), password=$('nu-pass').value, plan=$('nu-plan').value;
+  const r=await fetch(API+'/api/admin',{method:'POST',headers:AH(),body:JSON.stringify({action:'create',email,password,plan})});
+  const d=await r.json();
+  if(d.ok){ toast('User created ✓'); $('nu-email').value='';$('nu-pass').value=''; admRefresh(); }
+  else toast(d.error||'Failed');
+}
+async function admAddSlots(){
+  const lines=$('ds-bulk').value.split('\n').map(s=>s.trim()).filter(Boolean);
+  if(!lines.length){ toast('Add at least one datetime'); return; }
+  const slots=lines.map(l=>{ const iso=new Date(l.replace(' ','T')); return isNaN(iso)?null:iso.toISOString(); }).filter(Boolean);
+  if(!slots.length){ toast('Format: 2026-07-22 15:00'); return; }
+  const r=await fetch(API+'/api/demo',{method:'POST',headers:AH(),body:JSON.stringify({action:'add',slots})});
+  const d=await r.json();
+  if(d.ok){ toast(`Added ${d.added} slots`); $('ds-bulk').value=''; admSlots(); }
+  else toast(d.error||'Failed');
+}
+async function admSlots(){
+  const r=await fetch(API+'/api/demo',{headers:AH()}); const d=await r.json();
+  $('ds-list').innerHTML=(d.slots||[]).map(s=>{
+    const dt=new Date(s.slot_at);
+    return `<tr><td>${dt.toLocaleString('en-GB',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</td>
+      <td><span class="pill ${s.booked?'green':''}">${s.booked?'booked':'open'}</span></td>
+      <td>${s.booked?(s.name||'')+' · '+(s.phone||s.email||''):'—'}</td>
+      <td><button class="link" onclick="admDelSlot(${s.id})">delete</button></td></tr>`;
+  }).join('') || '<tr><td colspan="4" style="color:#aaa">No slots yet — add some above.</td></tr>';
+}
+async function admDelSlot(id){ await fetch(API+`/api/demo?id=${id}`,{method:'DELETE',headers:AH()}); admSlots(); }
 
 // ── init ──
 addStep();
