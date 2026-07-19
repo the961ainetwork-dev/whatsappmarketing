@@ -1,12 +1,5 @@
 {
-  "functions": {
-    "api/webhook.js": { "maxDuration": 60 },
-    "api/campaigns.js": { "maxDuration": 60 },
-    "api/drip-cron.js": { "maxDuration": 60 },
-    "api/daily-summary.js": { "maxDuration": 60 }
-  },
-  "crons": [
-    { "path": "/api/drip-cron", "schedule": "*/15 * * * *" },
-    { "path": "/api/daily-summary", "schedule": "0 4 * * *" }
-  ]
+  "name": "wa-marketer",
+  "version": "1.0.0",
+  "type": "module"
 }
