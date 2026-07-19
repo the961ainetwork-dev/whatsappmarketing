@@ -1,4 +1,4 @@
-import { sb, cors, waSend, waText, getSettings, logMsg } from './_lib.js';
+import { sb, cors, waSend, waText, getSettings, logMsg, regionFromPhone } from './_lib.js';
 
 export default async function handler(req, res) {
   cors(res);
@@ -115,6 +115,61 @@ intent=hot means: asked price/availability to buy now, gave order details, or as
         const o = await waSend(settings, settings.owner_phone.replace(/\D/g, ''), waText(alert));
         if (o.ok) await logMsg(userId, settings.owner_phone, 'out', alert, 'alert', o.id);
       }
+    }
+
+
+    // ══ CALL-CENTER: classify inbound into a CRM ticket ══
+    if (settings.callcenter && aKey) {
+      try {
+        const region = regionFromPhone(from);
+        const cr = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': aKey },
+          body: JSON.stringify({
+            model: 'claude-haiku-4-5', max_tokens: 350,
+            messages: [{ role: 'user', content: `Classify this incoming customer WhatsApp message for a business call-center CRM. Business: ${settings.business_name || settings.ai_prompt || 'a company'}.
+
+MESSAGE: "${text}"
+
+Respond ONLY JSON:
+{"category":"inquiry|order|complaint|support|billing|followup|other","priority":"urgent|normal|low","status":"new","needs_followup":true|false,"summary":"one short line","suggested_reply":"a ready-to-send reply the agent could use, in the customer's language"}` }],
+          }),
+        });
+        if (cr.ok) {
+          const cd = await cr.json();
+          const ct = (cd.content || []).filter(b => b.type === 'text').map(b => b.text).join('');
+          let cls = null;
+          try { const cl = ct.replace(/\`\`\`json|\`\`\`/g, '').trim(); cls = JSON.parse(cl.slice(cl.indexOf('{'), cl.lastIndexOf('}') + 1)); } catch {}
+          if (cls) {
+            // name from contact
+            const nr = await sb(`wm_contacts?user_id=eq.${userId}&phone=eq.${from}&select=name`);
+            const nm = (nr.ok ? (await nr.json())[0]?.name : '') || '';
+            // update existing open ticket for this phone, else create
+            const er = await sb(`wm_tickets?user_id=eq.${userId}&phone=eq.${from}&status=neq.resolved&select=id&order=id.desc&limit=1`);
+            const existing = (er.ok ? await er.json() : [])[0];
+            const row = {
+              user_id: userId, phone: from, contact_name: nm,
+              category: ['inquiry','order','complaint','support','billing','followup','other'].includes(cls.category) ? cls.category : 'other',
+              priority: ['urgent','normal','low'].includes(cls.priority) ? cls.priority : 'normal',
+              needs_followup: !!cls.needs_followup,
+              summary: String(cls.summary || '').slice(0, 300),
+              last_message: text.slice(0, 500),
+              suggested_reply: String(cls.suggested_reply || '').slice(0, 800),
+              country: region.country, language: region.language, local_time: region.local_time,
+              updated_at: new Date().toISOString(),
+            };
+            if (existing) await sb(`wm_tickets?id=eq.${existing.id}`, { method: 'PATCH', body: JSON.stringify(row) });
+            else await sb('wm_tickets', { method: 'POST', body: JSON.stringify([{ ...row, status: 'new' }]) });
+
+            // owner alert on urgent or complaint
+            if ((cls.priority === 'urgent' || cls.category === 'complaint') && settings.owner_phone) {
+              const al = `\uD83D\uDCDE New ${cls.category.toUpperCase()} (${cls.priority}) on ${settings.business_name || 'your business'}\n\n\uD83D\uDC64 ${nm || from} · ${region.country} · ${region.local_time} local\n\uD83D\uDCDD ${cls.summary || text.slice(0,80)}\n\nOpen: https://wa.me/${from}`;
+              const oa = await waSend(settings, settings.owner_phone.replace(/\D/g, ''), waText(al));
+              if (oa.ok) await logMsg(userId, settings.owner_phone, 'out', al, 'alert', oa.id);
+            }
+          }
+        }
+      } catch { /* classification best-effort */ }
     }
 
     return res.status(200).json({ ok: true });
