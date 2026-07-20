@@ -53,8 +53,10 @@ export function cors(res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 }
 
-// ── WhatsApp Cloud API send ──
+// ── Provider-aware WhatsApp send (Meta Cloud API OR Twilio) ──
 export async function waSend(settings, to, payload) {
+  if (settings.provider === 'twilio') return twilioSend(settings, to, payload);
+  // default: Meta Cloud API
   const r = await fetch(`https://graph.facebook.com/v21.0/${settings.phone_number_id}/messages`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${settings.access_token}`, 'Content-Type': 'application/json' },
@@ -62,6 +64,30 @@ export async function waSend(settings, to, payload) {
   });
   const d = await r.json().catch(() => ({}));
   return { ok: r.ok, id: d.messages?.[0]?.id, error: d.error?.message };
+}
+
+// Twilio WhatsApp sender — converts our payload to Twilio's form-encoded API
+async function twilioSend(settings, to, payload) {
+  const sid = settings.twilio_sid, tok = settings.twilio_token, from = settings.twilio_from;
+  if (!sid || !tok || !from) return { ok: false, error: 'Twilio credentials missing' };
+  // Flatten our Meta-style payload to a plain body string
+  let body = '';
+  if (payload.type === 'text') body = payload.text?.body || '';
+  else if (payload.type === 'template') {
+    // Twilio has no free-form templates here; send the vars joined (best-effort for MVP)
+    const vars = payload.template?.components?.[0]?.parameters?.map(p => p.text) || [];
+    body = vars.length ? vars.join(' ') : `[template:${payload.template?.name}]`;
+  }
+  const toAddr = to.startsWith('whatsapp:') ? to : `whatsapp:+${String(to).replace(/\D/g, '')}`;
+  const fromAddr = from.startsWith('whatsapp:') ? from : `whatsapp:${from}`;
+  const form = new URLSearchParams({ To: toAddr, From: fromAddr, Body: body });
+  const r = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${sid}/Messages.json`, {
+    method: 'POST',
+    headers: { Authorization: 'Basic ' + Buffer.from(`${sid}:${tok}`).toString('base64'), 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: form.toString(),
+  });
+  const d = await r.json().catch(() => ({}));
+  return { ok: r.ok, id: d.sid, error: d.message };
 }
 
 export function waText(body) { return { type: 'text', text: { body } }; }
@@ -99,4 +125,29 @@ export async function sentToday(userId) {
   const midnight = new Date(); midnight.setUTCHours(0, 0, 0, 0);
   const r = await sb(`wm_messages?user_id=eq.${userId}&direction=eq.out&created_at=gte.${midnight.toISOString()}&select=id`);
   return r.ok ? (await r.json()).length : 0;
+}
+
+
+// ── Region detection from WhatsApp number (country code → country/lang/tz offset) ──
+const DIAL = [
+  ['961','Lebanon','Levantine Arabic',2],['962','Jordan','Levantine Arabic',2],['963','Syria','Levantine Arabic',2],
+  ['971','UAE','Gulf Arabic',4],['966','Saudi Arabia','Gulf Arabic',3],['965','Kuwait','Gulf Arabic',3],
+  ['974','Qatar','Gulf Arabic',3],['973','Bahrain','Gulf Arabic',3],['968','Oman','Gulf Arabic',4],
+  ['20','Egypt','Egyptian Arabic',2],['212','Morocco','Darija Arabic',1],['213','Algeria','Arabic',1],
+  ['216','Tunisia','Arabic',1],['964','Iraq','Iraqi Arabic',3],['967','Yemen','Arabic',3],
+  ['970','Palestine','Levantine Arabic',2],['1','USA/Canada','English',-5],['44','UK','English',0],
+  ['33','France','French',1],['49','Germany','German',1],['90','Turkey','Turkish',3],['91','India','English',5],
+];
+export function regionFromPhone(phone) {
+  const p = String(phone || '').replace(/\D/g, '');
+  let best = null;
+  for (const [code, country, lang, tz] of DIAL) {
+    if (p.startsWith(code) && (!best || code.length > best[0].length)) best = [code, country, lang, tz];
+  }
+  if (!best) return { country: 'Unknown', language: 'Arabic/English', local_time: '' };
+  const [, country, language, tz] = best;
+  const now = new Date();
+  const local = new Date(now.getTime() + (tz * 60 + now.getTimezoneOffset()) * 60000);
+  const local_time = local.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+  return { country, language, local_time };
 }
