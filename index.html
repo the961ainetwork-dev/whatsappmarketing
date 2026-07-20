@@ -664,7 +664,35 @@ td{padding:9px 10px;border-bottom:1px solid rgba(0,0,0,0.05)}
   <div class="page" id="pg-settings">
     <h1>Settings</h1><div class="sub">Connect your own WhatsApp Business Cloud API — 10 minutes, free, no approvals.</div>
     <div class="card">
-      <h3>🔌 WhatsApp connection</h3>
+      <h3>🔗 Choose your WhatsApp provider</h3>
+      <p class="sub" style="margin-bottom:10px">Two ways to connect. Meta is free but needs a Facebook Business setup. Twilio is faster to start (works without a Meta developer account) but charges per message.</p>
+      <div class="row" style="gap:10px">
+        <label class="row" style="gap:6px;font-size:13px;cursor:pointer"><input type="radio" name="prov" value="meta" id="prov-meta" onchange="switchProvider()" checked> Meta Cloud API (free)</label>
+        <label class="row" style="gap:6px;font-size:13px;cursor:pointer"><input type="radio" name="prov" value="twilio" id="prov-twilio" onchange="switchProvider()"> Twilio (fast start)</label>
+      </div>
+    </div>
+
+    <div class="card" id="prov-twilio-card" style="display:none">
+      <h3>⚡ Twilio WhatsApp connection</h3>
+      <div class="ok-msg" id="tw-ok"></div><div class="err" id="tw-err"></div>
+      <div class="grid2">
+        <div class="field"><label>Business name</label><input id="tw-biz" placeholder="Your business"></div>
+        <div class="field"><label>Account SID</label><input id="tw-sid" placeholder="ACxxxxxxxx"></div>
+        <div class="field"><label>Auth Token</label><input id="tw-token" placeholder="your Twilio auth token"></div>
+        <div class="field"><label>WhatsApp From number</label><input id="tw-from" placeholder="whatsapp:+14155238886"></div>
+      </div>
+      <div class="row">
+        <button class="btn sm" onclick="saveTwilio()">Save</button>
+        <input id="tw-test" placeholder="Your phone: 9613…" style="padding:9px 12px;border:1.5px solid rgba(0,0,0,0.12);border-radius:8px">
+        <button class="btn sm wa" onclick="testSend()">Send test</button>
+      </div>
+      <div class="note">
+        <b>Twilio setup (10 min):</b> 1) Sign up at <a href="https://twilio.com" target="_blank" style="color:#0a0a0a;text-decoration:underline">twilio.com</a>. 2) Console → copy your <b>Account SID</b> + <b>Auth Token</b>. 3) Messaging → Try it out → <b>WhatsApp sandbox</b> (instant) or request a <b>WhatsApp sender</b> (production). 4) Copy the sandbox/sender number as <code>whatsapp:+1...</code> into "From". 5) In Twilio's WhatsApp Sandbox settings, set <b>"When a message comes in"</b> to: <code id="tw-hook">https://z24seven.tel/api/webhook</code> <button class="link" onclick="copyTxt($('tw-hook').textContent)">copy</button> (method POST).
+      </div>
+    </div>
+
+    <div class="card" id="prov-meta-card">
+      <h3>🔌 WhatsApp connection (Meta)</h3>
       <div class="ok-msg" id="s-ok"></div><div class="err" id="s-err"></div>
       <div class="grid2">
         <div class="field"><label>Business name</label><input id="s-biz" placeholder="Beirut Roasters"></div>
@@ -940,17 +968,33 @@ async function loadSettings(){
   $('s-waba').value=s.waba_id||''; $('s-token').value=s.access_token||'';
   $('ai-on').checked=!!s.ai_enabled; $('ai-prompt').value=s.ai_prompt||'';
   $('s-owner').value=s.owner_phone||''; $('s-daily').checked=!!s.daily_summary;
+  // provider
+  if(s.provider==='twilio'){ $('prov-twilio').checked=true; } else { $('prov-meta').checked=true; }
+  $('tw-biz').value=s.business_name||''; $('tw-sid').value=s.twilio_sid||''; $('tw-token').value=s.twilio_token||''; $('tw-from').value=s.twilio_from||'';
+  switchProvider();
   $('s-warmup').checked = s.warmup!==false;
   if($('cc-on')) $('cc-on').checked = !!s.callcenter;
 }
 async function saveSettings(){
-  const r = await fetch(API+'/api/settings',{method:'PUT',headers:H(),body:JSON.stringify({business_name:$('s-biz').value,phone_number_id:$('s-pnid').value,waba_id:$('s-waba').value,access_token:$('s-token').value})});
+  const r = await fetch(API+'/api/settings',{method:'PUT',headers:H(),body:JSON.stringify({provider:'meta',business_name:$('s-biz').value,phone_number_id:$('s-pnid').value,waba_id:$('s-waba').value,access_token:$('s-token').value})});
   const d = await r.json();
   if(d.ok){ $('s-ok').textContent='Saved ✓'; $('s-ok').style.display='block'; setTimeout(()=>$('s-ok').style.display='none',2500); }
   else { $('s-err').textContent=d.error||'Failed'; $('s-err').style.display='block'; }
 }
+function switchProvider(){
+  const tw = $('prov-twilio').checked;
+  $('prov-twilio-card').style.display = tw ? 'block' : 'none';
+  $('prov-meta-card').style.display = tw ? 'none' : 'block';
+}
+async function saveTwilio(){
+  const r = await fetch(API+'/api/settings',{method:'PUT',headers:H(),body:JSON.stringify({provider:'twilio',business_name:$('tw-biz').value,twilio_sid:$('tw-sid').value,twilio_token:$('tw-token').value,twilio_from:$('tw-from').value})});
+  const d = await r.json();
+  if(d.ok){ $('tw-ok').textContent='Saved ✓ — now send a test'; $('tw-ok').style.display='block'; setTimeout(()=>$('tw-ok').style.display='none',2500); }
+  else { $('tw-err').textContent=d.error||'Failed'; $('tw-err').style.display='block'; }
+}
 async function testSend(){
-  const r = await fetch(API+'/api/settings',{method:'POST',headers:H(),body:JSON.stringify({to:$('s-test').value})});
+  const to = $('prov-twilio').checked ? $('tw-test').value : $('s-test').value;
+  const r = await fetch(API+'/api/settings',{method:'POST',headers:H(),body:JSON.stringify({to})});
   const d = await r.json();
   toast(d.ok?'Test sent ✓ check WhatsApp':(d.error||'Failed'));
 }
