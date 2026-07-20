@@ -36,7 +36,7 @@ export default async function handler(req, res) {
       const s = await getSettings(user.id);
       const ready = s?.provider === 'twilio' ? (s?.twilio_sid && s?.twilio_token && s?.twilio_from) : (s?.phone_number_id && s?.access_token);
       if (!ready) return res.status(400).json({ error: 'Add your WhatsApp credentials first' });
-      const out = await waSend(s, String(to || '').replace(/\D/g, ''), waText('✅ WA-Marketer connected! Your WhatsApp integration works.'));
+      const out = await waSend(s, String(to || '').replace(/\D/g, ''), waText('✅ Z24SEVEN.tel connected! Your WhatsApp integration works.'));
       return res.status(out.ok ? 200 : 400).json(out.ok ? { ok: true } : { error: out.error || 'Send failed — check credentials. Note: outside a 24h window, only template messages deliver.' });
     }
 
