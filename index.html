@@ -1196,12 +1196,14 @@ function admLoad(d){
   </tr>`).join('') || '<tr><td colspan="4" style="color:#aaa">No activity yet.</td></tr>';
 }
 async function admStatus(id,status){
-  await fetch(API+'/api/admin',{method:'POST',headers:AH(),body:JSON.stringify({action:'status',userId:id,status})});
-  toast('Status → '+status); admRefresh();
+  if(!id||!status) return;
+  const r=await fetch(API+'/api/admin',{method:'POST',headers:AH(),body:JSON.stringify({action:'status',userId:id,status})});
+  const d=await r.json(); if(d.ok){ toast('Status → '+status); admRefresh(); } else toast(d.error||'Failed');
 }
 async function admPlan(id,plan){
-  await fetch(API+'/api/admin',{method:'POST',headers:AH(),body:JSON.stringify({action:'plan',userId:id,plan})});
-  toast('Plan → '+plan);
+  if(!id||!plan) return;
+  const r=await fetch(API+'/api/admin',{method:'POST',headers:AH(),body:JSON.stringify({action:'plan',userId:id,plan})});
+  const d=await r.json(); if(d.ok) toast('Plan → '+plan); else toast(d.error||'Failed');
 }
 async function admDelete(id){
   if(!confirm('Delete this user and ALL their data?')) return;
@@ -1284,10 +1286,13 @@ async function saveWarmup(){
 // ── admin: create user + demo slots ──
 async function admCreateUser(){
   const email=$('nu-email').value.trim(), password=$('nu-pass').value, plan=$('nu-plan').value;
-  const r=await fetch(API+'/api/admin',{method:'POST',headers:AH(),body:JSON.stringify({action:'create',email,password,plan})});
-  const d=await r.json();
-  if(d.ok){ toast('User created ✓'); $('nu-email').value='';$('nu-pass').value=''; admRefresh(); }
-  else toast(d.error||'Failed');
+  if(!email.includes('@')||password.length<6){ toast('Need valid email + 6-char password'); return; }
+  try{
+    const r=await fetch(API+'/api/admin',{method:'POST',headers:AH(),body:JSON.stringify({action:'create',email,password,plan})});
+    const d=await r.json();
+    if(d.ok){ toast('✅ User created: '+email); $('nu-email').value='';$('nu-pass').value=''; admRefresh(); }
+    else toast('❌ '+(d.error||'Create failed'));
+  }catch(e){ toast('❌ Network error creating user'); }
 }
 async function admSlots(){
   const r=await fetch(API+'/api/demo',{headers:AH()}); const d=await r.json();
