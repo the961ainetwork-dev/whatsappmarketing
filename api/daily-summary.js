@@ -31,7 +31,7 @@ export default async function handler(req, res) {
         const line = `${convos} convos, ${newContacts.length} new leads, ${hotToday.length} hot, ${orders.length} orders` + (hot.length ? `. CALL: ${hotLine}` : '');
         const dateStr = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
 
-        const body = `📊 ${s.business_name || 'Your business'} — daily report ${dateStr}\n\n💬 Conversations: ${convos}\n⬅️ Inbound messages: ${inbound.length}\n➡️ Sent: ${outbound.length}\n🆕 New leads: ${newContacts.length}\n🔥 Hot leads: ${hotToday.length}\n🛒 Orders collected: ${orders.length}${hot.length ? `\n\n📞 Call today: ${hotLine}` : ''}\n\n— WA-Marketer`;
+        const body = `📊 ${s.business_name || 'Your business'} — daily report ${dateStr}\n\n💬 Conversations: ${convos}\n⬅️ Inbound messages: ${inbound.length}\n➡️ Sent: ${outbound.length}\n🆕 New leads: ${newContacts.length}\n🔥 Hot leads: ${hotToday.length}\n🛒 Orders collected: ${orders.length}${hot.length ? `\n\n📞 Call today: ${hotLine}` : ''}\n\n— Z24SEVEN.tel`;
 
         // try free text (works if owner messaged the bot in last 24h), fall back to template
         let out = await waSend(s, s.owner_phone.replace(/\D/g, ''), waText(body));
