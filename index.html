@@ -98,6 +98,13 @@ td{padding:9px 10px;border-bottom:1px solid rgba(0,0,0,0.05)}
 .book-box{background:#FFFDF6;border:2.5px solid #0a0a0a;border-radius:18px;padding:30px;width:480px;max-width:94vw;max-height:88vh;overflow-y:auto;position:relative;box-shadow:6px 6px 0 #0a0a0a}
 .slot-chip{font-family:'Patrick Hand',cursive;font-size:13px;padding:8px 12px;border:2px solid #0a0a0a;border-radius:12px 3px 12px 3px;background:#fff;cursor:pointer}
 .slot-chip.on{background:#25D366}
+.wk-day-h{font-family:'Patrick Hand',cursive;font-size:12px;text-align:center;font-weight:700;padding:4px 0;border-bottom:2px solid #0a0a0a;margin-bottom:4px}
+.wk-slot{font-family:'Patrick Hand',cursive;font-size:12px;padding:6px 2px;border:1.5px solid rgba(0,0,0,0.15);border-radius:8px 2px 8px 2px;background:#fff;cursor:pointer;text-align:center;margin-bottom:4px;transition:all 0.1s}
+.wk-slot:hover{background:#eafff1;border-color:#25D366}
+.wk-slot.on{background:#25D366;border-color:#0a0a0a;font-weight:700}
+.wk-slot.empty{opacity:0.25;cursor:default;border-style:dashed}
+.wk-slot.empty:hover{background:#fff}
+.wk-col{min-height:40px}
 .slot-chip:hover{background:#eafff1}
 /* ═══ HAND-DRAWN LANDING ═══ */
 #landing{background:#FFFDF6;min-height:100vh;overflow-x:hidden}
@@ -251,7 +258,14 @@ td{padding:9px 10px;border-bottom:1px solid rgba(0,0,0,0.05)}
     <div style="text-align:center;margin-bottom:8px"><span class="z24logo" style="font-size:22px"><span class="z24-z">Z</span><span class="z24-24">24</span><span class="z24-7">SEVEN</span><span class="z24-tel">.tel</span></span></div>
     <h2 class="hd" style="font-size:30px;text-align:center;transform:rotate(-1deg);margin-bottom:2px">Book your live demo 📅</h2>
     <p class="hd2" style="text-align:center;color:#666;font-size:15px;margin-bottom:18px">30 minutes · free · we tailor it to your business</p>
-    <div id="book-slots" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:18px"><p class="hd2" style="color:#999">Loading times…</p></div>
+    <div id="book-cal" style="margin-bottom:16px">
+      <div class="row" style="justify-content:space-between;margin-bottom:10px">
+        <button class="btn sm ghost" id="wk-prev" onclick="wkNav(-1)">‹ prev</button>
+        <span class="hd2" id="wk-label" style="font-size:15px;font-weight:700"></span>
+        <button class="btn sm ghost" id="wk-next" onclick="wkNav(1)">next ›</button>
+      </div>
+      <div id="wk-grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px"><p class="hd2" style="grid-column:1/-1;text-align:center;color:#999">Loading calendar…</p></div>
+    </div>
     <div id="book-form" class="hidden">
       <div class="field"><label>Your name</label><input id="bk-name" placeholder="Ahmad"></div>
       <div class="field"><label>Email</label><input id="bk-email" type="email" placeholder="you@business.com"></div>
@@ -385,13 +399,9 @@ td{padding:9px 10px;border-bottom:1px solid rgba(0,0,0,0.05)}
           <p class="sub" style="margin:0">The user signs in with this email + password at your site. They're active immediately.</p>
         </div>
         <div class="card">
-          <div class="row" style="justify-content:space-between"><h3 style="margin:0">📅 Demo availability</h3></div>
-          <p class="sub">Add 30-min slots visitors can book. Add several at once (one datetime per line) or one at a time.</p>
-          <div class="row" style="align-items:flex-start">
-            <textarea id="ds-bulk" rows="3" placeholder="2026-07-22 15:00&#10;2026-07-22 15:30&#10;2026-07-23 11:00" style="flex:1;padding:10px;border:1.5px solid rgba(0,0,0,0.12);border-radius:8px"></textarea>
-            <button class="btn sm" onclick="admAddSlots()">Add slots</button>
-          </div>
-          <table style="margin-top:12px"><thead><tr><th>When</th><th>Status</th><th>Booked by</th><th></th></tr></thead><tbody id="ds-list"></tbody></table>
+          <div class="row" style="justify-content:space-between"><h3 style="margin:0">📅 Demo bookings</h3><button class="link" onclick="admSlots()">refresh</button></div>
+          <p class="sub">Slots auto-open Mon–Fri, 10:00–16:00, every 30 min (3 weeks ahead). Visitors book; confirmed bookings appear here.</p>
+          <table style="margin-top:8px"><thead><tr><th>When</th><th>Name</th><th>WhatsApp / Email</th><th>Business</th><th></th></tr></thead><tbody id="ds-list"></tbody></table>
         </div>
         <div class="card" style="margin-top:16px">
           <h3>👥 Users — approve, reject, supervise</h3>
@@ -1037,21 +1047,49 @@ function openBooking(){
   bkSlot=null; loadSlots();
 }
 function closeBooking(){ $('booking').classList.remove('open'); }
+let ALL_SLOTS=[], WK_OFFSET=0;
 async function loadSlots(){
   try{
     const r = await fetch(API+'/api/demo'); const d = await r.json();
-    const slots = d.slots||[];
-    if(!slots.length){ $('book-slots').innerHTML='<p class="hd2" style="color:#999">No open times right now — email hello@z24seven.tel and we\'ll set one up.</p>'; return; }
-    $('book-slots').innerHTML = slots.map(s=>{
-      const dt=new Date(s.slot_at);
-      const lbl=dt.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'})+' · '+dt.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-      return `<button class="slot-chip" data-id="${s.id}" onclick="pickSlot(${s.id},'${lbl.replace(/'/g,'')}')">${lbl}</button>`;
-    }).join('');
-  }catch(e){ $('book-slots').innerHTML='<p class="hd2" style="color:#c00">Could not load times.</p>'; }
+    ALL_SLOTS = (d.slots||[]).map(s=>new Date(s.slot_at));
+    WK_OFFSET=0;
+    renderWeek();
+  }catch(e){ $('wk-grid').innerHTML='<p class="hd2" style="grid-column:1/-1;text-align:center;color:#c00">Could not load calendar.</p>'; }
 }
-function pickSlot(id,lbl){
-  bkSlot={id,lbl};
-  document.querySelectorAll('.slot-chip').forEach(c=>c.classList.toggle('on', +c.dataset.id===id));
+function mondayOf(offset){
+  const now=new Date(); now.setHours(0,0,0,0);
+  const dow=(now.getDay()+6)%7; // 0=Mon
+  const mon=new Date(now); mon.setDate(now.getDate()-dow+offset*7);
+  return mon;
+}
+function renderWeek(){
+  const mon=mondayOf(WK_OFFSET);
+  const days=[...Array(5)].map((_,i)=>{ const d=new Date(mon); d.setDate(mon.getDate()+i); return d; });
+  const end=new Date(days[4]); end.setDate(end.getDate()+1);
+  $('wk-label').textContent = mon.toLocaleDateString('en-GB',{day:'numeric',month:'short'})+' – '+days[4].toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+  $('wk-prev').style.visibility = WK_OFFSET<=0 ? 'hidden':'visible';
+  // build 5 columns
+  $('wk-grid').innerHTML = days.map(day=>{
+    const dayEnd=new Date(day); dayEnd.setDate(day.getDate()+1);
+    const slots=ALL_SLOTS.filter(s=>s>=day && s<dayEnd).sort((a,b)=>a-b);
+    const head=`<div class="wk-day-h">${day.toLocaleDateString('en-GB',{weekday:'short'})}<br>${day.getDate()}/${day.getMonth()+1}</div>`;
+    const body = slots.length
+      ? slots.map(s=>`<div class="wk-slot" data-iso="${s.toISOString()}" onclick="pickSlot(this)">${s.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',hour12:false})}</div>`).join('')
+      : '<div class="wk-slot empty">—</div>';
+    return `<div class="wk-col">${head}${body}</div>`;
+  }).join('');
+}
+function wkNav(dir){
+  const max = 2; // 3 weeks (0,1,2)
+  WK_OFFSET = Math.max(0, Math.min(max, WK_OFFSET+dir));
+  renderWeek();
+}
+function pickSlot(el){
+  const iso=el.dataset.iso;
+  const dt=new Date(iso);
+  bkSlot={ iso, lbl: dt.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'})+' · '+dt.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',hour12:false}) };
+  document.querySelectorAll('.wk-slot').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
   $('book-form').classList.remove('hidden');
 }
 async function submitBooking(){
@@ -1060,7 +1098,7 @@ async function submitBooking(){
   if(!name||!email.includes('@')){ toast('Name and valid email needed'); return; }
   $('bk-submit').textContent='Booking…'; $('bk-submit').disabled=true;
   try{
-    const r=await fetch(API+'/api/demo',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:bkSlot.id,name,email,phone:$('bk-phone').value,note:$('bk-note').value})});
+    const r=await fetch(API+'/api/demo',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slot_at:bkSlot.iso,name,email,phone:$('bk-phone').value,note:$('bk-note').value})});
     const d=await r.json();
     if(d.ok){ $('book-form').classList.add('hidden'); $('book-slots').classList.add('hidden'); $('book-done').classList.remove('hidden'); $('book-done-when').textContent=bkSlot.lbl; }
     else toast(d.error||'Booking failed');
@@ -1251,27 +1289,16 @@ async function admCreateUser(){
   if(d.ok){ toast('User created ✓'); $('nu-email').value='';$('nu-pass').value=''; admRefresh(); }
   else toast(d.error||'Failed');
 }
-async function admAddSlots(){
-  const lines=$('ds-bulk').value.split('\n').map(s=>s.trim()).filter(Boolean);
-  if(!lines.length){ toast('Add at least one datetime'); return; }
-  const slots=lines.map(l=>{ const iso=new Date(l.replace(' ','T')); return isNaN(iso)?null:iso.toISOString(); }).filter(Boolean);
-  if(!slots.length){ toast('Format: 2026-07-22 15:00'); return; }
-  const r=await fetch(API+'/api/demo',{method:'POST',headers:AH(),body:JSON.stringify({action:'add',slots})});
-  const d=await r.json();
-  if(d.ok){ toast(`Added ${d.added} slots`); $('ds-bulk').value=''; admSlots(); }
-  else toast(d.error||'Failed');
-}
 async function admSlots(){
   const r=await fetch(API+'/api/demo',{headers:AH()}); const d=await r.json();
-  $('ds-list').innerHTML=(d.slots||[]).map(s=>{
+  $('ds-list').innerHTML=(d.bookings||[]).map(s=>{
     const dt=new Date(s.slot_at);
     return `<tr><td>${dt.toLocaleString('en-GB',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</td>
-      <td><span class="pill ${s.booked?'green':''}">${s.booked?'booked':'open'}</span></td>
-      <td>${s.booked?(s.name||'')+' · '+(s.phone||s.email||''):'—'}</td>
-      <td><button class="link" onclick="admDelSlot(${s.id})">delete</button></td></tr>`;
-  }).join('') || '<tr><td colspan="4" style="color:#aaa">No slots yet — add some above.</td></tr>';
+      <td>${s.name||'—'}</td><td>${s.phone||s.email||'—'}</td><td>${(s.note||'—')}</td>
+      <td><button class="link" onclick="admDelSlot(${s.id})">cancel</button></td></tr>`;
+  }).join('') || '<tr><td colspan="5" style="color:#aaa">No bookings yet.</td></tr>';
 }
-async function admDelSlot(id){ await fetch(API+`/api/demo?id=${id}`,{method:'DELETE',headers:AH()}); admSlots(); }
+async function admDelSlot(id){ if(!confirm('Cancel this booking?'))return; await fetch(API+`/api/demo?id=${id}`,{method:'DELETE',headers:AH()}); admSlots(); }
 
 // ── Call Center / tickets ──
 let TKF = { key:'status', val:'all' };
