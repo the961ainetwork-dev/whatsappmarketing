@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Z24SEVEN.tel — Your 24/7 AI Sales Employee on WhatsApp</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Caveat:wght@500;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Caveat:wght@500;700&family=Patrick+Hand&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:#fafafa;color:#0a0a0a}
@@ -16,7 +16,7 @@ input,select,textarea{font-family:inherit;font-size:14px;outline:none}
 #auth{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
 .auth-box{background:#fff;border:1px solid rgba(0,0,0,0.1);border-radius:18px;padding:36px;width:400px;max-width:94vw}
 .brand{font-size:22px;font-weight:900;letter-spacing:1px}
-.brand span{color:#25D366}
+.brand span{color:#1e40af}
 .tag{font-size:13px;color:#888;margin-top:4px;margin-bottom:24px}
 .field{margin-bottom:12px}
 .field label{font-size:12px;color:#888;display:block;margin-bottom:4px}
@@ -27,10 +27,10 @@ input,select,textarea{font-family:inherit;font-size:14px;outline:none}
 .btn.sm{width:auto;padding:9px 18px;font-size:13px}
 .btn.ghost{background:#fff;color:#0a0a0a;border:1.5px solid rgba(0,0,0,0.15)}
 .btn.ghost:hover{background:#f5f5f5}
-.btn.wa{background:#25D366}
-.btn.wa:hover{background:#1eb857}
+.btn.wa{background:#1e40af;color:#fff}
+.btn.wa:hover{background:#1e3a8a}
 .err{background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:9px 12px;font-size:12px;color:#dc2626;margin-bottom:12px;display:none}
-.ok-msg{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:9px 12px;font-size:12px;color:#16a34a;margin-bottom:12px;display:none}
+.ok-msg{background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:9px 12px;font-size:12px;color:#1e40af;margin-bottom:12px;display:none}
 .switch-line{text-align:center;font-size:13px;color:#888;margin-top:14px}
 .switch-line a{color:#0a0a0a;font-weight:600;cursor:pointer;text-decoration:underline}
 
@@ -56,7 +56,7 @@ table{width:100%;border-collapse:collapse;font-size:13px}
 th{text-align:left;font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.05em;padding:8px 10px;border-bottom:1px solid rgba(0,0,0,0.08)}
 td{padding:9px 10px;border-bottom:1px solid rgba(0,0,0,0.05)}
 .pill{font-size:10px;font-weight:700;padding:2px 9px;border-radius:99px;border:1px solid rgba(0,0,0,0.12);color:#555}
-.pill.green{background:#25D366;color:#fff;border-color:#25D366}
+.pill.green{background:#1e40af;color:#fff;border-color:#1e40af}
 .pill.dark{background:#0a0a0a;color:#fff;border-color:#0a0a0a}
 .link{font-size:12px;color:#0a0a0a;text-decoration:underline;cursor:pointer;background:none;border:none}
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
@@ -67,7 +67,7 @@ td{padding:9px 10px;border-bottom:1px solid rgba(0,0,0,0.05)}
 .seg-chip:hover{border-color:#0a0a0a}
 .seg-chip.on{background:#0a0a0a;color:#fff;border-color:#0a0a0a}
 .an-bar{height:8px;background:rgba(0,0,0,0.07);border-radius:4px;overflow:hidden;margin:4px 0 10px}
-.an-fill{height:100%;background:#25D366;border-radius:4px}
+.an-fill{height:100%;background:#1e40af;border-radius:4px}
 .wiz-step{display:flex;gap:12px;margin-bottom:14px;font-size:13px}
 .wiz-n{flex-shrink:0;width:26px;height:26px;border-radius:50%;background:#0a0a0a;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
 .wiz-t{color:#666;line-height:1.7}
@@ -75,84 +75,84 @@ td{padding:9px 10px;border-bottom:1px solid rgba(0,0,0,0.05)}
 .plink{font-size:13px;color:#666;cursor:pointer;font-weight:500}
 .plink:hover{color:#0a0a0a;text-decoration:underline}
 .feat{list-style:none;margin:12px 0;display:flex;flex-direction:column;gap:6px;font-size:13px;color:#444}
-.feat li::before{content:'✓ ';color:#25D366;font-weight:700}
+.feat li::before{content:'✓ ';color:#1e40af;font-weight:700}
 .pub-pg h1{font-size:26px;margin-bottom:4px}
 #demo-banner{background:#0a0a0a;color:#fff;padding:9px 24px;font-size:12px;display:none;align-items:center;gap:10px}
-#demo-banner a{color:#25D366;font-weight:600;cursor:pointer}
+#demo-banner a{color:#1e40af;font-weight:600;cursor:pointer}
 #toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#0a0a0a;color:#fff;border-radius:99px;padding:10px 22px;font-size:13px;z-index:999;display:none}
 @media(max-width:720px){.grid2,.grid4{grid-template-columns:1fr}.step-row{grid-template-columns:1fr}}
 
 /* ═══ Z24SEVEN LOGO ═══ */
-.z24logo{font-family:'Caveat',cursive;font-weight:700;display:inline-flex;align-items:baseline;letter-spacing:-0.5px;line-height:1}
-.z24logo .z24-z{font-size:1.5em;color:#0a0a0a}
-.z24logo .z24-24{font-size:1.5em;color:#25D366;margin:0 1px}
-.z24logo .z24-7{font-size:1.5em;color:#0a0a0a}
-.z24logo .z24-tel{font-family:'Patrick Hand',cursive;font-size:0.75em;color:#888;margin-left:2px;align-self:flex-end}
+.z24logo{font-family:'Courier Prime',monospace;font-weight:700;display:inline-flex;align-items:baseline;letter-spacing:-0.5px;line-height:1}
+.z24logo .z24-z{font-size:1.25em;color:#0a0a0a}
+.z24logo .z24-24{font-size:1.25em;color:#1e40af;margin:0 1px}
+.z24logo .z24-7{font-size:1.25em;color:#0a0a0a}
+.z24logo .z24-tel{font-family:'Courier Prime',monospace;font-size:0.75em;color:#888;margin-left:2px;align-self:flex-end}
 .z24logo.z24-big{font-size:34px}
-.z24logo.z24-big .z24-z,.z24logo.z24-big .z24-24,.z24logo.z24-big .z24-7{font-size:2.4em}
+.z24logo.z24-big .z24-z,.z24logo.z24-big .z24-24,.z24logo.z24-big .z24-7{font-size:2em}
 .z24-inv .z24-z,.z24-inv .z24-7{color:#fff}
 .z24-inv .z24-tel{color:#aaa}
 /* booking modal */
 #booking{position:fixed;inset:0;background:rgba(10,10,10,0.5);z-index:300;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px)}
 #booking.open{display:flex}
-.book-box{background:#FFFDF6;border:2.5px solid #0a0a0a;border-radius:18px;padding:30px;width:480px;max-width:94vw;max-height:88vh;overflow-y:auto;position:relative;box-shadow:6px 6px 0 #0a0a0a}
-.slot-chip{font-family:'Patrick Hand',cursive;font-size:13px;padding:8px 12px;border:2px solid #0a0a0a;border-radius:12px 3px 12px 3px;background:#fff;cursor:pointer}
-.slot-chip.on{background:#25D366}
-.wk-day-h{font-family:'Patrick Hand',cursive;font-size:12px;text-align:center;font-weight:700;padding:4px 0;border-bottom:2px solid #0a0a0a;margin-bottom:4px}
-.wk-slot{font-family:'Patrick Hand',cursive;font-size:12px;padding:6px 2px;border:1.5px solid rgba(0,0,0,0.15);border-radius:8px 2px 8px 2px;background:#fff;cursor:pointer;text-align:center;margin-bottom:4px;transition:all 0.1s}
-.wk-slot:hover{background:#eafff1;border-color:#25D366}
-.wk-slot.on{background:#25D366;border-color:#0a0a0a;font-weight:700}
+.book-box{background:#F8FAFC;border:2.5px solid #0a0a0a;border-radius:18px;padding:30px;width:480px;max-width:94vw;max-height:88vh;overflow-y:auto;position:relative;box-shadow:6px 6px 0 #0a0a0a}
+.slot-chip{font-family:'Courier Prime',monospace;font-size:13px;padding:8px 12px;border:2px solid #0a0a0a;border-radius:12px 3px 12px 3px;background:#fff;cursor:pointer}
+.slot-chip.on{background:#1e40af}
+.wk-day-h{font-family:'Courier Prime',monospace;font-size:12px;text-align:center;font-weight:700;padding:4px 0;border-bottom:2px solid #0a0a0a;margin-bottom:4px}
+.wk-slot{font-family:'Courier Prime',monospace;font-size:12px;padding:6px 2px;border:1.5px solid rgba(0,0,0,0.15);border-radius:8px 2px 8px 2px;background:#fff;cursor:pointer;text-align:center;margin-bottom:4px;transition:all 0.1s}
+.wk-slot:hover{background:#eff6ff;border-color:#1e40af}
+.wk-slot.on{background:#1e40af;border-color:#0a0a0a;font-weight:700}
 .wk-slot.empty{opacity:0.25;cursor:default;border-style:dashed}
 .wk-slot.empty:hover{background:#fff}
 .wk-col{min-height:40px}
-.slot-chip:hover{background:#eafff1}
+.slot-chip:hover{background:#eff6ff}
 /* ═══ HAND-DRAWN LANDING ═══ */
-#landing{background:#FFFDF6;min-height:100vh;overflow-x:hidden}
-.hd{font-family:'Caveat',cursive}
-.hd2{font-family:'Patrick Hand',cursive}
+#landing{background:#F8FAFC;min-height:100vh;overflow-x:hidden}
+.hd{font-family:'Courier Prime',monospace;font-weight:700}
+.hd2{font-family:'Courier Prime',monospace}
 .wob{border:2.5px solid #0a0a0a;border-radius:255px 15px 225px 15px/15px 225px 15px 255px}
 .wob2{border:2.5px solid #0a0a0a;border-radius:15px 255px 15px 225px/225px 15px 255px 15px}
-.mark{background:linear-gradient(104deg,rgba(37,211,102,0) 0.9%,rgba(37,211,102,0.45) 2.4%,rgba(37,211,102,0.35) 97.5%,rgba(37,211,102,0) 100%);padding:0 6px;border-radius:4px}
-.mark-y{background:linear-gradient(104deg,rgba(255,214,0,0) 0.9%,rgba(255,214,0,0.5) 2.4%,rgba(255,214,0,0.4) 97.5%,rgba(255,214,0,0) 100%);padding:0 6px;border-radius:4px}
-.sket-u{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 8'%3E%3Cpath d='M1 5 Q 25 1 50 5 T 99 4' stroke='%2325D366' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat bottom/100% 8px;padding-bottom:8px}
-.ld-nav{position:sticky;top:0;z-index:60;background:rgba(255,253,246,0.94);backdrop-filter:blur(8px);border-bottom:2.5px solid #0a0a0a;padding:12px 26px;display:flex;align-items:center;gap:18px}
-.ld-nav .brand{font-family:'Caveat',cursive;font-size:26px;font-weight:700}
-.ld-link{font-family:'Patrick Hand',cursive;font-size:16px;color:#333;cursor:pointer;background:none;border:none}
-.ld-link:hover{color:#25D366}
+.mark{background:linear-gradient(104deg,rgba(30,64,175,0) 0.9%,rgba(30,64,175,0.35) 2.4%,rgba(30,64,175,0.28) 97.5%,rgba(30,64,175,0) 100%);padding:0 6px;border-radius:4px}
+.mark-y{background:linear-gradient(104deg,rgba(59,130,246,0) 0.9%,rgba(59,130,246,0.35) 2.4%,rgba(59,130,246,0.28) 97.5%,rgba(59,130,246,0) 100%);padding:0 6px;border-radius:4px}
+.sket-u{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 8'%3E%3Cpath d='M1 5 Q 25 1 50 5 T 99 4' stroke='%231e40af' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat bottom/100% 8px;padding-bottom:8px}
+.ld-nav{position:sticky;top:0;z-index:60;background:rgba(248,250,252,0.94);backdrop-filter:blur(8px);border-bottom:2.5px solid #0a0a0a;padding:12px 26px;display:flex;align-items:center;gap:18px}
+.ld-nav .brand{font-family:'Courier Prime',monospace;font-size:26px;font-weight:700}
+.ld-link{font-family:'Courier Prime',monospace;font-size:16px;color:#333;cursor:pointer;background:none;border:none}
+.ld-link:hover{color:#1e40af}
 .ld-hero{max-width:1020px;margin:0 auto;padding:64px 26px 40px;position:relative}
-.ld-hero h1{font-size:clamp(34px,6vw,62px);font-weight:900;letter-spacing:-1.5px;line-height:1.06;transform:rotate(-1.2deg);margin-bottom:18px}
-.ld-hero .hd-sub{font-family:'Patrick Hand',cursive;font-size:clamp(17px,2.4vw,22px);color:#333;line-height:1.7;max-width:640px}
-.doodle{position:absolute;font-family:'Caveat',cursive;color:#25D366;pointer-events:none;user-select:none}
+.ld-hero h1{font-size:clamp(26px,4.6vw,48px);font-weight:700;letter-spacing:-0.5px;line-height:1.15;transform:rotate(-1.2deg);margin-bottom:14px}
+.ld-hero .hd-sub{font-family:'Courier Prime',monospace;font-size:clamp(17px,2.4vw,22px);color:#333;line-height:1.7;max-width:640px}
+.doodle{position:absolute;font-family:'Courier Prime',monospace;color:#1e40af;pointer-events:none;user-select:none}
 .ld-steps{display:flex;flex-direction:column;gap:14px;margin:30px auto;max-width:620px;text-align:left}
 .ld-step{display:flex;gap:14px;align-items:flex-start;transform:rotate(-0.4deg)}
 .ld-step:nth-child(2){transform:rotate(0.6deg)}
 .ld-step:nth-child(3){transform:rotate(-0.5deg)}
-.ld-n{font-family:'Caveat',cursive;font-size:28px;font-weight:700;flex-shrink:0;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:2.5px solid #0a0a0a;border-radius:50% 45% 55% 48%/48% 55% 45% 52%;background:#fff}
-.ld-step p{font-family:'Patrick Hand',cursive;font-size:17px;color:#222;line-height:1.55;margin-top:8px}
-.ld-cta{font-family:'Patrick Hand',cursive;font-size:18px;background:#25D366;color:#0a0a0a;border:2.5px solid #0a0a0a;border-radius:255px 15px 225px 15px/15px 225px 15px 255px;padding:14px 30px;cursor:pointer;box-shadow:4px 4px 0 #0a0a0a;transition:all 0.12s;font-weight:700}
+.ld-n{font-family:'Courier Prime',monospace;font-size:28px;font-weight:700;flex-shrink:0;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:2.5px solid #0a0a0a;border-radius:50% 45% 55% 48%/48% 55% 45% 52%;background:#fff}
+.ld-step p{font-family:'Courier Prime',monospace;font-size:17px;font-weight:700;color:#0a0a0a;line-height:1.55;margin-top:8px}
+.ld-cta{font-family:'Courier Prime',monospace;font-size:18px;background:#1e40af;color:#fff;border:2.5px solid #0a0a0a;border-radius:255px 15px 225px 15px/15px 225px 15px 255px;padding:14px 30px;cursor:pointer;box-shadow:4px 4px 0 #0a0a0a;transition:all 0.12s;font-weight:700}
 .ld-cta:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 #0a0a0a}
-.ld-cta.ghost{background:#fff}
+.ld-cta.ghost{background:#fff;color:#0a0a0a}
 .ld-sec{max-width:1020px;margin:0 auto;padding:50px 26px;position:relative}
-.ld-sec h2{font-family:'Caveat',cursive;font-size:clamp(30px,4.5vw,44px);font-weight:700;transform:rotate(-1deg);margin-bottom:8px}
-.ld-sec .sub2{font-family:'Patrick Hand',cursive;font-size:17px;color:#555;margin-bottom:28px}
+.ld-sec h2{font-family:'Courier Prime',monospace;font-size:clamp(26px,4vw,38px);font-weight:700;transform:rotate(-1deg);margin-bottom:8px}
+.ld-sec .sub2{font-family:'Courier Prime',monospace;font-size:17px;color:#555;margin-bottom:28px}
 .ld-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
 .ld-card{background:#fff;padding:22px;transform:rotate(-0.8deg)}
 .ld-card:nth-child(2){transform:rotate(0.7deg)}
 .ld-card:nth-child(3){transform:rotate(-0.5deg)}
 .ld-card:nth-child(4){transform:rotate(0.9deg)}
-.ld-card h3{font-family:'Patrick Hand',cursive;font-size:19px;margin-bottom:8px}
-.ld-card p{font-family:'Patrick Hand',cursive;font-size:15px;color:#555;line-height:1.6}
+.ld-card h3{font-family:'Courier Prime',monospace;font-size:19px;margin-bottom:8px}
+.ld-card p{font-family:'Courier Prime',monospace;font-size:15px;color:#555;line-height:1.6}
 .ld-card .big{font-size:30px;margin-bottom:8px;display:block}
 /* dashboard mock */
 .dash-frame{background:#fff;padding:0;overflow:hidden;transform:rotate(-0.6deg);box-shadow:6px 6px 0 rgba(10,10,10,0.9)}
-.dash-bar{border-bottom:2.5px solid #0a0a0a;padding:9px 14px;display:flex;gap:7px;align-items:center;background:#FFFDF6}
+.dash-bar{border-bottom:2.5px solid #0a0a0a;padding:9px 14px;display:flex;gap:7px;align-items:center;background:#F8FAFC}
 .dash-dot{width:11px;height:11px;border:2px solid #0a0a0a;border-radius:50%}
 .dash-body{padding:18px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;background:#fff}
-.dm-card{border:2px solid #0a0a0a;border-radius:14px 4px 14px 4px;padding:12px}
-.dm-card b{font-family:'Patrick Hand',cursive;font-size:13px;display:block;margin-bottom:6px}
-.dm-big{font-size:26px;font-weight:900}
-.dm-line{font-family:'Patrick Hand',cursive;font-size:12px;color:#555;padding:3px 0;border-bottom:1.5px dashed rgba(0,0,0,0.15)}
-.callout{font-family:'Caveat',cursive;font-size:20px;color:#0a0a0a;font-weight:700}
+.dm-card{border:2px solid #0a0a0a;border-radius:14px 4px 14px 4px;padding:16px}
+.dm-card b{font-family:'Courier Prime',monospace;font-size:16px;font-weight:700;display:block;margin-bottom:8px}
+.dm-big{font-size:34px;font-weight:900}
+.dm-line{font-family:'Courier Prime',monospace;font-size:14px;color:#444;padding:5px 0;border-bottom:1.5px dashed rgba(0,0,0,0.15)}
+.callout{font-family:'Courier Prime',monospace;font-size:20px;color:#0a0a0a;font-weight:700}
 @media(max-width:760px){.dash-body{grid-template-columns:1fr}.doodle{display:none}}
 </style>
 </head>
@@ -164,6 +164,7 @@ td{padding:9px 10px;border-bottom:1px solid rgba(0,0,0,0.05)}
 <div id="landing">
   <nav class="ld-nav">
     <span class="z24logo"><span class="z24-z">Z</span><span class="z24-24">24</span><span class="z24-7">SEVEN</span><span class="z24-tel">.tel</span></span>
+    <button class="ld-link" onclick="showPublic('how')">How it works</button>
     <button class="ld-link" onclick="showPublic('pricing')">Pricing</button>
     <button class="ld-link" onclick="showPublic('about')">About</button>
     <button class="ld-link" onclick="showPublic('faq')">FAQ</button>
@@ -175,11 +176,11 @@ td{padding:9px 10px;border-bottom:1px solid rgba(0,0,0,0.05)}
   <!-- HERO -->
   <section class="ld-hero" style="text-align:center">
     <span class="doodle" style="top:34px;right:6%;font-size:26px;transform:rotate(12deg)">no code, promise! →</span>
-    <span class="doodle" style="top:280px;left:2%;font-size:40px;transform:rotate(-15deg);color:#FFD600">✦</span>
+    <span class="doodle" style="top:280px;left:2%;font-size:40px;transform:rotate(-15deg);color:#3b82f6">✦</span>
     <span class="doodle" style="bottom:110px;right:10%;font-size:34px;transform:rotate(8deg)">✳︎</span>
     <div style="display:flex;justify-content:center;margin-bottom:14px"><span class="z24logo z24-big"><span class="z24-z">Z</span><span class="z24-24">24</span><span class="z24-7">SEVEN</span><span class="z24-tel">.tel</span></span></div>
-    <p class="hd" style="font-size:clamp(24px,4vw,40px);font-weight:700;transform:rotate(-1deg);margin-bottom:10px">Not all WhatsApp are Created Equal.</p>
-    <h1 style="transform:rotate(-1deg)">We built something <span class="sket-u">different.</span></h1>
+    <h1 style="transform:rotate(-1deg);font-family:'Courier Prime',monospace;line-height:1.15">Not all Agents &amp; WhatsApps are <span class="sket-u">Created Equal.</span><br><span style="font-size:0.62em;color:#1e40af">This one closes your deals.</span></h1>
+    <p class="hd" style="font-size:clamp(20px,3vw,30px);font-weight:700;transform:rotate(-1deg);margin:14px 0 10px;color:#555">We built something different. ✍️</p>
     <p class="hd-sub" style="margin:0 auto 8px">Forget "chatbot builders." This is a <span class="mark"><b>24/7 bilingual sales employee</b></span> for your business.</p>
     <div class="ld-steps">
       <div class="ld-step"><span class="ld-n">1</span><p>Paste your business info, PDF catalogs, or FAQs.</p></div>
@@ -187,7 +188,7 @@ td{padding:9px 10px;border-bottom:1px solid rgba(0,0,0,0.05)}
       <div class="ld-step"><span class="ld-n">3</span><p>It naturally switches between English and local dialects — Lebanese, Gulf, Egyptian — without missing a beat. 🇱🇧</p></div>
     </div>
     <p class="hd-sub" style="margin:0 auto 26px">It doesn't just answer support tickets. It <b>detects buying intent</b>, <b>collects order details</b>, and puts the 🔥 hot lead directly in front of you.</p>
-    <p class="hd hd-sub" style="font-size:26px;font-weight:700;transform:rotate(-1deg);margin-bottom:22px">Stop building flows. Start closing sales while you sleep. 😴💸</p>
+    <p class="hd hd-sub" style="font-size:26px;font-weight:700;transform:rotate(-1deg);margin:0 auto 22px;text-align:center">Stop building flows. Start closing sales while you sleep. 😴💸</p>
     <div style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center">
       <button class="ld-cta" onclick="openBooking()">📅 Book a live demo</button>
       <button class="ld-cta ghost" onclick="showAuth('login')">Sign in →</button>
@@ -197,13 +198,14 @@ td{padding:9px 10px;border-bottom:1px solid rgba(0,0,0,0.05)}
   <!-- DASHBOARD SHOWCASE -->
   <section class="ld-sec">
     <span class="doodle" style="top:24px;right:4%;font-size:24px;transform:rotate(6deg)">your mission control ↓</span>
-    <h2>Here's what you actually get 👇</h2>
-    <p class="sub2">One dashboard. Everything your WhatsApp business needs — nothing you don't.</p>
+    <h2 style="text-align:center">Here's what you actually get 👇</h2>
+    <p class="sub2" style="font-size:15px;line-height:1.75;color:#444;max-width:760px;margin:0 auto 14px;text-align:center">Our platform deploys intelligent, intent-driven AI agents directly into WhatsApp. Moving far beyond basic rule-based scripts, our digital employees effortlessly interpret natural language — fluidly navigating between English, formal Arabic, and regional dialects to qualify leads, answer complex inquiries, and close sales in real time.</p>
+    <p class="sub2" style="text-align:center">One dashboard. Everything your WhatsApp business needs — nothing you don't.</p>
     <div class="dash-frame wob2">
-      <div class="dash-bar"><span class="dash-dot"></span><span class="dash-dot" style="background:#FFD600"></span><span class="dash-dot" style="background:#25D366"></span><span class="hd2" style="font-size:13px;color:#888;margin-left:8px">yourbusiness.z24seven</span></div>
+      <div class="dash-bar"><span class="dash-dot"></span><span class="dash-dot" style="background:#3b82f6"></span><span class="dash-dot" style="background:#1e40af"></span><span class="hd2" style="font-size:15px;color:#888;margin-left:8px">yourbusiness.z24seven</span></div>
       <div class="dash-body">
-        <div class="dm-card"><b>🛡 Number health</b><span class="dm-big" style="color:#25D366">94</span><div class="dm-line">Today's sends: 132 / 500</div><div class="dm-line">Warm-up: ON · day 9</div><div class="dm-line">Reply rate: 38%</div></div>
-        <div class="dm-card"><b>🔥 Hot leads (live)</b><div class="dm-line">Sara — 2kg coffee → Jounieh</div><div class="dm-line">Omar — asking prices 🇦🇪</div><div class="dm-line">Rita — delivery Achrafieh</div><div class="dm-line" style="border:none;color:#25D366">→ alert sent to your phone</div></div>
+        <div class="dm-card"><b>🛡 Number health</b><span class="dm-big" style="color:#1e40af">94</span><div class="dm-line">Today's sends: 132 / 500</div><div class="dm-line">Warm-up: ON · day 9</div><div class="dm-line">Reply rate: 38%</div></div>
+        <div class="dm-card"><b>🔥 Hot leads (live)</b><div class="dm-line">Sara — 2kg coffee → Jounieh</div><div class="dm-line">Omar — asking prices 🇦🇪</div><div class="dm-line">Rita — delivery Achrafieh</div><div class="dm-line" style="border:none;color:#1e40af">→ alert sent to your phone</div></div>
         <div class="dm-card"><b>📊 Campaign: Summer promo</b><div class="dm-line">Delivered ▮▮▮▮▮▮▮▮▮ 96%</div><div class="dm-line">Read ▮▮▮▮▮▮▮ 71%</div><div class="dm-line">Replied ▮▮▮ 24%</div><div class="dm-line" style="border:none">Sent to: ⚡ Hot leads segment</div></div>
       </div>
     </div>
@@ -217,7 +219,7 @@ td{padding:9px 10px;border-bottom:1px solid rgba(0,0,0,0.05)}
   <!-- DEMO BANNER -->
   <section style="background:#0a0a0a;margin:20px 0;padding:52px 26px;text-align:center;transform:rotate(-0.5deg)">
     <div style="display:flex;justify-content:center;margin-bottom:14px"><span class="z24logo z24-inv"><span class="z24-z">Z</span><span class="z24-24">24</span><span class="z24-7">SEVEN</span><span class="z24-tel">.tel</span></span></div>
-    <p class="hd" style="font-size:clamp(26px,4vw,40px);color:#fff;font-weight:700;transform:rotate(-1deg);margin-bottom:8px">See it work on <span style="color:#25D366">your</span> business.</p>
+    <p class="hd" style="font-size:clamp(26px,4vw,40px);color:#fff;font-weight:700;transform:rotate(-1deg);margin-bottom:8px">See it work on <span style="color:#1e40af">your</span> business.</p>
     <p class="hd2" style="color:#ccc;font-size:18px;margin-bottom:24px">Book a free 30-minute live demo — we'll set it up with you, on WhatsApp. 📲</p>
     <button class="ld-cta" onclick="openBooking()">📅 Ask for a Demo</button>
   </section>
@@ -242,6 +244,7 @@ td{padding:9px 10px;border-bottom:1px solid rgba(0,0,0,0.05)}
   <footer style="border-top:2.5px solid #0a0a0a;padding:22px 26px;display:flex;gap:18px;flex-wrap:wrap;align-items:center">
     <span class="hd" style="font-size:22px;font-weight:700"><span class="z24logo"><span class="z24-z">Z</span><span class="z24-24">24</span><span class="z24-7">SEVEN</span><span class="z24-tel">.tel</span></span> — made in Beirut 🇱🇧</span>
     <span style="margin-left:auto"></span>
+    <button class="ld-link" onclick="showPublic('how')">How it works</button>
     <button class="ld-link" onclick="showPublic('pricing')">Pricing</button>
     <button class="ld-link" onclick="showPublic('about')">About</button>
     <button class="ld-link" onclick="showPublic('faq')">FAQ</button>
@@ -297,7 +300,8 @@ td{padding:9px 10px;border-bottom:1px solid rgba(0,0,0,0.05)}
     <button class="btn wa" style="margin-top:8px" onclick="openBooking()">⚡ Try 24-hour demo — no signup</button>
     <div class="switch-line" id="auth-switch">Already have an account? <a onclick="toggleAuth()">Sign in</a></div>
     <div style="display:flex;gap:14px;justify-content:center;margin-top:20px;padding-top:16px;border-top:1px solid rgba(0,0,0,0.07);font-size:12px">
-      <a class="plink" onclick="showPublic('pricing')">Pricing</a>
+      <a class="plink" onclick="showPublic('how')">How it works</a>
+    <a class="plink" onclick="showPublic('pricing')">Pricing</a>
       <a class="plink" onclick="showPublic('about')">About</a>
       <a class="plink" onclick="showPublic('faq')">FAQ</a>
       <a class="plink" onclick="showPublic('legal')">Terms &amp; Legal</a>
@@ -346,12 +350,92 @@ td{padding:9px 10px;border-bottom:1px solid rgba(0,0,0,0.05)}
     </div>
 
     <div class="pub-pg hidden" id="pub-about">
-      <h1>About us</h1>
-      <div class="card"><p style="font-size:14px;line-height:1.9;color:#444">
-        Z24SEVEN.tel was built in Beirut 🇱🇧 for businesses that live on WhatsApp — because in MENA, WhatsApp <i>is</i> the storefront, the support desk, and the sales channel.<br><br>
-        Big platforms treat WhatsApp as an afterthought and price in dollars that don't make sense here. We built the opposite: a focused tool where an AI assistant <b>sells</b> to your customers 24/7 in Arabic and English, captures every lead, classifies incoming messages into a call-center CRM, and runs your broadcast campaigns and drip follow-ups — all from one simple dashboard, on your own WhatsApp number (Meta or Twilio), under your control.<br><br>
-        You own your number. You own your contact list. You own your customer relationships. We just give them superpowers.
-      </p></div>
+      <h1 class="hd" style="font-size:34px;transform:rotate(-1deg)">About Z24SEVEN.tel ✦</h1>
+      <p class="hd2" style="font-size:17px;color:#555;margin-bottom:22px">The time zone was never the problem. Missing the message was.</p>
+
+      <div class="card">
+        <h3 class="hd2" style="font-size:20px">🌍 Built for the hours nobody's watching</h3>
+        <p style="font-size:14px;line-height:1.9;color:#444">
+          Z24SEVEN.tel was built in Beirut 🇱🇧 for a simple, painful truth: <b>the world doesn't sleep on the same schedule.</b><br><br>
+          When a customer in New York messages a business in Lebanon, it's 9am for them and 4pm for you — but by the time they're awake, you're closed, and by the time you reply, they've moved on. Deals die in the gap between time zones. A lead from the US, the Gulf, Europe, or Australia lands at 3am your time — and a slow reply the next morning is a lost sale.<br><br>
+          <b>We close that gap.</b> Z24SEVEN puts an AI sales employee on your WhatsApp that never sleeps, never takes a weekend, and answers in the customer's language and dialect the second they write — whether that's noon or 3am, whether you're asleep, busy, or on another call.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3 class="hd2" style="font-size:20px">💬 WhatsApp is the storefront here</h3>
+        <p style="font-size:14px;line-height:1.9;color:#444">
+          In MENA and most of the world, WhatsApp <i>is</i> the store, the support desk, and the checkout counter. Yet the big platforms treat it as an afterthought and price in dollars that make no sense locally.<br><br>
+          We built the opposite: a focused, affordable tool where an AI <b>sells</b> for you 24/7 in Arabic and English, captures every lead, sorts every incoming message into a call-center CRM, and runs your campaigns and follow-ups — all from one simple dashboard, on your own WhatsApp number, under your control.
+        </p>
+      </div>
+
+      <div class="card" style="background:#0a0a0a;color:#fff">
+        <h3 class="hd" style="font-size:24px;color:#fff;transform:rotate(-1deg)">You own everything. We just add the superpowers. 💪</h3>
+        <p style="font-size:14px;line-height:1.9;color:#ddd">
+          Your number. Your contact list. Your customer relationships. Your data. We never sell it, never train on it, never touch your WhatsApp fees. Z24SEVEN is the layer that makes your WhatsApp work while you live your life.
+        </p>
+      </div>
+
+      <div style="text-align:center;margin-top:28px">
+        <button class="ld-cta" onclick="openBooking()">📅 See it on your business — book a demo</button>
+      </div>
+    </div>
+
+    <!-- HOW IT WORKS / GET STARTED -->
+    <div class="pub-pg hidden" id="pub-how">
+      <h1 class="hd" style="font-size:34px;transform:rotate(-1deg)">How it works 🚀</h1>
+      <p class="hd2" style="font-size:17px;color:#555;margin-bottom:26px">Set it up once. It sells while you sleep. You wake up to the receipts.</p>
+
+      <!-- 3 steps -->
+      <div class="ld-cards" style="grid-template-columns:repeat(3,1fr)">
+        <div class="ld-card wob"><span class="big">1️⃣</span><h3>Feed it your brain</h3><p>Paste your products, prices, hours, FAQs — or drop a catalog. Takes 5 minutes. This becomes your AI's knowledge.</p></div>
+        <div class="ld-card wob2"><span class="big">2️⃣</span><h3>Connect your WhatsApp</h3><p>Link your business number (Meta or Twilio). Guided setup, ~10 minutes. Or let us do it for you.</p></div>
+        <div class="ld-card wob"><span class="big">3️⃣</span><h3>Go live & go to bed</h3><p>Flip it on. The AI now answers, sells, and logs every customer — around the clock, in their language.</p></div>
+      </div>
+
+      <!-- CALL CENTER / TIME ZONE BRIDGE -->
+      <div class="card" style="margin-top:32px;border:2.5px solid #0a0a0a">
+        <h2 class="hd" style="font-size:30px;transform:rotate(-1deg);margin-bottom:4px">🌙 While you were sleeping…</h2>
+        <p class="hd2" style="font-size:16px;color:#555;margin-bottom:18px">Your 24/7 call center that bridges continents.</p>
+        <p style="font-size:14px;line-height:1.9;color:#444">
+          Here's the magic for anyone doing business across borders: <b>your customers and you are never awake at the same time — and that's finally okay.</b><br><br>
+          A buyer in the <b>USA</b> messages at their lunch break — it's midnight in Beirut. A client in <b>Dubai</b> writes during your dinner. Someone in <b>London</b> asks a question while your team is in a meeting. Normally, every one of those is a missed opportunity.<br><br>
+          With Z24SEVEN's <b>Call Center CRM</b>, every single message is caught, answered, and sorted the instant it arrives — no matter the hour. Each conversation becomes a ticket, auto-tagged by <b>category</b> (order, complaint, inquiry, support), <b>priority</b>, and the customer's <b>country and local time</b> — so when you wake up, you know exactly who wrote, from where, what they wanted, and who to call back first.
+        </p>
+        <div class="ld-cards" style="grid-template-columns:repeat(2,1fr);margin-top:20px">
+          <div class="ld-card wob" style="transform:rotate(-0.6deg)"><span class="big">📞</span><h3>Every message = a ticket</h3><p>Auto-classified by type, urgency, country & local time. Your whole inbox, organized while you sleep.</p></div>
+          <div class="ld-card wob2" style="transform:rotate(0.7deg)"><span class="big">🌐</span><h3>Across every time zone</h3><p>USA, Gulf, Europe, Australia — nobody waits for morning. The AI replies in their dialect, right now.</p></div>
+          <div class="ld-card wob" style="transform:rotate(0.5deg)"><span class="big">🔥</span><h3>Urgent? You'll know</h3><p>Complaints and hot buyers ping your phone instantly — even at 3am, so you catch the ones that matter.</p></div>
+          <div class="ld-card wob2" style="transform:rotate(-0.7deg)"><span class="big">💡</span><h3>Reply ready to go</h3><p>Each ticket comes with a suggested reply in the customer's language. Tap send, or let the AI handle it.</p></div>
+        </div>
+      </div>
+
+      <!-- WHILE YOU SLEPT / DAILY BRIEF -->
+      <div class="card" style="margin-top:24px;background:#0a0a0a;color:#fff">
+        <h2 class="hd" style="font-size:30px;color:#fff;transform:rotate(-1deg);margin-bottom:4px">☀️ Wake up to the receipts</h2>
+        <p class="hd2" style="font-size:16px;color:#ccc;margin-bottom:18px">Your business ran all night. Here's what it did.</p>
+        <p style="font-size:14px;line-height:1.9;color:#ddd">
+          Every morning, Z24SEVEN sends a <b>Daily Brief</b> straight to your WhatsApp — a clean report of everything that happened while you were offline:
+        </p>
+        <div style="background:#161616;border:1px solid #333;border-radius:12px;padding:16px;margin-top:14px;font-family:'Courier Prime',monospace;font-size:14px;line-height:1.8;color:#eee">
+          📊 <b>Good morning! Here's what your agent did overnight:</b><br>
+          💬 Handled <b>34 conversations</b> while you were asleep<br>
+          🆕 Captured <b>9 new leads</b> — 3 from 🇺🇸 USA, 2 from 🇦🇪 UAE<br>
+          🔥 <b>6 hot buyers</b> ready to close<br>
+          🛒 Collected <b>3 orders</b> waiting for confirmation<br>
+          📞 <b>Call today:</b> Sara (2kg order → Jounieh), Mike (pricing, 🇺🇸)
+        </div>
+        <p style="font-size:14px;line-height:1.9;color:#ddd;margin-top:14px">
+          No logging in. No scrolling chats. You open WhatsApp with your coffee and already know: who wrote, who's ready to buy, and exactly who to call first. <b>Your agent answered and watched your business while you were away — so you never lose a customer to a closed door again.</b>
+        </p>
+      </div>
+
+      <div style="text-align:center;margin-top:30px">
+        <p class="hd" style="font-size:26px;transform:rotate(-1deg);margin-bottom:16px">Ready to never miss a message again? 🌙→☀️</p>
+        <button class="ld-cta" onclick="openBooking()">📅 Book your free live demo</button>
+        <p class="hd2" style="font-size:14px;color:#888;margin-top:10px">30 minutes · we set it up on your business · no card needed</p>
+      </div>
     </div>
 
     <div class="pub-pg hidden" id="pub-faq">
@@ -424,7 +508,7 @@ td{padding:9px 10px;border-bottom:1px solid rgba(0,0,0,0.05)}
 <!-- ═══════ APP ═══════ -->
 <div id="app">
   <div id="demo-banner"><span id="demo-banner-text"></span><a onclick="showPublic('pricing')">See plans →</a></div>
-  <div id="ws-banner" style="display:none;background:#25D366;color:#fff;padding:9px 24px;font-size:12px;align-items:center;gap:10px"><span id="ws-banner-text"></span><a onclick="wsBack()" style="color:#fff;font-weight:700;cursor:pointer;text-decoration:underline">← Back to agency</a></div>
+  <div id="ws-banner" style="display:none;background:#1e40af;color:#fff;padding:9px 24px;font-size:12px;align-items:center;gap:10px"><span id="ws-banner-text"></span><a onclick="wsBack()" style="color:#fff;font-weight:700;cursor:pointer;text-decoration:underline">← Back to agency</a></div>
   <div id="topbar">
     <span class="z24logo" style="font-size:15px;margin-right:14px"><span class="z24-z">Z</span><span class="z24-24">24</span><span class="z24-7">7</span></span>
     <button class="nav-btn on" data-p="dash" onclick="nav('dash')">Dashboard</button>
@@ -461,7 +545,7 @@ td{padding:9px 10px;border-bottom:1px solid rgba(0,0,0,0.05)}
           <tr><td style="color:#888">Read rate (7d)</td><td id="hl-read">—</td></tr>
           <tr><td style="color:#888">Reply rate (7d)</td><td id="hl-reply">—</td></tr>
         </table>
-        <div style="font-size:11px;color:#25D366;margin-top:8px">✓ We protect your number with smart daily limits</div>
+        <div style="font-size:11px;color:#1e40af;margin-top:8px">✓ We protect your number with smart daily limits</div>
       </div>
       <div class="card" style="margin:0">
         <h3>💼 My account</h3>
@@ -717,9 +801,9 @@ td{padding:9px 10px;border-bottom:1px solid rgba(0,0,0,0.05)}
         Verify token: <code>wamark-verify</code> <button class="link" onclick="copyTxt('wamark-verify')">copy</button><br>
         Then click <b>Manage</b> → subscribe to <b>messages</b>.</span></div></div>
       <div class="wiz-step"><span class="wiz-n">5</span><div><b>Save above → Send test message</b><br><span class="wiz-t">If the test arrives on your phone — you're live. 🎉</span></div></div>
-      <div class="note" style="background:#f0fdf4;border-color:#bbf7d0">
+      <div class="note" style="background:#eff6ff;border-color:#bfdbfe">
         🤝 <b>Don't want to do this yourself?</b> We set it up WITH you on a 15-min WhatsApp call — <b>$25</b>, done today.
-        <a href="https://wa.me/9613000000?text=Hi!%20I%20want%20the%20Z24SEVEN%20concierge%20setup%20($25)" target="_blank" style="color:#16a34a;font-weight:700">→ Book concierge setup</a>
+        <a href="https://wa.me/9613000000?text=Hi!%20I%20want%20the%20Z24SEVEN%20concierge%20setup%20($25)" target="_blank" style="color:#1e40af;font-weight:700">→ Book concierge setup</a>
       </div>
     </div>
 
@@ -1018,7 +1102,7 @@ async function loadHealth(){
     if(!r.ok) return;
     const d = await r.json();
     $('hl-score').textContent = d.score;
-    $('hl-score').style.color = d.score>=80?'#16a34a':d.score>=50?'#d97706':'#dc2626';
+    $('hl-score').style.color = d.score>=80?'#1e40af':d.score>=50?'#d97706':'#dc2626';
     $('hl-sends').textContent = `${d.sent_today} / ${d.cap}`;
     $('hl-warm').textContent = d.warmup ? `ON · day ${d.warmup_day}` : 'off';
     $('hl-read').textContent = d.week.read_rate!==undefined ? d.week.reply_rate+'%' : (d.week.read+' read');
@@ -1382,7 +1466,7 @@ async function loadTickets(){
         <span style="font-size:11px;color:#aaa">${t.country||''} ${t.local_time?'· '+t.local_time+' local':''}</span>
       </div>
       <p style="font-size:13px;color:#444;margin:8px 0">${(t.summary||t.last_message||'').replace(/</g,'&lt;')}</p>
-      ${t.suggested_reply?`<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:8px 10px;font-size:12px;color:#166534;margin-bottom:8px"><b>💡 Suggested reply:</b> ${t.suggested_reply.replace(/</g,'&lt;')}</div>`:''}
+      ${t.suggested_reply?`<div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:8px 10px;font-size:12px;color:#1e3a8a;margin-bottom:8px"><b>💡 Suggested reply:</b> ${t.suggested_reply.replace(/</g,'&lt;')}</div>`:''}
       <div class="row" style="gap:6px;flex-wrap:wrap">
         <input id="tkr-${t.id}" placeholder="Type a reply…" style="flex:1;min-width:160px;padding:8px 10px;border:1.5px solid rgba(0,0,0,0.12);border-radius:8px;font-size:13px" value="${(t.suggested_reply||'').replace(/"/g,'&quot;')}">
         <button class="btn sm wa" onclick="tkReply(${t.id})">Send</button>
