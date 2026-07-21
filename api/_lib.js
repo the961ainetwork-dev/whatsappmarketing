@@ -151,3 +151,34 @@ export function regionFromPhone(phone) {
   const local_time = local.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
   return { country, language, local_time };
 }
+
+
+// Build a compact catalog string for the AI responder (Catalog Agent)
+export async function catalogContext(userId) {
+  const r = await sb(`wm_products?user_id=eq.${userId}&in_stock=eq.true&select=name,price,currency,category,description&order=category.asc&limit=200`);
+  if (!r.ok) return '';
+  const items = await r.json();
+  if (!items.length) return '';
+  const lines = items.map(p => {
+    const price = p.price != null ? `${p.price} ${p.currency || 'USD'}` : 'ask for price';
+    return `- ${p.name}${p.category ? ' [' + p.category + ']' : ''}: ${price}${p.description ? ' — ' + p.description : ''}`;
+  });
+  return `\n\nPRODUCT CATALOG (use this to answer product/price questions; recommend items, mention prices, suggest options within the customer's budget):\n${lines.join('\n')}`;
+}
+
+
+// Booking context for the AI: next available slots (Appointment Agent)
+export async function bookingContext(userId, settings) {
+  if (!settings.booking_enabled) return '';
+  let cfg = {};
+  try { cfg = settings.booking_config ? JSON.parse(settings.booking_config) : {}; } catch {}
+  const { openSlots } = await import('./appointments.js');
+  const slots = await openSlots(userId, cfg);
+  if (!slots.length) return '';
+  // show next 8 options compactly
+  const opts = slots.slice(0, 8).map(iso => {
+    const d = new Date(iso);
+    return d.toLocaleString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+  });
+  return `\n\nAPPOINTMENT BOOKING is available for "${cfg.service || 'appointments'}". If the customer wants to book, offer these next open times and confirm one, then tell them it's reserved:\n${opts.join('\n')}\nWhen the customer picks a time, in your ###LEAD### JSON also add "book_slot":"<the ISO or exact time they chose>".`;
+}
