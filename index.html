@@ -933,7 +933,7 @@ td{padding:9px 10px;border-bottom:1px solid rgba(0,0,0,0.05)}
         <label class="row" style="gap:8px;font-size:13px"><input type="checkbox" id="voice-on" style="width:18px;height:18px"> Enabled</label></div>
       <p class="sub" style="margin:10px 0">Customers love sending voice notes. When ON, the AI transcribes and understands them — then replies like any text message. A huge edge in the region.</p>
       <button class="btn sm" onclick="saveStaff('voice_enabled',$('voice-on').checked)">Save toggle</button>
-      <div class="note">Requires an <code>OPENAI_API_KEY</code> env var (for Whisper transcription). Works on the Meta provider.</div>
+      <div class="note">Requires an <code>OPENAI_API_KEY</code> env var (for Whisper transcription). Works on <b>both Twilio and Meta</b> providers. Whisper costs ~$0.006/min of audio.</div>
     </div>
 
     <!-- STRATEGIST AGENT -->
