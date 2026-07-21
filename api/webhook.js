@@ -1,6 +1,28 @@
 import { sb, cors, waSend, waText, getSettings, logMsg, regionFromPhone, catalogContext, bookingContext } from './_lib.js';
 
 // Voice-Note Agent: download WhatsApp audio (Meta) and transcribe via Whisper
+// Voice-Note Agent (Twilio): download media with Twilio auth, transcribe via Whisper
+async function transcribeTwilioAudio(mediaUrl, mimeType, settings) {
+  const wKey = process.env.OPENAI_API_KEY;
+  if (!mediaUrl || !wKey) return '';
+  try {
+    const auth = 'Basic ' + Buffer.from(`${settings.twilio_sid}:${settings.twilio_token}`).toString('base64');
+    const ar = await fetch(mediaUrl, { headers: { Authorization: auth } });
+    if (!ar.ok) return '';
+    const buf = Buffer.from(await ar.arrayBuffer());
+    const form = new FormData();
+    const ext = (mimeType.includes('ogg') ? 'ogg' : mimeType.includes('mpeg') ? 'mp3' : mimeType.includes('amr') ? 'amr' : 'ogg');
+    form.append('file', new Blob([buf], { type: mimeType || 'audio/ogg' }), 'voice.' + ext);
+    form.append('model', 'whisper-1');
+    const tr = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+      method: 'POST', headers: { Authorization: `Bearer ${wKey}` }, body: form,
+    });
+    if (!tr.ok) return '';
+    const td = await tr.json();
+    return td.text || '';
+  } catch { return ''; }
+}
+
 async function transcribeWhatsAppAudio(mediaId, settings) {
   const wKey = process.env.OPENAI_API_KEY;
   if (!mediaId || !wKey) return '';
@@ -171,8 +193,11 @@ export default async function handler(req, res) {
       if (typeof b === 'string') { const p = new URLSearchParams(b); b = Object.fromEntries(p); }
       const fromTw = String(b.From || '').replace('whatsapp:', '').replace('+', '');
       const toTw = String(b.To || '').replace('whatsapp:', '');
-      const textTw = b.Body || '';
-      if (!fromTw || !textTw) { res.setHeader('Content-Type', 'text/xml'); return res.status(200).send('<Response></Response>'); }
+      let textTw = b.Body || '';
+      const numMedia = parseInt(b.NumMedia || '0', 10) || 0;
+      const mediaUrl = b.MediaUrl0 || '';
+      const mediaType = b.MediaContentType0 || '';
+      if (!fromTw || (!textTw && !numMedia)) { res.setHeader('Content-Type', 'text/xml'); return res.status(200).send('<Response></Response>'); }
       // route tenant by twilio_from matching this To
       const sr = await sb(`wm_settings?provider=eq.twilio&twilio_from=eq.${encodeURIComponent('whatsapp:' + toTw)}&select=*`);
       let settings = (sr.ok ? await sr.json() : [])[0];
@@ -182,7 +207,11 @@ export default async function handler(req, res) {
         settings = rows2.find(s => (s.twilio_from || '').replace('whatsapp:', '').replace('+', '') === toTw.replace('+', ''));
       }
       if (settings) {
-        await handleInbound(settings, fromTw, textTw, null);
+        // Voice-Note Agent (Twilio): transcribe audio media via Whisper
+        if (numMedia && mediaUrl && mediaType.startsWith('audio') && settings.voice_enabled) {
+          try { textTw = await transcribeTwilioAudio(mediaUrl, mediaType, settings) || textTw; } catch {}
+        }
+        if (textTw) await handleInbound(settings, fromTw, textTw, null);
       }
       res.setHeader('Content-Type', 'text/xml');
       return res.status(200).send('<Response></Response>');
