@@ -1,4 +1,31 @@
-import { sb, cors, waSend, waText, getSettings, logMsg, regionFromPhone } from './_lib.js';
+import { sb, cors, waSend, waText, getSettings, logMsg, regionFromPhone, catalogContext, bookingContext } from './_lib.js';
+
+// Voice-Note Agent: download WhatsApp audio (Meta) and transcribe via Whisper
+async function transcribeWhatsAppAudio(mediaId, settings) {
+  const wKey = process.env.OPENAI_API_KEY;
+  if (!mediaId || !wKey) return '';
+  try {
+    // 1. get media URL from Meta
+    const mr = await fetch(`https://graph.facebook.com/v21.0/${mediaId}`, { headers: { Authorization: `Bearer ${settings.access_token}` } });
+    if (!mr.ok) return '';
+    const md = await mr.json();
+    // 2. download the audio bytes
+    const ar = await fetch(md.url, { headers: { Authorization: `Bearer ${settings.access_token}` } });
+    if (!ar.ok) return '';
+    const buf = Buffer.from(await ar.arrayBuffer());
+    // 3. send to Whisper
+    const form = new FormData();
+    form.append('file', new Blob([buf], { type: md.mime_type || 'audio/ogg' }), 'voice.ogg');
+    form.append('model', 'whisper-1');
+    const tr = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+      method: 'POST', headers: { Authorization: `Bearer ${wKey}` }, body: form,
+    });
+    if (!tr.ok) return '';
+    const td = await tr.json();
+    return td.text || '';
+  } catch { return ''; }
+}
+
 
 // Shared inbound processor (used by both Meta and Twilio paths)
 async function handleInbound(settings, from, text, waMsgId) {
@@ -16,8 +43,11 @@ async function handleInbound(settings, from, text, waMsgId) {
     const hr = await sb(`wm_messages?user_id=eq.${userId}&phone=eq.${from}&select=direction,body&order=id.desc&limit=12`);
     const hist = (hr.ok ? await hr.json() : []).reverse();
     const convo = hist.map(m => ({ role: m.direction === 'in' ? 'user' : 'assistant', content: m.body || '' }));
+    let extraCtx = '';
+    if (settings.catalog_enabled) { try { extraCtx += await catalogContext(userId); } catch {} }
+    if (settings.booking_enabled) { try { extraCtx += await bookingContext(userId, settings); } catch {} }
     const system = `You are the WhatsApp SALES assistant for this business:
-${settings.ai_prompt || settings.business_name || 'A business.'}
+${settings.ai_prompt || settings.business_name || 'A business.'}${extraCtx}
 
 YOUR JOB IS TO SELL, not just answer:
 - Reply in the customer's language (mirror Arabic/English/dialect). Warm, human, SHORT (under 90 words).
@@ -46,8 +76,24 @@ After your reply, on a NEW line output exactly:
         } catch {}
         const out = await waSend(settings, from, waText(reply));
         await logMsg(userId, from, 'out', reply, 'ai', out.id);
+        if (!out.ok) await logMsg(userId, from, 'out', `[AI reply FAILED to send: ${out.error || 'unknown'}]`, 'error', null);
       }
       if (lead) {
+        // Appointment Agent: if the AI captured a chosen slot, book it
+        if (lead.book_slot && settings.booking_enabled) {
+          try {
+            const when = new Date(lead.book_slot);
+            if (!isNaN(when)) {
+              let cfg = {}; try { cfg = settings.booking_config ? JSON.parse(settings.booking_config) : {}; } catch {}
+              await sb('wm_appointments', { method: 'POST', body: JSON.stringify([{ user_id: userId, phone: from, customer_name: lead.name || '', slot_at: when.toISOString(), service: cfg.service || 'Appointment', status: 'booked' }]) });
+              if (settings.owner_phone) {
+                const ab = `\uD83D\uDCC5 New booking!\n\uD83D\uDC64 ${lead.name || from}\n\uD83D\uDD52 ${when.toLocaleString('en-GB',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}\n${cfg.service || 'Appointment'}`;
+                const ob = await waSend(settings, settings.owner_phone.replace(/\D/g,''), waText(ab));
+                if (ob.ok) await logMsg(userId, settings.owner_phone, 'out', ab, 'alert', ob.id);
+              }
+            }
+          } catch {}
+        }
         const patch = { intent_at: new Date().toISOString() };
         if (lead.name) patch.name = String(lead.name).slice(0, 120);
         if (lead.interest) patch.interest = String(lead.interest).slice(0, 200);
@@ -156,11 +202,14 @@ export default async function handler(req, res) {
     }
 
     const msg = value?.messages?.[0];
-    if (!msg || msg.type !== 'text') return res.status(200).json({ ok: true });
+    if (!msg) return res.status(200).json({ ok: true });
+    const isText = msg.type === 'text';
+    const isAudio = msg.type === 'audio' || msg.type === 'voice';
+    if (!isText && !isAudio) return res.status(200).json({ ok: true });
 
     const phoneNumberId = value?.metadata?.phone_number_id;
     const from = msg.from;
-    const text = msg.text?.body || '';
+    let text = msg.text?.body || '';
     if (!phoneNumberId || !from) return res.status(200).json({ ok: true });
 
     const sr = await sb(`wm_settings?phone_number_id=eq.${encodeURIComponent(phoneNumberId)}&select=*`);
@@ -168,6 +217,13 @@ export default async function handler(req, res) {
     if (!settings) return res.status(200).json({ ok: true });
     const userId = settings.user_id;
 
+    if (isAudio && settings.voice_enabled) {
+      try {
+        const mediaId = (msg.audio || msg.voice)?.id;
+        text = await transcribeWhatsAppAudio(mediaId, settings) || text;
+      } catch {}
+    }
+    if (!text) return res.status(200).json({ ok: true });
     await handleInbound(settings, from, text, msg.id);
     return res.status(200).json({ ok: true });
   } catch (e) { return res.status(200).json({ ok: true }); }
