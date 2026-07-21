@@ -22,6 +22,8 @@ export default async function handler(req, res) {
       if ('daily_summary' in b) patch.daily_summary = !!b.daily_summary;
       if ('warmup' in b) patch.warmup = !!b.warmup;
       if ('callcenter' in b) patch.callcenter = !!b.callcenter;
+      if ('catalog_enabled' in b) patch.catalog_enabled = !!b.catalog_enabled;
+      if ('voice_enabled' in b) patch.voice_enabled = !!b.voice_enabled;
       if ('ai_enabled' in b) patch.ai_enabled = !!b.ai_enabled;
       if (b.access_token && !String(b.access_token).startsWith('••••')) patch.access_token = String(b.access_token);
       const r = await sb(`wm_settings?user_id=eq.${user.id}`, { method: 'PATCH', body: JSON.stringify(patch) });
