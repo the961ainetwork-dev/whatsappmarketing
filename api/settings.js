@@ -24,6 +24,9 @@ export default async function handler(req, res) {
       if ('callcenter' in b) patch.callcenter = !!b.callcenter;
       if ('catalog_enabled' in b) patch.catalog_enabled = !!b.catalog_enabled;
       if ('voice_enabled' in b) patch.voice_enabled = !!b.voice_enabled;
+      if ('languages' in b) patch.languages = String(b.languages || '').slice(0, 300);
+      if ('payment_enabled' in b) patch.payment_enabled = !!b.payment_enabled;
+      if (b.payment_config) patch.payment_config = typeof b.payment_config === 'string' ? b.payment_config : JSON.stringify(b.payment_config);
       if ('ai_enabled' in b) patch.ai_enabled = !!b.ai_enabled;
       if (b.access_token && !String(b.access_token).startsWith('••••')) patch.access_token = String(b.access_token);
       const r = await sb(`wm_settings?user_id=eq.${user.id}`, { method: 'PATCH', body: JSON.stringify(patch) });
