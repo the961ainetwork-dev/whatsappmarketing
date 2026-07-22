@@ -186,7 +186,7 @@ td{padding:9px 10px;border-bottom:1px solid rgba(0,0,0,0.05)}
 .hero-h1{font-family:var(--display);font-weight:400;font-size:clamp(42px,4.6vw,66px);line-height:1.02;letter-spacing:-1.2px;margin:20px 0 22px}
 .hero-lede{font-size:17.5px;line-height:1.65;color:var(--ed-ink2);max-width:460px;margin-bottom:30px}
 .hero-cta{display:flex;gap:12px;flex-wrap:wrap}
-.btn-claim{max-width:100%;text-align:center;line-height:1.35}
+.btn-claim,.btn-claim:hover,.btn-claim:active,.btn-claim:focus{max-width:100%;text-align:center;line-height:1.35;background:var(--ed-ink);color:#fff;border:1px solid var(--ed-ink);transition:none}
 @media(max-width:520px){.btn-claim{width:100%}.hero-cta .ed-btn-ghost{width:100%}}
 .hero-meta{display:flex;gap:26px;margin-top:34px;padding-top:24px;border-top:1px solid var(--ed-line);font-family:var(--mono);font-size:12px;color:var(--ed-ink2);letter-spacing:.2px;flex-wrap:wrap}
 .hero-meta b{color:var(--ed-ink);font-weight:500}
@@ -242,7 +242,40 @@ td{padding:9px 10px;border-bottom:1px solid rgba(0,0,0,0.05)}
 .brief-l{font-family:var(--mono);font-size:13.5px;color:var(--ed-ink);line-height:2.05}
 .brief-l b{color:var(--ed-accent);font-weight:600}
 
-/* ── staff ── */
+
+/* ── HIRE BAND (under hero) ── */
+.hire{border-top:1px solid var(--ed-line);border-bottom:1px solid var(--ed-line);background:var(--ed-bg)}
+.hire-in{max-width:1140px;margin:0 auto;padding:44px 40px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:56px;align-items:center}
+.hire-h{font-family:var(--display);font-weight:400;font-size:clamp(24px,2.6vw,32px);line-height:1.15;letter-spacing:-0.5px;color:var(--ed-ink);margin:12px 0 10px}
+.hire-h em{font-family:var(--display);font-style:italic;color:var(--ed-accent)}
+.hire-p{font-size:15px;line-height:1.7;color:var(--ed-ink)}
+.hire-list{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--ed-line);border:1px solid var(--ed-line)}
+.hire-row{background:var(--ed-bg);padding:13px 15px;display:flex;align-items:baseline;gap:10px}
+.hire-role{font-size:13.5px;color:var(--ed-ink)}
+.hire-cost{margin-left:auto;font-family:var(--mono);font-size:11.5px;color:var(--ed-accent);white-space:nowrap}
+.hire-cost.inc{color:var(--ed-ink2)}
+@media(max-width:940px){.hire-in{grid-template-columns:1fr;gap:28px;padding:36px 24px}.hire-list{grid-template-columns:1fr}}
+
+/* ── STAFF TABS ── */
+.stabs{display:flex;gap:0;border-bottom:1px solid var(--ed-line);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.stabs::-webkit-scrollbar{display:none}
+.stab{background:none;border:none;border-bottom:2px solid transparent;padding:0 22px 14px 0;margin-right:8px;font-family:var(--mono);font-size:11.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--ed-ink2);cursor:pointer;white-space:nowrap;transition:color .15s,border-color .15s}
+.stab:hover{color:var(--ed-ink)}
+.stab.on{color:var(--ed-accent);border-bottom-color:var(--ed-accent)}
+.spanel{display:none;padding:38px 0 4px}
+.spanel.on{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,380px);gap:56px;align-items:start}
+.spanel h3{font-family:var(--display);font-weight:400;font-size:clamp(26px,2.8vw,34px);letter-spacing:-0.5px;line-height:1.14;color:var(--ed-ink);margin-bottom:14px}
+.spanel p{font-size:15.5px;line-height:1.75;color:var(--ed-ink);max-width:520px}
+.stag{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:1.2px;text-transform:uppercase;padding:5px 10px;border:1px solid var(--ed-line);border-radius:4px;color:var(--ed-ink2);margin-top:20px}
+.stag.addon{color:var(--ed-accent);border-color:var(--ed-accent)}
+.sdemo{background:#fff;border:1px solid var(--ed-line);border-radius:12px;padding:20px}
+.sdemo-hd{font-family:var(--mono);font-size:10px;letter-spacing:1.3px;text-transform:uppercase;color:var(--ed-ink2);padding-bottom:12px;margin-bottom:14px;border-bottom:1px solid var(--ed-line)}
+.sline{font-size:13.5px;line-height:1.55;color:var(--ed-ink);padding:7px 0}
+.sline .who{font-family:var(--mono);font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:var(--ed-accent);display:block;margin-bottom:3px}
+.sline.cust .who{color:var(--ed-ink2)}
+@media(max-width:940px){.spanel.on{grid-template-columns:1fr;gap:28px}}
+
+/* ── staff (legacy grid, still used on public pages) ── */
 .ed-staff-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--ed-line);border:1px solid var(--ed-line)}
 .ed-staff{background:var(--ed-bg);padding:32px 28px;transition:background .18s}
 .ed-staff:hover{background:#fff}
@@ -380,7 +413,7 @@ td{padding:9px 10px;border-bottom:1px solid rgba(0,0,0,0.05)}
       <h1 class="hero-h1">Your best salesperson<br>was asleep at <em>3:47am.</em><br>This one wasn't.</h1>
       <p class="hero-lede">Not a chatbot builder. A bilingual sales employee on your own WhatsApp number — it answers in your customer's dialect, knows your catalog, collects the order, and wakes you only when the deal is worth waking for.</p>
       <div class="hero-cta">
-        <button class="ed-btn ed-btn-lg btn-claim" onclick="openBooking()">Claim Your Demo Account — Book a Meeting</button>
+        <button class="ed-btn ed-btn-lg btn-claim" style="background:#000;color:#fff;border:1px solid #000" onclick="openBooking()">Claim Your Demo Account — Book a Meeting</button>
         <button class="ed-btn-ghost" onclick="showPublic('how')">See how it works</button>
       </div>
       <div class="hero-meta">
@@ -411,6 +444,25 @@ td{padding:9px 10px;border-bottom:1px solid rgba(0,0,0,0.05)}
       <div class="alert d7">
         <div class="alert-hd">→ Sent to your phone</div>
         <div class="alert-b"><b>Hot lead — Omar K.</b><br>3 × leather tote, brown → Dubai · $360<br>Ready to confirm. Local time there: 04:49.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HIRE BAND -->
+  <section class="hire">
+    <div class="hire-in">
+      <div>
+        <p class="ed-eyebrow">Staffing</p>
+        <h2 class="hire-h">Think of it as <em>hiring,</em> not configuring.</h2>
+        <p class="hire-p">Every plan comes with the two you can't run without — the sales rep who answers and the dispatcher who files everything. The rest are specialists: switch one on when you need it, switch it off when you don't. No setup call, no contract per agent.</p>
+      </div>
+      <div class="hire-list">
+        <div class="hire-row"><span class="hire-role">Sales rep</span><span class="hire-cost inc">included</span></div>
+        <div class="hire-row"><span class="hire-role">Dispatcher</span><span class="hire-cost inc">included</span></div>
+        <div class="hire-row"><span class="hire-role">Shopkeeper</span><span class="hire-cost">+$10/mo</span></div>
+        <div class="hire-row"><span class="hire-role">Receptionist</span><span class="hire-cost">+$15/mo</span></div>
+        <div class="hire-row"><span class="hire-role">Listener</span><span class="hire-cost">+$10/mo</span></div>
+        <div class="hire-row"><span class="hire-role">Strategist</span><span class="hire-cost">+$15/mo</span></div>
       </div>
     </div>
   </section>
@@ -447,15 +499,99 @@ td{padding:9px 10px;border-bottom:1px solid rgba(0,0,0,0.05)}
     <div class="ed-sec-head">
       <p class="ed-eyebrow">Meet the staff</p>
       <h2 class="ed-h2">Not one bot. A team you switch on.</h2>
-      <p class="ed-sec-sub">Every business needs different people. Hire only the ones you need — they all work the same WhatsApp number, and none of them sleep.</p>
+      <p class="ed-sec-sub">Six specialists, one WhatsApp number. Pick one to see what it actually does.</p>
     </div>
-    <div class="ed-staff-grid">
-      <div class="ed-staff"><div class="ed-staff-role">Sales rep</div><h3 class="ed-staff-h">Answers and closes</h3><p>Replies in the customer's dialect within seconds, spots buying intent, collects the order, and sends the hot ones straight to your phone.</p></div>
-      <div class="ed-staff"><div class="ed-staff-role">Shopkeeper</div><h3 class="ed-staff-h">Knows your catalog</h3><p>"Anything under $50?" — pulls from your real product list, quotes the price, and suggests what fits the budget.</p></div>
-      <div class="ed-staff"><div class="ed-staff-role">Receptionist</div><h3 class="ed-staff-h">Books the appointment</h3><p>Checks your live availability, offers open times, confirms the slot, and puts it in your calendar. No back-and-forth.</p></div>
-      <div class="ed-staff"><div class="ed-staff-role">Listener</div><h3 class="ed-staff-h">Understands voice notes</h3><p>Half the region prefers talking. It transcribes the voice note, understands it, and answers like any other message.</p></div>
-      <div class="ed-staff"><div class="ed-staff-role">Strategist</div><h3 class="ed-staff-h">Plans your week</h3><p>Finds who's gone quiet and who's warm, then tells you which campaign to send — with the message already written.</p></div>
-      <div class="ed-staff"><div class="ed-staff-role">Dispatcher</div><h3 class="ed-staff-h">Sorts every message</h3><p>Files each conversation by type, urgency, country and local time, so the 3am complaint isn't buried under the 3am small talk.</p></div>
+
+    <div class="stabs" role="tablist">
+      <button class="stab on" role="tab" aria-selected="true"  aria-controls="sp0" onclick="staffTab(0)">Sales rep</button>
+      <button class="stab"    role="tab" aria-selected="false" aria-controls="sp1" onclick="staffTab(1)">Shopkeeper</button>
+      <button class="stab"    role="tab" aria-selected="false" aria-controls="sp2" onclick="staffTab(2)">Receptionist</button>
+      <button class="stab"    role="tab" aria-selected="false" aria-controls="sp3" onclick="staffTab(3)">Listener</button>
+      <button class="stab"    role="tab" aria-selected="false" aria-controls="sp4" onclick="staffTab(4)">Strategist</button>
+      <button class="stab"    role="tab" aria-selected="false" aria-controls="sp5" onclick="staffTab(5)">Dispatcher</button>
+    </div>
+
+    <div class="spanel on" id="sp0" role="tabpanel">
+      <div>
+        <h3>Answers and closes, in their dialect.</h3>
+        <p>Replies within seconds of the message landing, in Lebanese, Gulf, Egyptian or English — whatever the customer wrote in. It reads buying intent, asks the one question that moves the sale forward, collects the order, and pushes the ready buyers to your phone while everything else waits for morning.</p>
+        <span class="stag">Included in every plan</span>
+      </div>
+      <div class="sdemo">
+        <div class="sdemo-hd">02:14 · Beirut</div>
+        <div class="sline cust"><span class="who">Customer</span>في عندكن توصيل عبيروت؟</div>
+        <div class="sline"><span class="who">Sales rep</span>أكيد! التوصيل لبيروت خلال ٢٤ ساعة، ٣$. شو حابب تطلب؟</div>
+        <div class="sline cust"><span class="who">Customer</span>بدي ٢ كيلو</div>
+        <div class="sline"><span class="who">→ your phone</span>Hot lead · 2kg → Beirut · ready to confirm</div>
+      </div>
+    </div>
+
+    <div class="spanel" id="sp1" role="tabpanel">
+      <div>
+        <h3>Knows every product and price you sell.</h3>
+        <p>Upload your catalog once — by hand or as a list — and the AI stops guessing. It answers budget questions with real options, quotes the exact price, says what's out of stock, and steers people toward what you actually want to move.</p>
+        <span class="stag addon">Add-on · +$10/mo</span>
+      </div>
+      <div class="sdemo">
+        <div class="sdemo-hd">Catalog lookup</div>
+        <div class="sline cust"><span class="who">Customer</span>Anything nice under $50?</div>
+        <div class="sline"><span class="who">Shopkeeper</span>Two that fit: the canvas tote at $45 and the leather card holder at $38. The tote comes in black or sand — want photos?</div>
+      </div>
+    </div>
+
+    <div class="spanel" id="sp2" role="tabpanel">
+      <div>
+        <h3>Fills your calendar while you work.</h3>
+        <p>Set your hours once. The AI checks what's genuinely free, offers real times, confirms the slot and books it — then tells you. Built for clinics, salons, consultants and anyone who loses an hour a day to scheduling messages.</p>
+        <span class="stag addon">Add-on · +$15/mo</span>
+      </div>
+      <div class="sdemo">
+        <div class="sdemo-hd">Booking</div>
+        <div class="sline cust"><span class="who">Customer</span>Do you have anything Thursday?</div>
+        <div class="sline"><span class="who">Receptionist</span>Thursday I have 11:00 or 15:30 free. Which suits you?</div>
+        <div class="sline cust"><span class="who">Customer</span>11 please</div>
+        <div class="sline"><span class="who">→ your calendar</span>Thu 11:00 · booked · confirmation sent</div>
+      </div>
+    </div>
+
+    <div class="spanel" id="sp3" role="tabpanel">
+      <div>
+        <h3>Half the region would rather talk.</h3>
+        <p>Voice notes are how people actually message here, and most tools simply ignore them. This one transcribes what was said, understands it, and replies like it was typed — so a rushed voice message at midnight still gets a real answer.</p>
+        <span class="stag addon">Add-on · +$10/mo</span>
+      </div>
+      <div class="sdemo">
+        <div class="sdemo-hd">Voice note · 0:11</div>
+        <div class="sline cust"><span class="who">Transcribed</span>"Hi, the leather bag — do you have brown, and how much for three?"</div>
+        <div class="sline"><span class="who">Listener</span>Brown's in stock. $120 each, so $360 for three — shipping's free over $300.</div>
+      </div>
+    </div>
+
+    <div class="spanel" id="sp4" role="tabpanel">
+      <div>
+        <h3>Tells you what to send, before you ask.</h3>
+        <p>Most campaign tools wait for you to have an idea. This one reads your own list — who's gone quiet, who's warm, what you sent last — and comes back with the move worth making this week, the audience to send it to, and the message already written.</p>
+        <span class="stag addon">Add-on · +$15/mo</span>
+      </div>
+      <div class="sdemo">
+        <div class="sdemo-hd">This week's move</div>
+        <div class="sline"><span class="who">Strategist</span>142 contacts haven't heard from you in 30+ days, and 38 of them once asked about delivery.</div>
+        <div class="sline"><span class="who">Send</span>Tuesday 7pm · "free delivery this week" · draft ready</div>
+      </div>
+    </div>
+
+    <div class="spanel" id="sp5" role="tabpanel">
+      <div>
+        <h3>Files everything before you wake.</h3>
+        <p>Every conversation becomes a ticket, tagged by category, urgency, country and the customer's local time. The complaint doesn't get buried under the small talk, and the 4am order from Dubai is at the top of your list with a reply already drafted.</p>
+        <span class="stag">Included in every plan</span>
+      </div>
+      <div class="sdemo">
+        <div class="sdemo-hd">Overnight tickets</div>
+        <div class="sline"><span class="who">Urgent · complaint</span>Rita · 🇱🇧 09:12 local · order arrived damaged</div>
+        <div class="sline"><span class="who">Order</span>Omar · 🇦🇪 04:49 local · 3 × tote, ready to pay</div>
+        <div class="sline"><span class="who">Inquiry</span>Mike · 🇺🇸 20:47 local · asking about shipping</div>
+      </div>
     </div>
   </section>
 
@@ -1091,6 +1227,101 @@ td{padding:9px 10px;border-bottom:1px solid rgba(0,0,0,0.05)}
       <p class="sub" style="margin:10px 0">Proactive, not reactive. Analyzes who's gone quiet, who's hot, and what you sent recently — then tells you exactly what campaign to run this week.</p>
       <button class="btn sm wa" onclick="runStrategist()" id="strat-btn">✨ What should I send this week?</button>
       <div class="hidden" id="strat-out" style="margin-top:14px"></div>
+    </div>
+
+    <!-- FOLLOW-UP -->
+    <div class="card">
+      <div class="row" style="justify-content:space-between"><h3 style="margin:0">🔄 Follow-up Agent</h3>
+        <label class="row" style="gap:8px;font-size:13px"><input type="checkbox" id="fu-on" style="width:18px;height:18px"> Enabled</label></div>
+      <p class="sub" style="margin:10px 0">Most sales die from silence, not rejection. This finds people who asked about something and never wrote back, then sends one warm, low-pressure nudge.</p>
+      <div class="grid2" style="grid-template-columns:repeat(3,1fr)">
+        <div class="field"><label>Wait this many days</label><input id="fu-days" type="number" min="1" max="30" value="3"></div>
+        <div class="field"><label>Max nudges per person</label><input id="fu-max" type="number" min="1" max="5" value="2"></div>
+        <div class="field"><label>Give up after (days)</label><input id="fu-win" type="number" min="7" max="120" value="30"></div>
+      </div>
+      <button class="btn sm" onclick="fuSave()">Save</button>
+      <div style="margin-top:14px"><h3 style="font-size:14px">Waiting to be nudged</h3>
+        <table><thead><tr><th>Customer</th><th>Was interested in</th><th>Silent since</th><th></th></tr></thead><tbody id="fu-list"></tbody></table></div>
+    </div>
+
+    <!-- PAYMENT -->
+    <div class="card">
+      <div class="row" style="justify-content:space-between"><h3 style="margin:0">💳 Payment Agent</h3>
+        <label class="row" style="gap:8px;font-size:13px"><input type="checkbox" id="pay-on" style="width:18px;height:18px"> Enabled</label></div>
+      <p class="sub" style="margin:10px 0">Once an order is agreed, the AI hands over your payment details in the same chat — so the sale closes there instead of going quiet.</p>
+      <div class="grid2" style="grid-template-columns:1fr 1fr">
+        <div class="field"><label>How you get paid</label><input id="pay-method" placeholder="Whish / OMT / bank transfer / cash on delivery"></div>
+        <div class="field"><label>Payment link (optional)</label><input id="pay-link" placeholder="https://…"></div>
+      </div>
+      <div class="field"><label>Details to send the customer</label><textarea id="pay-instr" rows="2" placeholder="Whish to 71 000 000 under the name Z24SEVEN, then send the receipt here."></textarea></div>
+      <button class="btn sm" onclick="paySave()">Save</button>
+      <div class="note">These details are only sent after the customer has agreed to an order — never earlier.</div>
+    </div>
+
+    <!-- REVIEW -->
+    <div class="card">
+      <div class="row" style="justify-content:space-between"><h3 style="margin:0">⭐ Review Agent</h3>
+        <label class="row" style="gap:8px;font-size:13px"><input type="checkbox" id="rv-on" style="width:18px;height:18px"> Enabled</label></div>
+      <p class="sub" style="margin:10px 0">Asks for a 1–5 rating after a conversation is resolved. Happy customers get your public review link; unhappy ones reach you privately instead of posting.</p>
+      <div class="grid2" style="grid-template-columns:1fr 2fr">
+        <div class="field"><label>Ask this many days after</label><input id="rv-delay" type="number" min="0" max="30" value="2"></div>
+        <div class="field"><label>Public review link (4–5 stars go here)</label><input id="rv-url" placeholder="https://g.page/r/…"></div>
+      </div>
+      <button class="btn sm" onclick="rvSave()">Save</button>
+      <p id="rv-avg" class="sub" style="margin-top:12px"></p>
+      <table><thead><tr><th>Customer</th><th>Rating</th><th>What they said</th><th>Status</th></tr></thead><tbody id="rv-list"></tbody></table>
+    </div>
+
+    <!-- INVOICES -->
+    <div class="card">
+      <div class="row" style="justify-content:space-between"><h3 style="margin:0">🧾 Invoice Reminder Agent</h3>
+        <label class="row" style="gap:8px;font-size:13px"><input type="checkbox" id="inv-on" style="width:18px;height:18px"> Enabled</label></div>
+      <p class="sub" style="margin:10px 0">Chases unpaid invoices on WhatsApp, politely, so you never have to send that message yourself.</p>
+      <div class="grid2" style="grid-template-columns:repeat(4,1fr)">
+        <div class="field"><label>Customer number</label><input id="inv-phone" placeholder="9613…"></div>
+        <div class="field"><label>Customer name</label><input id="inv-name" placeholder="Acme Ltd"></div>
+        <div class="field"><label>Amount</label><input id="inv-amt" placeholder="450"></div>
+        <div class="field"><label>Due date</label><input id="inv-due" type="date"></div>
+      </div>
+      <div class="row"><input id="inv-ref" placeholder="Reference e.g. INV-1042" style="padding:9px 12px;border:1px solid #E5DBCC;border-radius:8px;flex:1">
+        <button class="btn sm" onclick="invAdd()">Add invoice</button></div>
+      <div class="row" style="margin-top:10px">
+        <div class="field" style="margin:0"><label>Remind before due (days)</label><input id="inv-before" type="number" min="0" max="30" value="3" style="width:90px"></div>
+        <div class="field" style="margin:0"><label>Then after due (days, comma-separated)</label><input id="inv-after" value="1, 7, 14" style="width:180px"></div>
+        <button class="btn sm ghost" onclick="invCfg()" style="align-self:flex-end">Save schedule</button>
+      </div>
+      <table style="margin-top:12px"><thead><tr><th>Reference</th><th>Customer</th><th>Amount</th><th>Due</th><th>Status</th><th></th></tr></thead><tbody id="inv-list"></tbody></table>
+    </div>
+
+    <!-- LANGUAGES -->
+    <div class="card">
+      <h3 style="margin:0">🌍 Language Agent</h3>
+      <p class="sub" style="margin:10px 0">The AI already handles Arabic and English. Add any others your customers use and it will answer in whichever language they wrote in.</p>
+      <div class="field"><label>Languages to speak</label><input id="lang-list" placeholder="English, Arabic (Lebanese & Gulf), French, Turkish"></div>
+      <button class="btn sm" onclick="langSave()">Save</button>
+    </div>
+
+    <!-- INSIGHTS -->
+    <div class="card">
+      <h3 style="margin:0">📈 Insights Agent</h3>
+      <p class="sub" style="margin:10px 0">Reads your last 30 days of real conversations and tells you what you don't already know — when people actually message, what they keep asking for, where they're writing from.</p>
+      <button class="btn sm wa" id="ins-btn" onclick="runInsights()">Analyse my last 30 days</button>
+      <div class="hidden" id="ins-out" style="margin-top:14px"></div>
+    </div>
+
+    <!-- HANDOFF -->
+    <div class="card">
+      <div class="row" style="justify-content:space-between"><h3 style="margin:0">🤝 Team Handoff Agent</h3>
+        <label class="row" style="gap:8px;font-size:13px"><input type="checkbox" id="ho-on" style="width:18px;height:18px" onchange="hoToggle()"> Enabled</label></div>
+      <p class="sub" style="margin:10px 0">When a message needs a person, it goes to the right one — with the customer's name, country, local time and a summary already attached.</p>
+      <div class="grid2" style="grid-template-columns:repeat(4,1fr)">
+        <div class="field"><label>Name</label><input id="tm-name" placeholder="Rita"></div>
+        <div class="field"><label>Their WhatsApp</label><input id="tm-phone" placeholder="9613…"></div>
+        <div class="field"><label>Handles</label><select id="tm-dept"><option value="sales">Sales</option><option value="support">Support</option><option value="billing">Billing</option><option value="manager">Manager</option></select></div>
+        <div class="field"><label>Trigger words (optional)</label><input id="tm-kw" placeholder="refund, broken, invoice"></div>
+      </div>
+      <button class="btn sm" onclick="tmAdd()">Add teammate</button>
+      <table style="margin-top:12px"><thead><tr><th>Name</th><th>Handles</th><th>Trigger words</th><th>WhatsApp</th><th></th></tr></thead><tbody id="tm-list"></tbody></table>
     </div>
   </div>
 
@@ -1855,8 +2086,15 @@ async function loadStaff(){
     const sr=await fetch(API+'/api/settings',{headers:H()}); const sd=await sr.json(); const s=sd.settings||{};
     if($('cat-on')) $('cat-on').checked=!!s.catalog_enabled;
     if($('voice-on')) $('voice-on').checked=!!s.voice_enabled;
+    if($('lang-list')) $('lang-list').value=s.languages||'';
+    if($('pay-on')) $('pay-on').checked=!!s.payment_enabled;
+    try{ const pc=s.payment_config?JSON.parse(s.payment_config):{};
+      if($('pay-method'))$('pay-method').value=pc.method||'';
+      if($('pay-link'))$('pay-link').value=pc.link||'';
+      if($('pay-instr'))$('pay-instr').value=pc.instructions||'';
+    }catch(e){}
   }catch(e){}
-  prLoad(); apptLoad();
+  prLoad(); apptLoad(); fuLoad(); rvLoad(); invLoad(); tmLoad();
 }
 async function saveStaff(key,val){
   const r=await fetch(API+'/api/settings',{method:'PUT',headers:H(),body:JSON.stringify({[key]:val})});
@@ -1919,6 +2157,114 @@ async function runStrategist(){
     }
   }catch(e){toast('Network error');}
   $('strat-btn').textContent='✨ What should I send this week?';$('strat-btn').disabled=false;
+}
+
+function staffTab(i){
+  document.querySelectorAll('.stab').forEach((b,n)=>{
+    const on = n===i;
+    b.classList.toggle('on',on);
+    b.setAttribute('aria-selected',on?'true':'false');
+  });
+  document.querySelectorAll('.spanel').forEach((p,n)=>p.classList.toggle('on',n===i));
+}
+
+// ── follow-up ──
+async function fuLoad(){
+  const r=await fetch(API+'/api/followup',{headers:H()}); const d=await r.json();
+  if(d.enabled!==undefined)$('fu-on').checked=!!d.enabled;
+  const c=d.config||{}; $('fu-days').value=c.days??3; $('fu-max').value=c.max??2; $('fu-win').value=c.window??30;
+  $('fu-list').innerHTML=(d.due||[]).map(x=>{
+    const days=Math.max(1,Math.round((Date.now()-new Date(x.silent_since))/86400000));
+    return `<tr><td>${x.name||x.phone}</td><td>${x.interest||'—'}</td><td>${days} days</td><td><button class="link" onclick="fuStop('${x.phone}')">stop</button></td></tr>`;
+  }).join('')||'<tr><td colspan="4" style="color:#6B6157">Nobody is waiting on a nudge right now.</td></tr>';
+}
+async function fuSave(){
+  const r=await fetch(API+'/api/followup',{method:'PUT',headers:H(),body:JSON.stringify({enabled:$('fu-on').checked,days:$('fu-days').value,max:$('fu-max').value,window:$('fu-win').value})});
+  const d=await r.json(); toast(d.ok?'Saved':(d.error||'Could not save')); if(d.ok)fuLoad();
+}
+async function fuStop(p){ await fetch(API+'/api/followup',{method:'POST',headers:H(),body:JSON.stringify({action:'stop',phone:p})}); fuLoad(); }
+
+// ── payment ──
+async function paySave(){
+  const cfg={method:$('pay-method').value,link:$('pay-link').value,instructions:$('pay-instr').value};
+  const r=await fetch(API+'/api/settings',{method:'PUT',headers:H(),body:JSON.stringify({payment_enabled:$('pay-on').checked,payment_config:cfg})});
+  const d=await r.json(); toast(d.ok?'Saved':(d.error||'Could not save'));
+}
+
+// ── reviews ──
+async function rvLoad(){
+  const r=await fetch(API+'/api/reviews',{headers:H()}); const d=await r.json();
+  $('rv-on').checked=!!d.enabled;
+  const c=d.config||{}; $('rv-delay').value=c.delay_days??2; $('rv-url').value=c.google_url||'';
+  $('rv-avg').textContent=d.average?`Average rating ${d.average} from ${d.count} customers.`:'No ratings in yet.';
+  $('rv-list').innerHTML=(d.reviews||[]).map(x=>`<tr><td>${x.contact_name||x.phone}</td><td>${x.rating?x.rating+'/5':'—'}</td><td>${(x.comment||'').slice(0,60)}</td><td>${x.status}</td></tr>`).join('')||'<tr><td colspan="4" style="color:#6B6157">No reviews yet.</td></tr>';
+}
+async function rvSave(){
+  const r=await fetch(API+'/api/reviews',{method:'PUT',headers:H(),body:JSON.stringify({enabled:$('rv-on').checked,delay_days:$('rv-delay').value,google_url:$('rv-url').value})});
+  const d=await r.json(); toast(d.ok?'Saved':(d.error||'Could not save'));
+}
+
+// ── invoices ──
+async function invLoad(){
+  const r=await fetch(API+'/api/invoices',{headers:H()}); const d=await r.json();
+  $('inv-on').checked=!!d.enabled;
+  const c=d.config||{}; if(c.before!==undefined)$('inv-before').value=c.before;
+  if(Array.isArray(c.after))$('inv-after').value=c.after.join(', ');
+  $('inv-list').innerHTML=(d.invoices||[]).map(x=>`<tr><td>${x.reference||'—'}</td><td>${x.customer_name||x.phone}</td><td>${x.amount} ${x.currency||''}</td><td>${x.due_at||'—'}</td><td>${x.status}${x.reminder_count?' · '+x.reminder_count+' reminders':''}</td><td>${x.status==='unpaid'?`<button class="link" onclick="invPaid(${x.id})">mark paid</button> `:''}<button class="link" onclick="invDel(${x.id})">delete</button></td></tr>`).join('')||'<tr><td colspan="6" style="color:#6B6157">No invoices yet.</td></tr>';
+}
+async function invAdd(){
+  const r=await fetch(API+'/api/invoices',{method:'POST',headers:H(),body:JSON.stringify({phone:$('inv-phone').value,customer_name:$('inv-name').value,amount:$('inv-amt').value,due_at:$('inv-due').value,reference:$('inv-ref').value})});
+  const d=await r.json();
+  if(d.ok){toast('Invoice added');['inv-phone','inv-name','inv-amt','inv-ref'].forEach(i=>$(i).value='');invLoad();}
+  else toast(d.error||'Could not save');
+}
+async function invCfg(){
+  const after=$('inv-after').value.split(',').map(x=>parseInt(x.trim())).filter(x=>!isNaN(x));
+  const r=await fetch(API+'/api/invoices',{method:'PUT',headers:H(),body:JSON.stringify({action:'config',enabled:$('inv-on').checked,before:$('inv-before').value,after})});
+  const d=await r.json(); toast(d.ok?'Schedule saved':(d.error||'Could not save'));
+}
+async function invPaid(id){ await fetch(API+'/api/invoices',{method:'PUT',headers:H(),body:JSON.stringify({id,status:'paid'})}); invLoad(); }
+async function invDel(id){ await fetch(API+`/api/invoices?id=${id}`,{method:'DELETE',headers:H()}); invLoad(); }
+
+// ── languages ──
+async function langSave(){
+  const r=await fetch(API+'/api/settings',{method:'PUT',headers:H(),body:JSON.stringify({languages:$('lang-list').value})});
+  const d=await r.json(); toast(d.ok?'Saved':(d.error||'Could not save'));
+}
+
+// ── insights ──
+async function runInsights(){
+  $('ins-btn').textContent='Reading your conversations…'; $('ins-btn').disabled=true;
+  try{
+    const r=await fetch(API+'/api/insights',{method:'POST',headers:H(),body:JSON.stringify({})});
+    const d=await r.json();
+    if(!d.ok){toast(d.error||'Could not analyse');}
+    else{
+      $('ins-out').classList.remove('hidden');
+      const f=(d.findings||[]).map(x=>`<div style="padding:9px 0;border-bottom:1px solid #E5DBCC"><b style="font-size:13px">${x.label}</b><div style="font-size:13px;color:#241F1B;margin-top:3px">${x.detail}</div></div>`).join('');
+      const a=(d.actions||[]).map(x=>`<div style="padding:9px 0"><b style="font-size:13px;color:#B4552D">→ ${x.do}</b><div style="font-size:12.5px;color:#6B6157;margin-top:3px">${x.because}</div></div>`).join('');
+      $('ins-out').innerHTML=`<div class="card" style="margin:0"><h3 style="font-size:17px">${d.headline||''}</h3><p class="sub" style="margin:6px 0 12px">${d.why||''}</p>${f}${a?'<div style="margin-top:10px">'+a+'</div>':''}</div>`;
+    }
+  }catch(e){toast('Network error');}
+  $('ins-btn').textContent='Analyse my last 30 days'; $('ins-btn').disabled=false;
+}
+
+// ── team handoff ──
+async function tmLoad(){
+  const r=await fetch(API+'/api/team',{headers:H()}); const d=await r.json();
+  $('ho-on').checked=!!d.enabled;
+  $('tm-list').innerHTML=(d.team||[]).map(x=>`<tr><td>${x.name}</td><td>${x.department}</td><td>${x.keywords||'—'}</td><td>${x.phone}</td><td><button class="link" onclick="tmDel(${x.id})">remove</button></td></tr>`).join('')||'<tr><td colspan="5" style="color:#6B6157">No teammates yet.</td></tr>';
+}
+async function tmAdd(){
+  const r=await fetch(API+'/api/team',{method:'POST',headers:H(),body:JSON.stringify({name:$('tm-name').value,phone:$('tm-phone').value,department:$('tm-dept').value,keywords:$('tm-kw').value})});
+  const d=await r.json();
+  if(d.ok){toast('Teammate added');$('tm-name').value='';$('tm-phone').value='';$('tm-kw').value='';tmLoad();}
+  else toast(d.error||'Could not add');
+}
+async function tmDel(id){ await fetch(API+`/api/team?id=${id}`,{method:'DELETE',headers:H()}); tmLoad(); }
+async function hoToggle(){
+  const r=await fetch(API+'/api/team',{method:'PUT',headers:H(),body:JSON.stringify({action:'toggle',enabled:$('ho-on').checked})});
+  const d=await r.json(); toast(d.ok?'Saved':(d.error||'Could not save'));
 }
 
 // ── init ──
