@@ -54,6 +54,37 @@ async function handleInbound(settings, from, text, waMsgId) {
   const userId = settings.user_id;
   const aKey = process.env.ANTHROPIC_API_KEY;
   await logMsg(userId, from, 'in', text, 'text', waMsgId);
+
+  // ── Review Agent: is this a reply to a rating request? ──
+  if (settings.review_enabled) {
+    try {
+      const pend = await sb(`wm_reviews?user_id=eq.${userId}&phone=eq.${from}&status=eq.requested&select=id,contact_name&order=id.desc&limit=1`);
+      const [rev] = pend.ok ? await pend.json() : [];
+      const m = String(text).trim().match(/^([1-5])(\s|$|\/|\.)/);
+      if (rev && m) {
+        const rating = Number(m[1]);
+        let cfg = {}; try { cfg = settings.review_config ? JSON.parse(settings.review_config) : {}; } catch {}
+        await sb(`wm_reviews?id=eq.${rev.id}`, { method: 'PATCH', body: JSON.stringify({ rating, comment: text.slice(0, 400), status: 'answered', answered_at: new Date().toISOString() }) });
+        let reply;
+        if (rating >= 4) {
+          reply = cfg.google_url
+            ? `Thank you! That means a lot. If you have a moment, a public review helps us more than anything: ${cfg.google_url}`
+            : 'Thank you! That means a lot to us.';
+        } else {
+          reply = 'Thank you for being honest — that helps us fix it. Someone from the team will reach out shortly.';
+          if (settings.owner_phone) {
+            const al = `\u26A0\uFE0F Low rating: ${rating}/5\n\uD83D\uDC64 ${rev.contact_name || from}\n\uD83D\uDCAC "${text.slice(0, 120)}"\n\nReply: https://wa.me/${from}`;
+            const oa = await waSend(settings, settings.owner_phone.replace(/\D/g, ''), waText(al));
+            if (oa.ok) await logMsg(userId, settings.owner_phone, 'out', al, 'alert', oa.id);
+          }
+          await sb(`wm_reviews?id=eq.${rev.id}`, { method: 'PATCH', body: JSON.stringify({ status: 'routed' }) });
+        }
+        const out = await waSend(settings, from, waText(reply));
+        await logMsg(userId, from, 'out', reply, 'review', out.id);
+        return;
+      }
+    } catch {}
+  }
   await sb('wm_contacts?on_conflict=user_id,phone', {
     method: 'POST',
     headers: { Prefer: 'resolution=merge-duplicates,return=representation' },
@@ -68,6 +99,15 @@ async function handleInbound(settings, from, text, waMsgId) {
     let extraCtx = '';
     if (settings.catalog_enabled) { try { extraCtx += await catalogContext(userId); } catch {} }
     if (settings.booking_enabled) { try { extraCtx += await bookingContext(userId, settings); } catch {} }
+    // Multi-language Agent
+    if (settings.languages) {
+      extraCtx += `\n\nLANGUAGES: you are fluent in ${settings.languages}. Always answer in the language and dialect the customer wrote in. If they switch language mid-conversation, switch with them.`;
+    }
+    // Payment Agent
+    if (settings.payment_enabled) {
+      let pc = {}; try { pc = settings.payment_config ? JSON.parse(settings.payment_config) : {}; } catch {}
+      extraCtx += `\n\nTAKING PAYMENT: once an order is agreed (product and quantity confirmed), give the payment details below so they can pay immediately. Never send them before the order is agreed.\nMethod: ${pc.method || 'as arranged'}${pc.link ? '\nPayment link: ' + pc.link : ''}${pc.instructions ? '\nInstructions: ' + pc.instructions : ''}`;
+    }
     const system = `You are the WhatsApp SALES assistant for this business:
 ${settings.ai_prompt || settings.business_name || 'A business.'}${extraCtx}
 
@@ -162,6 +202,23 @@ After your reply, on a NEW line output exactly:
           };
           if (existing) await sb(`wm_tickets?id=eq.${existing.id}`, { method: 'PATCH', body: JSON.stringify(row) });
           else await sb('wm_tickets', { method: 'POST', body: JSON.stringify([{ ...row, status: 'new' }]) });
+          // ── Team-Handoff Agent: route to the right person ──
+          if (settings.handoff_enabled) {
+            try {
+              const tm = await sb(`wm_team?user_id=eq.${userId}&active=eq.true&select=*`);
+              const team = tm.ok ? await tm.json() : [];
+              const low = text.toLowerCase();
+              const byDept = { complaint: 'support', support: 'support', billing: 'billing', order: 'sales', inquiry: 'sales' };
+              let pick = team.find(t => (t.keywords || '').split(',').map(k => k.trim().toLowerCase()).filter(Boolean).some(k => low.includes(k)));
+              if (!pick) pick = team.find(t => t.department === byDept[row.category]);
+              if (!pick && cls.priority === 'urgent') pick = team.find(t => t.department === 'manager');
+              if (pick) {
+                const hb = `\uD83D\uDCE8 Handed to you \u2014 ${row.category} (${row.priority})\n\uD83D\uDC64 ${nm || from} \u00B7 ${region.country} \u00B7 ${region.local_time} local\n\uD83D\uDCDD ${cls.summary || text.slice(0, 90)}\n\nReply: https://wa.me/${from}`;
+                const ho = await waSend(settings, pick.phone.replace(/\D/g, ''), waText(hb));
+                if (ho.ok) await logMsg(userId, pick.phone, 'out', hb, 'handoff', ho.id);
+              }
+            } catch {}
+          }
           if ((cls.priority === 'urgent' || cls.category === 'complaint') && settings.owner_phone) {
             const al = `📞 New ${cls.category.toUpperCase()} (${cls.priority})\n\n👤 ${nm || from} · ${region.country} · ${region.local_time} local\n📝 ${cls.summary || text.slice(0,80)}\n\nOpen: https://wa.me/${from}`;
             const oa = await waSend(settings, settings.owner_phone.replace(/\D/g, ''), waText(al));
